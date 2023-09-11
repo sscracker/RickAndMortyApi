@@ -24,6 +24,8 @@ class CharactersListAdapter/*(private val characterListener: CharacterListDetail
         return charactersList.size
     }
 
+
+
     override fun onBindViewHolder(holder: CharactersListViewHolder, position: Int) {
         val character = charactersList[position]
         holder.bindCharacter(character)
