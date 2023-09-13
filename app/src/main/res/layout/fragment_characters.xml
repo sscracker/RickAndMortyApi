@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/characters_rv"
+            android:id="@+id/recycler_view_characters"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -23,5 +23,5 @@
             android:indeterminate="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
-    
+
     </androidx.constraintlayout.widget.ConstraintLayout>

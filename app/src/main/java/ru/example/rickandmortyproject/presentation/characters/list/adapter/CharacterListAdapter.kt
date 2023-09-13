@@ -4,14 +4,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.example.rickandmortyproject.R
-import ru.example.rickandmortyproject.presentation.characters.CharacterListDetailsListener
 import ru.example.rickandmortyproject.presentation.characters.list.SingleCharacter
 
-class CharactersListAdapter/*(private val characterListener: CharacterListDetailsListener)*/:RecyclerView.Adapter<CharactersListViewHolder>()
-{
+class CharacterListAdapter :
+    RecyclerView.Adapter<CharacterListViewHolder>() {
     private val charactersList = mutableListOf<SingleCharacter>()
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharactersListViewHolder {
-        return CharactersListViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterListViewHolder {
+        return CharacterListViewHolder(
             LayoutInflater.from(parent.context).inflate(
                 R.layout.item_character,
                 parent,
@@ -20,13 +19,9 @@ class CharactersListAdapter/*(private val characterListener: CharacterListDetail
         )
     }
 
-    override fun getItemCount(): Int {
-        return charactersList.size
-    }
+    override fun getItemCount(): Int = charactersList.size
 
-
-
-    override fun onBindViewHolder(holder: CharactersListViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CharacterListViewHolder, position: Int) {
         val character = charactersList[position]
         holder.bindCharacter(character)
     }

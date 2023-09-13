@@ -6,7 +6,7 @@
     android:padding="6dp">
 
     <ImageView
-        android:id="@+id/character_photo_iv"
+        android:id="@+id/image_view_character_photo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -14,46 +14,46 @@
         android:layout_height="70dp"/>
 
     <TextView
-        android:id="@+id/character_name_tv"
+        android:id="@+id/text_view_character_name"
         android:text="@string/character_name"
         android:textSize="20sp"
         android:layout_marginStart="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/character_photo_iv"
+        app:layout_constraintTop_toBottomOf="@id/image_view_character_photo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
     <TextView
-        android:id="@+id/character_species_tv"
+        android:id="@+id/text_view_character_species"
         android:text="@string/character_gender"
         android:textSize="20sp"
         android:layout_marginStart="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/character_name_tv"
+        app:layout_constraintTop_toBottomOf="@id/text_view_character_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
     <TextView
-        android:id="@+id/character_gender_tv"
+        android:id="@+id/text_view_character_gender"
         android:text="@string/character_gender"
         android:textSize="20sp"
         android:layout_marginStart="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/character_species_tv"
+        app:layout_constraintTop_toBottomOf="@id/text_view_character_species"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
     <TextView
-        android:id="@+id/character_status_tv"
+        android:id="@+id/text_view_character_status"
         android:text="@string/character_gender"
         android:textSize="20sp"
         android:layout_marginStart="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/character_gender_tv"
+        app:layout_constraintTop_toBottomOf="@id/text_view_character_gender"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 

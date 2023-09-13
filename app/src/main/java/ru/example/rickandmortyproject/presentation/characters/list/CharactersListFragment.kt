@@ -8,14 +8,13 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import ru.example.rickandmortyproject.R
 import ru.example.rickandmortyproject.databinding.FragmentCharactersBinding
-import ru.example.rickandmortyproject.presentation.characters.CharacterListDetailsListener
-import ru.example.rickandmortyproject.presentation.characters.list.adapter.CharactersListAdapter
-
+import ru.example.rickandmortyproject.presentation.characters.list.adapter.CharacterListAdapter
+private const val COLUMN_COUNT = 2
 class CharactersListFragment : Fragment(R.layout.fragment_characters) {
 
     private var _binding: FragmentCharactersBinding? = null
     private val binding get() = _binding!!
-    private lateinit var characterAdapter: CharactersListAdapter
+    private var characterAdapter: CharacterListAdapter? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,12 +27,13 @@ class CharactersListFragment : Fragment(R.layout.fragment_characters) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        characterAdapter = CharactersListAdapter()
-        with(binding.charactersRv) {
-            layoutManager = GridLayoutManager(requireActivity(), 2)
-            adapter = adapter
+        characterAdapter = CharacterListAdapter()
+        with(binding.recyclerViewCharacters) {
+            layoutManager = GridLayoutManager(requireActivity(), COLUMN_COUNT)
+            adapter = characterAdapter
         }
     }
+
     companion object {
         const val CHARACTERS_TAG = "CHARACTERS"
         fun newInstance() = CharactersListFragment()
