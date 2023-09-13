@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import ru.example.rickandmortyproject.R
 import ru.example.rickandmortyproject.databinding.FragmentCharactersBinding
 import ru.example.rickandmortyproject.presentation.characters.list.adapter.CharacterListAdapter
+
 private const val COLUMN_COUNT = 2
 class CharactersListFragment : Fragment(R.layout.fragment_characters) {
 

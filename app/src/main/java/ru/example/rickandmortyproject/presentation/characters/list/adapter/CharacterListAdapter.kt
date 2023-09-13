@@ -25,5 +25,4 @@ class CharacterListAdapter :
         val character = charactersList[position]
         holder.bindCharacter(character)
     }
-
 }

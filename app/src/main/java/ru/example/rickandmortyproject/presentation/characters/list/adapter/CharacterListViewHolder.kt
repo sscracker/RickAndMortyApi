@@ -26,6 +26,5 @@ class CharacterListViewHolder(
             .diskCacheStrategy(DiskCacheStrategy.NONE)
             .skipMemoryCache(true)
             .into(binding.imageViewCharacterPhoto)
-
     }
 }
