@@ -11,32 +11,31 @@ import ru.example.rickandmortyproject.databinding.FragmentCharactersBinding
 import ru.example.rickandmortyproject.presentation.characters.CharacterListDetailsListener
 import ru.example.rickandmortyproject.presentation.characters.list.adapter.CharactersListAdapter
 
-class CharactersListFragment: Fragment(R.layout.fragment_characters) {
+class CharactersListFragment : Fragment(R.layout.fragment_characters) {
 
-        private var _binding: FragmentCharactersBinding? = null
+    private var _binding: FragmentCharactersBinding? = null
     private val binding get() = _binding!!
- private lateinit var characterAdapter: CharactersListAdapter
-    companion object{
-        const val CHARACTERS_TAG = "CHARACTERS"
-        fun newInstance() = CharactersListFragment()
-    }
+    private lateinit var characterAdapter: CharactersListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
-        _binding = FragmentCharactersBinding.inflate(inflater,container,false)
+        _binding = FragmentCharactersBinding.inflate(inflater, container, false)
         return binding.root
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         characterAdapter = CharactersListAdapter()
-        with(binding.charactersRv){
+        with(binding.charactersRv) {
             layoutManager = GridLayoutManager(requireActivity(), 2)
             adapter = adapter
         }
-
+    }
+    companion object {
+        const val CHARACTERS_TAG = "CHARACTERS"
+        fun newInstance() = CharactersListFragment()
     }
 }

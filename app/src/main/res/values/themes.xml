@@ -1,8 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.RickAndMortyProject" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-
-    </style>
-
+    <style name="Base.Theme.RickAndMortyProject" parent="Theme.MaterialComponents.DayNight.DarkActionBar"/>
     <style name="Theme.RickAndMortyProject" parent="Base.Theme.RickAndMortyProject" />
 </resources>

@@ -12,11 +12,13 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction().run {
             setReorderingAllowed(true)
             val charactersListFragment = CharactersListFragment.newInstance()
-            replace(R.id.fragment_container,charactersListFragment, CharactersListFragment.CHARACTERS_TAG)
+            replace(
+                R.id.fragment_container,
+                charactersListFragment,
+                CharactersListFragment.CHARACTERS_TAG
+            )
             addToBackStack(CharactersListFragment.CHARACTERS_TAG)
             commit()
         }
     }
-
-
 }
