@@ -16,7 +16,6 @@ class CharacterListViewHolder(
         singleCharacter: SingleCharacter
     ) {
         with(binding) {
-            textViewCharacterId.text = singleCharacter.id.toString()
             textViewCharacterName.text = singleCharacter.name
             textViewCharacterGender.text = singleCharacter.gender
             textViewCharacterSpecies.text = singleCharacter.species

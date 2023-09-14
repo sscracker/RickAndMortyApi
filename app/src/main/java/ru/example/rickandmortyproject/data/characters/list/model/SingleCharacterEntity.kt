@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
 
 @Entity(tableName = "CharacterListEntity")
-data class SingleCharacterData(
+data class SingleCharacterEntity(
     @Expose
     @PrimaryKey(autoGenerate = true)
     val id: Long,

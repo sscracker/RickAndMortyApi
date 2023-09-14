@@ -5,18 +5,18 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import ru.example.rickandmortyproject.data.characters.list.model.SingleCharacterData
+import ru.example.rickandmortyproject.data.characters.list.model.SingleCharacterEntity
 
 @Dao
 interface CharacterListDao {
     @Query("SELECT * FROM CharacterListEntity")
-    suspend fun getCharacterList(): List<SingleCharacterData>
+    suspend fun getCharacterList(): List<SingleCharacterEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun setCharacterList(characterList: List<SingleCharacterData>)
+    suspend fun setCharacterList(characterList: List<SingleCharacterEntity>)
 
     @Update
-    suspend fun updateCharacterList(characterList: List<SingleCharacterData>)
+    suspend fun updateCharacterList(characterList: List<SingleCharacterEntity>)
 
     @Query("DELETE FROM CharacterListEntity")
     suspend fun deleteCharacterList()

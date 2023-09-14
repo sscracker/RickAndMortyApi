@@ -1,12 +1,12 @@
 package ru.example.rickandmortyproject.data.db
 
 import androidx.room.Database
-import ru.example.rickandmortyproject.data.characters.list.model.SingleCharacterData
+import ru.example.rickandmortyproject.data.characters.list.model.SingleCharacterEntity
 import ru.example.rickandmortyproject.data.db.lists.CharacterListDao
 
 @Database(
     entities = [
-        SingleCharacterData::class
+        SingleCharacterEntity::class
     ],
     version = 1,
     exportSchema = false
