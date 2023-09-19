@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.example.rickandmortyproject.R
-import ru.example.rickandmortyproject.presentation.characters.list.SingleCharacter
+import ru.example.rickandmortyproject.presentation.characters.list.model.SingleCharacter
 
 class CharacterListAdapter :
     RecyclerView.Adapter<CharacterListViewHolder>() {

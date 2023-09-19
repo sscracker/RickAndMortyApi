@@ -20,5 +20,9 @@ data class SingleCharacterEntity(
     @Expose
     val type: String,
     @Expose
-    val image: String
+    val image: String,
+    @Expose
+    val url: String,
+    @Expose
+    val created: String
 )
