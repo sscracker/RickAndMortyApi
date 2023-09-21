@@ -6,7 +6,7 @@ import dagger.Component
 import ru.example.rickandmortyproject.di.module.LocalDbModule
 import ru.example.rickandmortyproject.di.module.MapperModule
 import ru.example.rickandmortyproject.di.module.NetworkModule
-import ru.example.rickandmortyproject.di.module.BindsModule
+import ru.example.rickandmortyproject.di.module.CharactersBindsModule
 import ru.example.rickandmortyproject.di.scope.ActivityScope
 import ru.example.rickandmortyproject.presentation.characters.list.CharactersListFragment
 import ru.example.rickandmortyproject.utils.ViewModelFactory
@@ -16,7 +16,7 @@ import ru.example.rickandmortyproject.utils.ViewModelFactory
         NetworkModule::class,
         MapperModule::class,
         LocalDbModule::class,
-        BindsModule::class,
+        CharactersBindsModule::class,
     ]
 )
 @ActivityScope

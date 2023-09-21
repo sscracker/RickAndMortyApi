@@ -9,7 +9,7 @@ import ru.example.rickandmortyproject.domain.characters.list.CharactersListUseCa
 import ru.example.rickandmortyproject.domain.characters.list.CharactersRepository
 
 @Module
-interface BindsModule {
+interface CharactersBindsModule {
 
     @Binds
     @ActivityScope
