@@ -2,10 +2,9 @@ package ru.example.rickandmortyproject.domain.characters.list
 
 import kotlinx.coroutines.flow.Flow
 import ru.example.rickandmortyproject.domain.characters.list.model.SingleCharacterDomain
-import ru.example.rickandmortyproject.utils.ResponseUtil
-
+import ru.example.rickandmortyproject.utils.Response
 
 interface CharactersRepository {
-    fun getAllCharacters(): Flow<ResponseUtil<List<SingleCharacterDomain>>>
+    fun getAllCharacters(): Flow<Response<List<SingleCharacterDomain>>>
     fun getAllCharactersFromLocal(): Flow<List<SingleCharacterDomain>>
 }

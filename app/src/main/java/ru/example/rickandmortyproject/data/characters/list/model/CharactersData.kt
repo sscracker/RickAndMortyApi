@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class CharactersData(
     @Expose
-    val info: SingleCharacterInfoData,
+    val info: CharactersPaginationData,
 
     @SerializedName("results")
     @Expose

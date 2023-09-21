@@ -7,7 +7,7 @@ import ru.example.rickandmortyproject.data.characters.list.mapper.CharacterDataT
 import ru.example.rickandmortyproject.data.db.lists.CharacterListDao
 import ru.example.rickandmortyproject.domain.characters.list.CharactersRepository
 import ru.example.rickandmortyproject.domain.characters.list.model.SingleCharacterDomain
-import ru.example.rickandmortyproject.utils.ResponseUtil
+import ru.example.rickandmortyproject.utils.Response
 import javax.inject.Inject
 
 class CharactersRepositoryImpl @Inject constructor(
@@ -15,18 +15,16 @@ class CharactersRepositoryImpl @Inject constructor(
     private val mapper: CharacterDataToListSingleCharacterDomainMapper,
     private val characterListDao: CharacterListDao
 ) : CharactersRepository {
-    override fun getAllCharacters(): Flow<ResponseUtil<List<SingleCharacterDomain>>> {
+    override fun getAllCharacters(): Flow<Response<List<SingleCharacterDomain>>> {
         return flow {
             emit(
-                try {
+                kotlin.runCatching{
                     val response = charactersApi.getAllCharacters()
                     characterListDao.setCharacterList(response.body()?.characters ?: emptyList())
-                    ResponseUtil.Success(
+                    Response.Success(
                         mapper.map(response.body()?.characters ?: emptyList())
                     )
-                } catch (e: Throwable) {
-                    ResponseUtil.Failure(e)
-                }
+                }.getOrThrow()
             )
         }
     }
