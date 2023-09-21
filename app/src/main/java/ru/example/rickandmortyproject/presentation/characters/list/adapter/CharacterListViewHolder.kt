@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import ru.example.rickandmortyproject.databinding.ItemCharacterBinding
-import ru.example.rickandmortyproject.presentation.characters.list.SingleCharacter
+import ru.example.rickandmortyproject.presentation.characters.list.model.SingleCharacter
 
 class CharacterListViewHolder(
     itemView: View,

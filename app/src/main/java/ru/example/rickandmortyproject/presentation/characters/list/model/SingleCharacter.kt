@@ -1,4 +1,4 @@
-package ru.example.rickandmortyproject.presentation.characters.list
+package ru.example.rickandmortyproject.presentation.characters.list.model
 
 data class SingleCharacter(
     val id: Int,
