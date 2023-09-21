@@ -17,7 +17,6 @@ import ru.example.rickandmortyproject.utils.ViewModelFactory
         MapperModule::class,
         LocalDbModule::class,
         BindsModule::class,
-        UseCaseModule::class
     ]
 )
 @ActivityScope
