@@ -25,4 +25,9 @@ class CharacterListAdapter :
         val character = charactersList[position]
         holder.bindCharacter(character)
     }
+    fun updateCharacterList(newCharactersList: List<SingleCharacter>){
+        charactersList.clear()
+        charactersList.addAll(newCharactersList)
+        notifyDataSetChanged()
+    }
 }
