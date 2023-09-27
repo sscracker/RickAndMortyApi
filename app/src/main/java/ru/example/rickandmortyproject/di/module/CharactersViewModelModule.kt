@@ -1,6 +1,7 @@
 package ru.example.rickandmortyproject.di.module
 
 import androidx.lifecycle.ViewModel
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoMap
@@ -20,7 +21,7 @@ class CharactersViewModelModule {
         charactersListUseCase: CharactersListUseCase,
         mapper: SingleCharacterDomainToSingleCharacterUiMapper,
         connectivity: Connectivity
-    ): ViewModel{
+    ): ViewModel {
         return CharacterListViewModel(
             charactersListUseCase,
             mapper,

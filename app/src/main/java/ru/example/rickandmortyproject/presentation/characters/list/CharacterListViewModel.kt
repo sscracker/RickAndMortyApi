@@ -18,17 +18,18 @@ class CharacterListViewModel @Inject constructor(
     private val charactersListUseCase: CharactersListUseCase,
     private val mapper: SingleCharacterDomainToSingleCharacterUiMapper,
     private val connectivity: Connectivity
-): ViewModel() {
+) : ViewModel() {
+
     private var characters = MutableStateFlow<ViewState<List<SingleCharacter>>>(ViewState.Loading)
 
     init {
         loadCharacters()
     }
 
-     fun loadCharacters() {
-        if (connectivity.isNetworkAvailable()){
+    fun loadCharacters() {
+        if (connectivity.isNetworkAvailable()) {
             loadAllCharacters()
-        } else{
+        } else {
             characters.value = ViewState.Error(Throwable("Отсутствует интернет соединение"))
             loadAllCharactersFromLocal()
         }
@@ -36,19 +37,19 @@ class CharacterListViewModel @Inject constructor(
 
     fun loadAllCharactersFromLocal() {
         viewModelScope.launch(Dispatchers.IO) {
-            charactersListUseCase.getAllCharactersFromLocal().collect(){ data ->
+            charactersListUseCase.getAllCharactersFromLocal().collect() { data ->
                 characters.value = ViewState.Data(mapper.map(data))
             }
         }
     }
 
-     fun loadAllCharacters() {
-        viewModelScope.launch(Dispatchers.IO){
-            charactersListUseCase.getAllCharacters().collect{response ->
-            characters.value = when(response){
-                is Response.Success -> ViewState.Data(mapper.map(response.data))
-                is Response.Failure -> ViewState.Error(response.error)
-            }
+    fun loadAllCharacters() {
+        viewModelScope.launch(Dispatchers.IO) {
+            charactersListUseCase.getAllCharacters().collect { response ->
+                characters.value = when (response) {
+                    is Response.Success -> ViewState.Data(mapper.map(response.data))
+                    is Response.Failure -> ViewState.Error(response.error)
+                }
             }
         }
     }

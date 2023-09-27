@@ -10,7 +10,6 @@ import ru.example.rickandmortyproject.di.module.CharactersBindsModule
 import ru.example.rickandmortyproject.di.module.CharactersViewModelModule
 import ru.example.rickandmortyproject.di.scope.ActivityScope
 import ru.example.rickandmortyproject.presentation.characters.list.CharactersListFragment
-import ru.example.rickandmortyproject.utils.ViewModelFactory
 
 @Component(
     modules = [
@@ -30,5 +29,9 @@ interface AppComponent {
         fun create(@BindsInstance context: Context): AppComponent
     }
 
-    fun getViewModelFactory(): ViewModelFactory
+    companion object {
+        fun init(context: Context): AppComponent {
+            return DaggerAppComponent.factory().create(context)
+        }
+    }
 }

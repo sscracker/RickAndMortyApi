@@ -1,50 +1,33 @@
 package ru.example.rickandmortyproject.presentation.characters.list
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
+import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import kotlinx.coroutines.launch
-import ru.example.rickandmortyproject.MainActivity
-import ru.example.rickandmortyproject.R
 import ru.example.rickandmortyproject.databinding.FragmentCharactersBinding
 import ru.example.rickandmortyproject.di.AppComponent
+import ru.example.rickandmortyproject.presentation.base.BaseFragment
 import ru.example.rickandmortyproject.presentation.characters.list.adapter.CharacterListAdapter
 import ru.example.rickandmortyproject.presentation.characters.list.model.SingleCharacter
-import ru.example.rickandmortyproject.utils.ViewModelFactory
 import ru.example.rickandmortyproject.utils.ViewState
-import javax.inject.Inject
 
 private const val COLUMN_COUNT = 2
 
-class CharactersListFragment : Fragment(R.layout.fragment_characters) {
+class CharactersListFragment :
+    BaseFragment<CharacterListViewModel>(CharacterListViewModel::class.java) {
 
     private var _binding: FragmentCharactersBinding? = null
     private val binding get() = _binding!!
-    private var characterAdapter: CharacterListAdapter? = null
-    private var appComponent: AppComponent? = null
-    @Inject
-    lateinit var viewModel: CharacterListViewModel
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        appComponent = (activity as MainActivity).appComponent
-        appComponent?.inject(this)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModelFactory = appComponent!!.getViewModelFactory()
+    private var characterAdapter = CharacterListAdapter()
+    override fun injectDependencies(appComponent: AppComponent) {
+        appComponent.inject(this)
     }
 
     override fun onCreateView(
@@ -58,15 +41,12 @@ class CharactersListFragment : Fragment(R.layout.fragment_characters) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        viewModel = ViewModelProvider(this, viewModelFactory)[CharacterListViewModel::class.java]
+        initCharacterList()
         observeViewModel()
         updateCharacters()
-        initCharacterList()
     }
 
     private fun initCharacterList() {
-        characterAdapter = CharacterListAdapter()
         with(binding.recyclerViewCharacters) {
             layoutManager = GridLayoutManager(requireActivity(), COLUMN_COUNT)
             adapter = characterAdapter
@@ -91,13 +71,14 @@ class CharactersListFragment : Fragment(R.layout.fragment_characters) {
         }
     }
 
-    private fun dataState(data: List<SingleCharacter>) {
-        characterAdapter?.updateCharacterList(data)
-        binding.progressBar.visibility = View.GONE
+    private fun dataState(list: List<SingleCharacter>) {
+        characterAdapter.differ.submitList(list)
+        binding.progressBar.isVisible = false
     }
 
+
     private fun errorState(message: String) {
-        binding.progressBar.visibility = View.GONE
+        binding.progressBar.isVisible = false
         Toast.makeText(
             requireContext(),
             message,
@@ -106,7 +87,7 @@ class CharactersListFragment : Fragment(R.layout.fragment_characters) {
     }
 
     private fun loadingState() {
-        binding.progressBar.visibility = View.VISIBLE
+        binding.progressBar.isVisible = true
     }
 
     private fun updateCharacters() {
