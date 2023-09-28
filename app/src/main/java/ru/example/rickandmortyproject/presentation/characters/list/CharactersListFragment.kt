@@ -26,6 +26,7 @@ class CharactersListFragment :
     private var _binding: FragmentCharactersBinding? = null
     private val binding get() = _binding!!
     private var characterAdapter = CharacterListAdapter()
+
     override fun injectDependencies(appComponent: AppComponent) {
         appComponent.inject(this)
     }

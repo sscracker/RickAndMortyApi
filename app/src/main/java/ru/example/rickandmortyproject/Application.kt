@@ -11,12 +11,10 @@ class Application : Application(), App {
         super.onCreate()
         appComponent()
     }
-
     private fun getAppComponent(): AppComponent{
         if (appComponent == null){
             appComponent = AppComponent.init(applicationContext)
         }
         return appComponent!!
     }
-
 }
