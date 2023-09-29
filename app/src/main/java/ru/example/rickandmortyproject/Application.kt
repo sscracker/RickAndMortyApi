@@ -14,8 +14,8 @@ class Application : Application(), App {
         appComponent()
     }
 
-    private fun getAppComponent(): AppComponent{
-        if (appComponent == null){
+    private fun getAppComponent(): AppComponent {
+        if (appComponent == null) {
             appComponent = AppComponent.init(applicationContext)
         }
         return appComponent!!
