@@ -2,7 +2,6 @@ package ru.example.rickandmortyproject.utils.interceptors
 
 import okhttp3.Interceptor
 import okhttp3.Response
-import java.lang.Exception
 
 class NetworkExceptionInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
@@ -16,7 +15,6 @@ class NetworkExceptionInterceptor : Interceptor {
                 is NetworkException.ConnectivityException -> {
                     throw NetworkException.ConnectivityException(e.message)
                 }
-
                 else -> {
                     throw NetworkException.ApiException(e.message)
                 }

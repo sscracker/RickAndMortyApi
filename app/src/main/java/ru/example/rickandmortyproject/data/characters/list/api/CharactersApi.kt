@@ -5,6 +5,6 @@ import retrofit2.http.GET
 import ru.example.rickandmortyproject.data.characters.list.model.CharactersData
 
 interface CharactersApi {
-    @GET("characters")
+    @GET("character")
     suspend fun getAllCharacters(): Response<CharactersData>
 }
