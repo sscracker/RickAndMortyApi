@@ -3,56 +3,159 @@ package ru.example.rickandmortyproject.presentation.characters.list
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
-import ru.example.rickandmortyproject.domain.characters.list.CharactersListUseCase
-import ru.example.rickandmortyproject.presentation.characters.list.mapper.SingleCharacterDomainToSingleCharacterUiMapper
-import ru.example.rickandmortyproject.presentation.characters.list.model.SingleCharacter
-import ru.example.rickandmortyproject.utils.Connectivity
-import ru.example.rickandmortyproject.utils.Response
-import ru.example.rickandmortyproject.utils.ViewState
+import ru.example.rickandmortyproject.domain.characters.list.model.CharacterFilterSettings
+import ru.example.rickandmortyproject.domain.characters.list.model.CharacterEntity
+import ru.example.rickandmortyproject.domain.characters.list.usecases.GetCharacterFilterUseCase
+import ru.example.rickandmortyproject.domain.characters.list.usecases.GetCharactersUseCase
+import ru.example.rickandmortyproject.domain.characters.list.usecases.LoadCharactersPageUseCase
+import ru.example.rickandmortyproject.domain.characters.list.usecases.SaveCharacterFilterUseCase
 import javax.inject.Inject
 
 class CharacterListViewModel @Inject constructor(
-    private val charactersListUseCase: CharactersListUseCase,
-    private val mapper: SingleCharacterDomainToSingleCharacterUiMapper,
-    private val connectivity: Connectivity
+    private val getCharacterFilterUseCase: GetCharacterFilterUseCase,
+    private val saveCharacterFilterUseCase: SaveCharacterFilterUseCase,
+    private val getCharactersUseCase: GetCharactersUseCase,
+    private val loadCharactersPageUseCase: LoadCharactersPageUseCase,
+    private val pageHolder: CharactersPageHolder,
+    private val matcher: CharactersMatcher
 ) : ViewModel() {
 
-    private var characters = MutableStateFlow<ViewState<List<SingleCharacter>>>(ViewState.Loading)
+    private val _charactersListState = MutableSharedFlow<List<CharacterEntity>>(1)
+    val charactersListState = _charactersListState.asSharedFlow()
 
-    init {
-        loadCharacters()
-    }
+    private val _notEmptyFilterState = MutableStateFlow<Boolean?>(null)
+    val notEmptyFilterState = _notEmptyFilterState.asStateFlow()
+        .filterNotNull()
 
-    fun loadCharacters() {
-        if (connectivity.isNetworkAvailable()) {
-            loadAllCharacters()
-        } else {
-            characters.value = ViewState.Error(Throwable("Отсутствует интернет соединение"))
-            loadAllCharactersFromLocal()
+    private val _errorState = MutableStateFlow<Any?>(null)
+    val errorState = _errorState.asStateFlow()
+        .filterNotNull()
+
+    private val _emptyResultState = MutableStateFlow<Any?>(null)
+    val emptyResultState = _emptyResultState.asStateFlow()
+        .filterNotNull()
+
+    private var job: Job? = null
+    private val emptyFilterSettings = CharacterFilterSettings(
+        EMPTY_STRING, null, EMPTY_STRING, EMPTY_STRING, null
+    )
+
+    private var searchQuery = EMPTY_STRING
+
+    fun onViewCreated() {
+        if (pageHolder.currentPageNumber() == INITIAL_PAGE_NUMBER) {
+            loadPage()
         }
+        provideCharactersFlow()
+        loadFilterIsPresent()
     }
 
-    fun loadAllCharactersFromLocal() {
+    private fun loadFilterIsPresent() {
         viewModelScope.launch(Dispatchers.IO) {
-            charactersListUseCase.getAllCharactersFromLocal().collect() { data ->
-                characters.value = ViewState.Data(mapper.map(data))
+            val filterSettings = getCharacterFilterUseCase.invoke()
+            if (filterSettings != emptyFilterSettings) {
+                _notEmptyFilterState.tryEmit(true)
+            } else {
+                _notEmptyFilterState.tryEmit(false)
             }
         }
     }
 
-    fun loadAllCharacters() {
-        viewModelScope.launch(Dispatchers.IO) {
-            charactersListUseCase.getAllCharacters().collect { response ->
-                characters.value = when (response) {
-                    is Response.Success -> ViewState.Data(mapper.map(response.data))
-                    is Response.Failure -> ViewState.Error(response.error)
+    private fun provideCharactersFlow() {
+        job = viewModelScope.launch(Dispatchers.IO) {
+            getCharactersUseCase.invoke()
+                .catch {
+                    emitErrorState()
+                }
+                .collect { charactersList ->
+                    val filter = getCharacterFilterUseCase.invoke()
+                    val filtered = charactersList.filter { matcher.isCharacterMatches(filter, it) }
+                    emitFilteredWithQuery(filtered)
+                }
+        }
+    }
+
+    private fun emitFilteredWithQuery(charactersList: List<CharacterEntity>) {
+        if (searchQuery != EMPTY_STRING) {
+            charactersList.filter {
+                it.name.contains(searchQuery, true)
+            }.also {
+                _charactersListState.tryEmit(it)
+                if (it.isEmpty()) {
+                    emitEmptyResultState()
                 }
             }
+        } else {
+            _charactersListState.tryEmit(charactersList)
+            if (charactersList.isEmpty()) {
+                emitEmptyResultState()
+            }
         }
     }
 
-    fun getAllCharacters(): MutableStateFlow<ViewState<List<SingleCharacter>>> = characters
+    private fun loadPage() {
+        viewModelScope.launch(Dispatchers.IO) {
+            var pageNumber = pageHolder.currentPageNumber()
+            val success = loadCharactersPageUseCase.invoke(pageNumber)
+            if (success) {
+                pageHolder.savePageNumber(pageNumber)
+            } else {
+                emitErrorState()
+            }
+        }
+    }
+
+    fun onListEnded() {
+        loadPage()
+    }
+
+    fun onListSwiped() {
+        resetData()
+    }
+
+    fun onFilterSettingsChanged() {
+        resetData()
+    }
+
+    fun onButtonClearPressed() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val emptySettingsSaved = saveCharacterFilterUseCase.invoke(emptyFilterSettings)
+            if (emptySettingsSaved) {
+                resetData()
+                _notEmptyFilterState.tryEmit(false)
+            }
+        }
+    }
+
+    fun onSearchQueryChanged(query: String?) {
+        searchQuery = query?.trim() ?: EMPTY_STRING
+        resetData()
+    }
+
+
+    private fun emitErrorState() {
+        _errorState.tryEmit(Any())
+    }
+
+    private fun emitEmptyResultState() {
+        _emptyResultState.tryEmit(Any())
+    }
+
+    private fun resetData() {
+        job?.cancel()
+        provideCharactersFlow()
+    }
+
+    companion object {
+        private const val EMPTY_STRING = ""
+        private const val INITIAL_PAGE_NUMBER = 1
+    }
 }

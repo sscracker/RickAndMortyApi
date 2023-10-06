@@ -1,15 +1,13 @@
 package ru.example.rickandmortyproject.domain.characters.list.model
 
-import java.io.Serializable
-
-data class SingleCharacterDomain(
-    val id: Long,
+data class CharacterEntity(
+    val id: Int,
     val name: String,
-    val status: String,
+    val status: CharacterStatus,
     val species: String,
     val type: String,
-    val gender: String,
+    val gender: CharacterGender,
     val image: String,
     val url: String,
     val created: String
-):Serializable
+)

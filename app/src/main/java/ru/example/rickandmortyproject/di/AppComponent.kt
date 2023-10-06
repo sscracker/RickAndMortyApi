@@ -4,25 +4,25 @@ import android.content.Context
 import dagger.BindsInstance
 import dagger.Component
 import ru.example.rickandmortyproject.di.module.LocalDbModule
-import ru.example.rickandmortyproject.di.module.MapperModule
 import ru.example.rickandmortyproject.di.module.NetworkModule
-import ru.example.rickandmortyproject.di.module.CharactersBindsModule
-import ru.example.rickandmortyproject.di.module.CharactersViewModelModule
-import ru.example.rickandmortyproject.di.scope.ActivityScope
+import ru.example.rickandmortyproject.di.module.characters.CharactersBindsModule
+import ru.example.rickandmortyproject.di.module.characters.CharactersViewModelModule
+import ru.example.rickandmortyproject.presentation.characters.list.CharactersFiltersFragment
 import ru.example.rickandmortyproject.presentation.characters.list.CharactersListFragment
+import javax.inject.Singleton
 
 @Component(
     modules = [
         NetworkModule::class,
-        MapperModule::class,
         LocalDbModule::class,
         CharactersBindsModule::class,
         CharactersViewModelModule::class
     ]
 )
-@ActivityScope
+@Singleton
 interface AppComponent {
     fun inject(charactersListFragment: CharactersListFragment)
+    fun inject(charactersFiltersFragment: CharactersFiltersFragment)
 
     @Component.Factory
     interface AppComponentFactory {

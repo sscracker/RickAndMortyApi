@@ -1,24 +1,59 @@
 package ru.example.rickandmortyproject
 
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
+import com.google.android.material.navigation.NavigationBarView
+import ru.example.rickandmortyproject.databinding.ActivityMainBinding
 import ru.example.rickandmortyproject.presentation.characters.list.CharactersListFragment
 
-class MainActivity : FragmentActivity(R.layout.activity_main) {
+class MainActivity : AppCompatActivity() {
+
+    private val binding by lazy {
+        ActivityMainBinding.inflate(layoutInflater)
+    }
+
+    private val navigationListener = NavigationBarView.OnItemSelectedListener {
+        when(it.itemId){
+            R.id.menu_item_characters -> {
+                val startFragment = CharactersListFragment.newInstance(TAB_NAME_CHARACTERS)
+                showTab(startFragment, TAB_NAME_CHARACTERS)
+            }
+        }
+        true
+    }
+
+    private var selectedTabName: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(binding.root)
+        setNavigationListener()
+        setDefaultSelectedTab(savedInstanceState)
+    }
 
-        supportFragmentManager.beginTransaction().run {
-            setReorderingAllowed(true)
-            val charactersListFragment = CharactersListFragment.newInstance()
-            replace(
-                R.id.fragment_container,
-                charactersListFragment,
-                CharactersListFragment.CHARACTERS_TAG
-            )
-            addToBackStack(CharactersListFragment.CHARACTERS_TAG)
-            commit()
+    private fun showTab(startFragment: CharactersListFragment, tabName: String){
+        selectedTabName?.let {
+            supportFragmentManager.saveBackStack(it)
         }
+        supportFragmentManager.beginTransaction()
+            .setReorderingAllowed(true)
+            .replace(R.id.fragment_container,startFragment)
+            .commit()
+        supportFragmentManager.restoreBackStack(tabName)
+        selectedTabName = tabName
+    }
+
+    private fun setNavigationListener(){
+        binding.mainNavigation.setOnItemSelectedListener(navigationListener)
+    }
+
+    private fun setDefaultSelectedTab(savedInstanceState: Bundle?){
+        if (savedInstanceState == null){
+            binding.mainNavigation.selectedItemId = R.id.menu_item_characters
+        }
+    }
+
+    companion object{
+        private const val TAB_NAME_CHARACTERS = "tabCharacters"
     }
 }

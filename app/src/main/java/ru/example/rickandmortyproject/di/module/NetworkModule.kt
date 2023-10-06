@@ -7,20 +7,20 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import ru.example.rickandmortyproject.di.scope.ActivityScope
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import ru.example.rickandmortyproject.data.characters.list.api.CharactersApi
 import ru.example.rickandmortyproject.utils.interceptors.AppChuckerInterceptor
 import ru.example.rickandmortyproject.utils.interceptors.ConnectivityInterceptor
 import ru.example.rickandmortyproject.utils.interceptors.NetworkExceptionInterceptor
 import java.util.concurrent.TimeUnit
+import javax.inject.Singleton
 
 private const val BASE_URL = "https://rickandmortyapi.com/api/"
 
 @Module
 class NetworkModule {
     @Provides
-    @ActivityScope
+    @Singleton
     fun provideRetrofit(
         client: OkHttpClient
     ): Retrofit = Retrofit.Builder()
@@ -30,7 +30,7 @@ class NetworkModule {
         .build()
 
     @Provides
-    @ActivityScope
+    @Singleton
     fun providesOkHttpClient(
         chuckerInterceptor: ChuckerInterceptor,
         httpLoggingInterceptor: HttpLoggingInterceptor,
@@ -47,28 +47,28 @@ class NetworkModule {
         .build()
 
     @Provides
-    @ActivityScope
+    @Singleton
     fun providesChuckerInterceptor(context: Context) =
         AppChuckerInterceptor(context).intercept()
 
     @Provides
-    @ActivityScope
+    @Singleton
     fun providesNetworkExceptionInterceptor() =
         NetworkExceptionInterceptor()
 
     @Provides
-    @ActivityScope
+    @Singleton
     fun providesConnectivityInterceptor(context: Context) =
         ConnectivityInterceptor(context)
 
     @Provides
-    @ActivityScope
+    @Singleton
     fun providesHttpLoggingInterceptor() = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
 
     @Provides
-    @ActivityScope
+    @Singleton
     fun providesCharacterListNetworkSource(retrofit: Retrofit): CharactersApi =
         retrofit.create(CharactersApi::class.java)
 }
