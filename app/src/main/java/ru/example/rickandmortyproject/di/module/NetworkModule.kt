@@ -9,6 +9,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import ru.example.rickandmortyproject.data.characters.list.api.CharactersApi
+import ru.example.rickandmortyproject.di.scope.ActivityScope
 import ru.example.rickandmortyproject.utils.interceptors.AppChuckerInterceptor
 import ru.example.rickandmortyproject.utils.interceptors.ConnectivityInterceptor
 import ru.example.rickandmortyproject.utils.interceptors.NetworkExceptionInterceptor
@@ -20,7 +21,7 @@ private const val BASE_URL = "https://rickandmortyapi.com/api/"
 @Module
 class NetworkModule {
     @Provides
-    @Singleton
+    @ActivityScope
     fun provideRetrofit(
         client: OkHttpClient
     ): Retrofit = Retrofit.Builder()
@@ -30,7 +31,7 @@ class NetworkModule {
         .build()
 
     @Provides
-    @Singleton
+    @ActivityScope
     fun providesOkHttpClient(
         chuckerInterceptor: ChuckerInterceptor,
         httpLoggingInterceptor: HttpLoggingInterceptor,
@@ -47,28 +48,28 @@ class NetworkModule {
         .build()
 
     @Provides
-    @Singleton
+    @ActivityScope
     fun providesChuckerInterceptor(context: Context) =
         AppChuckerInterceptor(context).intercept()
 
     @Provides
-    @Singleton
+    @ActivityScope
     fun providesNetworkExceptionInterceptor() =
         NetworkExceptionInterceptor()
 
     @Provides
-    @Singleton
+    @ActivityScope
     fun providesConnectivityInterceptor(context: Context) =
         ConnectivityInterceptor(context)
 
     @Provides
-    @Singleton
+    @ActivityScope
     fun providesHttpLoggingInterceptor() = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
 
     @Provides
-    @Singleton
+    @ActivityScope
     fun providesCharacterListNetworkSource(retrofit: Retrofit): CharactersApi =
         retrofit.create(CharactersApi::class.java)
 }

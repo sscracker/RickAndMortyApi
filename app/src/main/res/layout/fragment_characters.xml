@@ -6,7 +6,7 @@
 
     <SearchView
         android:id="@+id/characters_search_view"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/app_base_margin"
         android:layout_marginTop="@dimen/app_base_margin"

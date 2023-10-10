@@ -4,8 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
@@ -13,17 +15,17 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterFilterSettings
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterEntity
-import ru.example.rickandmortyproject.domain.characters.list.usecases.GetCharacterFilterUseCase
-import ru.example.rickandmortyproject.domain.characters.list.usecases.GetCharactersUseCase
-import ru.example.rickandmortyproject.domain.characters.list.usecases.LoadCharactersPageUseCase
-import ru.example.rickandmortyproject.domain.characters.list.usecases.SaveCharacterFilterUseCase
+import ru.example.rickandmortyproject.domain.characters.list.usecases.GetCharacterFilterUseCaseImpl
+import ru.example.rickandmortyproject.domain.characters.list.usecases.GetCharactersUseCaseImpl
+import ru.example.rickandmortyproject.domain.characters.list.usecases.LoadCharactersPageUseCaseImpl
+import ru.example.rickandmortyproject.domain.characters.list.usecases.SaveCharacterFilterUseCaseImpl
 import javax.inject.Inject
 
 class CharacterListViewModel @Inject constructor(
-    private val getCharacterFilterUseCase: GetCharacterFilterUseCase,
-    private val saveCharacterFilterUseCase: SaveCharacterFilterUseCase,
-    private val getCharactersUseCase: GetCharactersUseCase,
-    private val loadCharactersPageUseCase: LoadCharactersPageUseCase,
+    private val getCharacterFilterUseCase: GetCharacterFilterUseCaseImpl,
+    private val saveCharacterFilterUseCaseImpl: SaveCharacterFilterUseCaseImpl,
+    private val getCharactersUseCaseImpl: GetCharactersUseCaseImpl,
+    private val loadCharactersPageUseCaseImpl: LoadCharactersPageUseCaseImpl,
     private val pageHolder: CharactersPageHolder,
     private val matcher: CharactersMatcher
 ) : ViewModel() {
@@ -71,7 +73,7 @@ class CharacterListViewModel @Inject constructor(
 
     private fun provideCharactersFlow() {
         job = viewModelScope.launch(Dispatchers.IO) {
-            getCharactersUseCase.invoke()
+            getCharactersUseCaseImpl.invoke()
                 .catch {
                     emitErrorState()
                 }
@@ -85,11 +87,11 @@ class CharacterListViewModel @Inject constructor(
 
     private fun emitFilteredWithQuery(charactersList: List<CharacterEntity>) {
         if (searchQuery != EMPTY_STRING) {
-            charactersList.filter {
-                it.name.contains(searchQuery, true)
-            }.also {
-                _charactersListState.tryEmit(it)
-                if (it.isEmpty()) {
+            charactersList.filter { characters ->
+                characters.name.contains(searchQuery, true)
+            }.also { characters ->
+                _charactersListState.tryEmit(characters)
+                if (characters.isEmpty()) {
                     emitEmptyResultState()
                 }
             }
@@ -104,7 +106,7 @@ class CharacterListViewModel @Inject constructor(
     private fun loadPage() {
         viewModelScope.launch(Dispatchers.IO) {
             var pageNumber = pageHolder.currentPageNumber()
-            val success = loadCharactersPageUseCase.invoke(pageNumber)
+            val success = loadCharactersPageUseCaseImpl.invoke(pageNumber)
             if (success) {
                 pageHolder.savePageNumber(pageNumber)
             } else {
@@ -127,7 +129,7 @@ class CharacterListViewModel @Inject constructor(
 
     fun onButtonClearPressed() {
         viewModelScope.launch(Dispatchers.IO) {
-            val emptySettingsSaved = saveCharacterFilterUseCase.invoke(emptyFilterSettings)
+            val emptySettingsSaved = saveCharacterFilterUseCaseImpl.invoke(emptyFilterSettings)
             if (emptySettingsSaved) {
                 resetData()
                 _notEmptyFilterState.tryEmit(false)

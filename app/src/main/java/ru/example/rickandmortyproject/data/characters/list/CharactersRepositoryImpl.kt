@@ -9,18 +9,17 @@ import ru.example.rickandmortyproject.data.characters.list.mapper.CharactersMapp
 import ru.example.rickandmortyproject.data.db.lists.CharacterListDao
 import ru.example.rickandmortyproject.domain.characters.list.CharactersRepository
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterFilterSettings
+import ru.example.rickandmortyproject.utils.Preferences
 import javax.inject.Inject
 
 class CharactersRepositoryImpl @Inject constructor(
-    context: Context,
+    preferences: Preferences,
     private val charactersApi: CharactersApi,
     private val mapper: CharactersMapper,
     private val characterListDao: CharacterListDao
 ) : CharactersRepository {
 
-    private val preferences: SharedPreferences = context.getSharedPreferences(
-        CHARACTERS_PREFERENCES_NAME, Context.MODE_PRIVATE
-    )
+    private val preferences = preferences.getCharacterRepositoryPreferences()
 
     override fun getAllCharacters() = characterListDao.getCharacterList().map {
         mapper.mapDbModelsListToEntitiesList(it)
@@ -79,7 +78,6 @@ class CharactersRepositoryImpl @Inject constructor(
     }
 
     companion object {
-        private const val CHARACTERS_PREFERENCES_NAME = "charactersRepositoryPreferences"
         private const val KEY_CHARACTERS_FILTER = "charactersFilter"
         private const val EMPTY_VALUE = ""
     }

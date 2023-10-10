@@ -38,20 +38,12 @@ class CharactersListFragment :
         })
     }
 
-    private var tabName: String? = null
+    private val tabName by lazy {
+        requireArguments().getString(KEY_TAB_NAME)
+    }
 
     override fun injectDependencies(appComponent: AppComponent) {
         appComponent.inject(this)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        parseArguments()
-    }
-
-    private fun parseArguments() {
-        val args = requireArguments()
-        tabName = args.getString(KEY_TAB_NAME)
     }
 
     override fun onCreateView(
@@ -86,16 +78,20 @@ class CharactersListFragment :
     private fun subscribeCharactersFlow() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+
                 viewModel.charactersListState.onEach {
                     processCharactersList(it)
                 }.launchIn(this)
+
                 viewModel.notEmptyFilterState.onEach {
                     setButtonClearState(it)
                 }.launchIn(this)
+
                 viewModel.errorState.onEach {
                     showError()
                     stopProgress()
                 }.launchIn(this)
+
                 viewModel.emptyResultState.onEach {
                     showEmptyResult()
                 }.launchIn(this)
@@ -103,14 +99,14 @@ class CharactersListFragment :
         }
     }
 
-    private fun setButtonClearState(notEmptyFilter: Boolean){
-        if (notEmptyFilter){
+    private fun setButtonClearState(notEmptyFilter: Boolean) {
+        if (notEmptyFilter) {
             binding.charactersButtonClear.setBackgroundResource(R.drawable.app_rectangle_button)
             binding.charactersButtonClear.setOnClickListener {
                 viewModel.onButtonClearPressed()
                 startProgress()
             }
-        } else{
+        } else {
             binding.charactersButtonClear.setBackgroundResource(R.drawable.app_gray_button)
             binding.charactersButtonClear.setOnClickListener(null)
         }
@@ -159,27 +155,27 @@ class CharactersListFragment :
 
     private fun setSearchViewListener() {
         val listener = object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(p0: String?): Boolean = true
+            override fun onQueryTextSubmit(query: String?): Boolean = true
 
-            override fun onQueryTextChange(p0: String?): Boolean {
-                viewModel.onSearchQueryChanged(p0)
+            override fun onQueryTextChange(changedText: String?): Boolean {
+                viewModel.onSearchQueryChanged(changedText)
                 return true
             }
         }
         binding.charactersSearchView.setOnQueryTextListener(listener)
     }
 
-    private fun showError(){
+    private fun showError() {
         val errorMessage = "Error! Pull the list and retry loading"
         requireContext().showToast(errorMessage)
     }
 
-    private fun showEmptyResult(){
+    private fun showEmptyResult() {
         val emptyMessage = "Results not found"
         requireContext().showToast(emptyMessage)
     }
 
-    private fun notifyViewModel(){
+    private fun notifyViewModel() {
         viewModel.onViewCreated()
     }
 

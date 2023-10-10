@@ -4,17 +4,24 @@ import com.google.gson.Gson
 import ru.example.rickandmortyproject.data.characters.list.model.CharacterDto
 import ru.example.rickandmortyproject.data.characters.list.api.ResponseDto
 import ru.example.rickandmortyproject.data.characters.list.model.CharacterDbModel
+import ru.example.rickandmortyproject.di.scope.ActivityScope
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterGender
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterStatus
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterEntity
 import javax.inject.Inject
 import javax.inject.Singleton
 
-@Singleton
+const val ALIVE = "Alive"
+const val DEAD = "Dead"
+const val UNKNOWN = "unknown"
+const val FEMALE = "Female"
+const val MALE = "Male"
+const val GENDERLESS = "Genderless"
+@ActivityScope
 class CharactersMapper @Inject constructor() {
 
     fun mapPageToDbModelList(page: ResponseDto) = mutableListOf<CharacterDbModel>().apply {
-        page.results.forEach { json ->
+        page.results.map { json ->
             Gson().fromJson(json, CharacterDto::class.java)?.let {
                 this.add(mapDtoToDbModel(it))
             }
@@ -27,18 +34,18 @@ class CharactersMapper @Inject constructor() {
         id = dto.id,
         name = dto.name,
         status = when (dto.status) {
-            "Alive" -> CharacterStatus.ALIVE.ordinal
-            "Dead" -> CharacterStatus.DEAD.ordinal
-            "unknown" -> CharacterStatus.UNKNOWN.ordinal
+            ALIVE -> CharacterStatus.ALIVE.ordinal
+            DEAD -> CharacterStatus.DEAD.ordinal
+            UNKNOWN -> CharacterStatus.UNKNOWN.ordinal
             else -> throw RuntimeException("Wrong status value: ${dto.status}")
         },
         species = dto.species,
         type = dto.type,
         gender = when (dto.gender) {
-            "Female" -> CharacterGender.FEMALE.ordinal
-            "Male" -> CharacterGender.MALE.ordinal
-            "Genderless" -> CharacterGender.GENDERLESS.ordinal
-            "unknown" -> CharacterGender.UNKNOWN.ordinal
+            FEMALE -> CharacterGender.FEMALE.ordinal
+            MALE -> CharacterGender.MALE.ordinal
+            GENDERLESS -> CharacterGender.GENDERLESS.ordinal
+            UNKNOWN -> CharacterGender.UNKNOWN.ordinal
             else -> throw RuntimeException("Wrong gender value: ${dto.gender}")
         },
         image = dto.image,

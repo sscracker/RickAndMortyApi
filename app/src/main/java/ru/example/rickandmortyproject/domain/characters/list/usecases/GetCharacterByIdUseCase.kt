@@ -1,10 +1,8 @@
 package ru.example.rickandmortyproject.domain.characters.list.usecases
 
-import ru.example.rickandmortyproject.domain.characters.list.CharactersRepository
-import javax.inject.Inject
+import kotlinx.coroutines.flow.Flow
+import ru.example.rickandmortyproject.domain.characters.list.model.CharacterEntity
 
-class GetCharacterByIdUseCase @Inject constructor(
-    private val repository: CharactersRepository
-) {
-    operator fun invoke(ids: List<Int>) = repository.getCharactersById(ids)
+interface GetCharacterByIdUseCase {
+    operator fun invoke(ids: List<Int>): Flow<List<CharacterEntity>>
 }

@@ -8,13 +8,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterFilterSettings
-import ru.example.rickandmortyproject.domain.characters.list.usecases.GetCharacterFilterUseCase
-import ru.example.rickandmortyproject.domain.characters.list.usecases.SaveCharacterFilterUseCase
+import ru.example.rickandmortyproject.domain.characters.list.usecases.GetCharacterFilterUseCaseImpl
+import ru.example.rickandmortyproject.domain.characters.list.usecases.SaveCharacterFilterUseCaseImpl
 import javax.inject.Inject
 
 class CharactersFiltersViewModel @Inject constructor(
-    private val getCharactersFilterUseCase: GetCharacterFilterUseCase,
-    private val saveCharactersFilterUseCase: SaveCharacterFilterUseCase
+    private val getCharactersFilterUseCase: GetCharacterFilterUseCaseImpl,
+    private val saveCharactersFilterUseCase: SaveCharacterFilterUseCaseImpl
 ) : ViewModel() {
 
     private val _charactersFilterState = MutableStateFlow<CharacterFilterSettings?>(null)
