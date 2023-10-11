@@ -4,9 +4,55 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <SearchView
+        android:id="@+id/characters_search_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/app_base_margin"
+        android:layout_marginTop="@dimen/app_base_margin"
+        android:background="@drawable/search_view_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/characters_button_filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="@dimen/app_base_margin"
+        android:background="@drawable/app_rectangle_button"
+        android:minHeight="0dp"
+        android:paddingHorizontal="@dimen/app_base_padding"
+        android:paddingVertical="8dp"
+        android:text="@string/filter"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/app_base_text_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/characters_search_view" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/characters_button_clear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="@dimen/app_base_margin"
+        android:background="@drawable/app_gray_button"
+        android:minHeight="0dp"
+        android:paddingHorizontal="@dimen/app_base_padding"
+        android:paddingVertical="8dp"
+        android:text="@string/clear"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/app_base_text_size"
+        app:layout_constraintEnd_toStartOf="@id/characters_button_filter"
+        app:layout_constraintTop_toBottomOf="@id/characters_search_view" />
+
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh_layout_character_list"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/characters_button_clear"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -15,10 +61,6 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_characters"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 

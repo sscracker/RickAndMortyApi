@@ -1,10 +1,30 @@
 package ru.example.rickandmortyproject.data.characters.list.api
 
-import retrofit2.Response
 import retrofit2.http.GET
-import ru.example.rickandmortyproject.data.characters.list.model.CharactersData
+import retrofit2.http.Path
+import retrofit2.http.Query
+import ru.example.rickandmortyproject.data.characters.list.model.CharacterDto
 
 interface CharactersApi {
     @GET("character")
-    suspend fun getAllCharacters(): Response<CharactersData>
+    suspend fun loadPage(
+        @Query(QUERY_PARAM_PAGE) page: Int
+    ): ResponseDto
+
+    @GET("character/{$PATH_ITEM_ID}")
+    suspend fun loadItem(
+        @Path(PATH_ITEM_ID) itemId: Int
+    ): CharacterDto
+
+    @GET("character/{${PATH_ITEM_IDS_STRING}}")
+    suspend fun loadItemsByIds(
+        @Path(PATH_ITEM_IDS_STRING) itemIds: String
+    ): List<CharacterDto>
+
+    companion object {
+
+        private const val QUERY_PARAM_PAGE = "page"
+        private const val PATH_ITEM_ID = "itemId"
+        private const val PATH_ITEM_IDS_STRING = "itemIdsString"
+    }
 }

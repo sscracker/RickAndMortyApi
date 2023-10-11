@@ -7,13 +7,14 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import ru.example.rickandmortyproject.di.scope.ActivityScope
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import ru.example.rickandmortyproject.data.characters.list.api.CharactersApi
+import ru.example.rickandmortyproject.di.scope.ActivityScope
 import ru.example.rickandmortyproject.utils.interceptors.AppChuckerInterceptor
 import ru.example.rickandmortyproject.utils.interceptors.ConnectivityInterceptor
 import ru.example.rickandmortyproject.utils.interceptors.NetworkExceptionInterceptor
 import java.util.concurrent.TimeUnit
+import javax.inject.Singleton
 
 private const val BASE_URL = "https://rickandmortyapi.com/api/"
 
