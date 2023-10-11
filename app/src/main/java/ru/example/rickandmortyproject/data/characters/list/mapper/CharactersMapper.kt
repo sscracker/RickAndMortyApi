@@ -9,7 +9,6 @@ import ru.example.rickandmortyproject.domain.characters.list.model.CharacterGend
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterStatus
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterEntity
 import javax.inject.Inject
-import javax.inject.Singleton
 
 const val ALIVE = "Alive"
 const val DEAD = "Dead"
@@ -17,16 +16,14 @@ const val UNKNOWN = "unknown"
 const val FEMALE = "Female"
 const val MALE = "Male"
 const val GENDERLESS = "Genderless"
+
 @ActivityScope
 class CharactersMapper @Inject constructor() {
 
-    fun mapPageToDbModelList(page: ResponseDto) = mutableListOf<CharacterDbModel>().apply {
-        page.results.map { json ->
-            Gson().fromJson(json, CharacterDto::class.java)?.let {
-                this.add(mapDtoToDbModel(it))
-            }
+    fun mapPageToDbModelList(page: ResponseDto) =
+        page.results.mapNotNull { json ->
+            Gson().fromJson(json, CharacterDto::class.java)?.let(::mapDtoToDbModel)
         }
-    }.toList()
 
     fun mapDtoListToDbModelList(dtoList: List<CharacterDto>) = dtoList.map { mapDtoToDbModel(it) }
 
