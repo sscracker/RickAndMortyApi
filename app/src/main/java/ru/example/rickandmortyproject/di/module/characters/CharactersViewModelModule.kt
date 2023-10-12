@@ -5,6 +5,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 import ru.example.rickandmortyproject.di.key.ViewModelKey
+import ru.example.rickandmortyproject.presentation.characters.details.CharacterDetailsViewModel
 import ru.example.rickandmortyproject.presentation.characters.list.CharacterListViewModel
 import ru.example.rickandmortyproject.presentation.characters.list.CharactersFiltersViewModel
 
@@ -19,5 +20,10 @@ interface CharactersViewModelModule {
     @IntoMap
     @ViewModelKey(CharactersFiltersViewModel::class)
     fun bindCharactersFilterViewModel(charactersFilterViewModel: CharactersFiltersViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(CharacterDetailsViewModel::class)
+    fun bindCharacterDetailsViewModel(characterDetailsViewModel: CharacterDetailsViewModel): ViewModel
 
 }

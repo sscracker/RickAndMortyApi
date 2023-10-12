@@ -23,6 +23,12 @@ data class CharacterDto(
     @SerializedName("gender")
     @Expose
     val gender: String,
+    @SerializedName("location")
+    @Expose
+    val location: LocationMinDto,
+    @SerializedName("origin")
+    @Expose
+    val origin: LocationMinDto,
     @SerializedName("image")
     @Expose
     val image: String,
