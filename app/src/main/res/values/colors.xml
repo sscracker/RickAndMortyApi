@@ -7,4 +7,5 @@
     <color name="app_gray">#9A8484</color>
     <color name="app_green_light">#73D107</color>
     <color name="app_orange">#F89A11</color>
+    <color name="app_background">#F8DF00</color>
 </resources>
