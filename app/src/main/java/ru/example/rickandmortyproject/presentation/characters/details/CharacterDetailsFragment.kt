@@ -1,11 +1,9 @@
 package ru.example.rickandmortyproject.presentation.characters.details
 
-import android.opengl.Visibility
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowId
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
@@ -65,7 +63,7 @@ class CharacterDetailsFragment :
         }
     }
 
-    private fun notifyViewModel(){
+    private fun notifyViewModel() {
         viewModel.onViewCreated(characterId)
     }
 
@@ -133,8 +131,8 @@ class CharacterDetailsFragment :
     }
 
     private fun showErrorViews() {
-        binding.characterDetailsErrorTextView.visibility = View.VISIBLE
-        binding.characterDetailsButtonReload.visibility = View.VISIBLE
+        binding.characterDetailsErrorTextView.isVisible = true
+        binding.characterDetailsButtonReload.isVisible = true
         binding.characterDetailsButtonReload.setOnClickListener {
             viewModel.onButtonReloadPressed(characterId)
             hideErrorView()
@@ -145,10 +143,7 @@ class CharacterDetailsFragment :
 
     private fun hideErrorView() {
         binding.characterDetailsErrorTextView.isVisible = false
-        binding.characterDetailsButtonReload.apply {
-            isVisible = true
-            setOnClickListener(null)
-        }
+        binding.characterDetailsButtonReload.isVisible = false
     }
 
     private fun showContent() {
@@ -162,11 +157,11 @@ class CharacterDetailsFragment :
     }
 
     private fun startProgress() {
-        binding.characterDetailsProgressBar.visibility = View.VISIBLE
+        binding.characterDetailsProgressBar.isVisible = true
     }
 
     private fun stopProgress() {
-        binding.characterDetailsProgressBar.visibility = View.GONE
+        binding.characterDetailsProgressBar.isVisible = false
     }
 
     companion object {
