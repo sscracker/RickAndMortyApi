@@ -20,6 +20,7 @@ import ru.example.rickandmortyproject.databinding.FragmentCharactersBinding
 import ru.example.rickandmortyproject.di.AppComponent
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterEntity
 import ru.example.rickandmortyproject.presentation.base.BaseFragment
+import ru.example.rickandmortyproject.presentation.characters.details.CharacterDetailsFragment
 import ru.example.rickandmortyproject.presentation.characters.list.adapter.CharacterListAdapter
 import ru.example.rickandmortyproject.utils.showToast
 
@@ -35,11 +36,25 @@ class CharactersListFragment :
         {
             viewModel.onListEnded()
             startProgress()
-        })
+        },
+            onItemClick = { character ->
+                launchDetailsFragment(character.id)
+            })
     }
 
     private val tabName by lazy {
         requireArguments().getString(KEY_TAB_NAME)
+    }
+
+    private fun launchDetailsFragment(id: Int) {
+        tabName?.let { characterDetailsTabName ->
+            parentFragmentManager.beginTransaction().setReorderingAllowed(true)
+                .replace(
+                    R.id.fragment_container,
+                    CharacterDetailsFragment.newInstance(id, characterDetailsTabName)
+                )
+                .addToBackStack(characterDetailsTabName).commit()
+        }
     }
 
     override fun injectDependencies(appComponent: AppComponent) {

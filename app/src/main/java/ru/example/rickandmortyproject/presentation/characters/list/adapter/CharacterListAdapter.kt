@@ -14,7 +14,8 @@ import ru.example.rickandmortyproject.domain.characters.list.model.CharacterStat
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterEntity
 
 class CharacterListAdapter(
-    private val onListEnded: (() -> Unit)?
+    private val onListEnded: (() -> Unit)?,
+    private val onItemClick: (CharacterEntity) -> Unit
 ) : ListAdapter<CharacterEntity, CharacterListAdapter.CharacterListViewHolder>(
     CharacterDiffCallback
 ) {
@@ -51,6 +52,9 @@ class CharacterListAdapter(
         }
         holder.image.load(entity.image) {
             error(R.drawable.person_placeholder)
+        }
+        holder.itemView.setOnClickListener {
+            onItemClick.invoke(entity)
         }
         if (position == currentList.size - 1) {
             onListEnded?.invoke()
