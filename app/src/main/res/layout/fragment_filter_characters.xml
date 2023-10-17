@@ -172,7 +172,7 @@
         android:paddingVertical="@dimen/app_base_padding"
         android:text="@string/apply_filters"
         android:textAllCaps="false"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:textSize="@dimen/app_base_text_size"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -106,6 +106,7 @@ class CharacterListViewModel @Inject constructor(
             var pageNumber = pageHolder.currentPageNumber()
             val success = loadCharactersPageUseCaseImpl.invoke(pageNumber)
             if (success) {
+                pageNumber++
                 pageHolder.savePageNumber(pageNumber)
             } else {
                 emitErrorState()
