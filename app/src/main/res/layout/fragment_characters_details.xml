@@ -97,7 +97,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/character_details_progress_bar">
 
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -169,7 +168,7 @@
                 android:id="@+id/character_details_origin_card_view"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
-                android:layout_marginHorizontal="@dimen/app_base_margin"
+                android:layout_marginHorizontal="4dp"
                 android:layout_marginTop="52dp"
                 app:cardBackgroundColor="@color/app_orange"
                 app:cardCornerRadius="8dp"
