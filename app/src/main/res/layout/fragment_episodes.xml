@@ -50,7 +50,6 @@
         app:layout_constraintEnd_toStartOf="@id/episodes_button_filter"
         app:layout_constraintTop_toBottomOf="@id/episodes_search_view" />
 
-
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh_layout_episodes_list"
         android:layout_width="match_parent"
