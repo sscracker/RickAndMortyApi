@@ -8,6 +8,7 @@ import ru.example.rickandmortyproject.data.db.AppDatabase
 import ru.example.rickandmortyproject.di.scope.ActivityScope
 
 private const val DB_NAME = "app_dp"
+
 @Module
 class LocalDbModule {
     @Provides
