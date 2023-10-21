@@ -2,9 +2,11 @@ package ru.example.rickandmortyproject
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.google.android.material.navigation.NavigationBarView
 import ru.example.rickandmortyproject.databinding.ActivityMainBinding
 import ru.example.rickandmortyproject.presentation.characters.list.CharactersListFragment
+import ru.example.rickandmortyproject.presentation.episodes.list.EpisodesListFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,6 +20,11 @@ class MainActivity : AppCompatActivity() {
                 val startFragment = CharactersListFragment.newInstance(TAB_NAME_CHARACTERS)
                 showTab(startFragment, TAB_NAME_CHARACTERS)
             }
+
+            R.id.menu_item_episodes -> {
+                val startFragment = EpisodesListFragment.newInstance(TAB_NAME_EPISODES)
+                showTab(startFragment, TAB_NAME_EPISODES)
+            }
         }
         true
     }
@@ -30,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         setDefaultSelectedTab(savedInstanceState)
     }
 
-    private fun showTab(startFragment: CharactersListFragment, tabName: String) {
+    private fun showTab(startFragment: Fragment, tabName: String) {
         selectedTabName?.let {
             supportFragmentManager.saveBackStack(it)
         }
@@ -54,5 +61,6 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val TAB_NAME_CHARACTERS = "tabCharacters"
+        private const val TAB_NAME_EPISODES = "tabEpisodes"
     }
 }

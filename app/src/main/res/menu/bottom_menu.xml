@@ -2,7 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/menu_item_characters"
-        android:icon="@drawable/person_placeholder"
+        android:icon="@drawable/icon_rick"
         android:title="Characters" />
+
+    <item
+        android:id="@+id/menu_item_episodes"
+        android:icon="@drawable/icon_episode"
+        android:title="Episodes" />
 
 </menu>
