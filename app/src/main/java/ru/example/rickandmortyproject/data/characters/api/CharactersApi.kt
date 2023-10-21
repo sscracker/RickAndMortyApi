@@ -1,9 +1,9 @@
-package ru.example.rickandmortyproject.data.characters.list.api
+package ru.example.rickandmortyproject.data.characters.api
 
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
-import ru.example.rickandmortyproject.data.characters.list.model.CharacterDto
+import ru.example.rickandmortyproject.data.characters.model.CharacterDto
 
 interface CharactersApi {
     @GET("character")
@@ -16,7 +16,7 @@ interface CharactersApi {
         @Path(PATH_ITEM_ID) itemId: Int
     ): CharacterDto
 
-    @GET("character/{${PATH_ITEM_IDS_STRING}}")
+    @GET("character/{$PATH_ITEM_IDS_STRING}")
     suspend fun loadItemsByIds(
         @Path(PATH_ITEM_IDS_STRING) itemIds: String
     ): List<CharacterDto>

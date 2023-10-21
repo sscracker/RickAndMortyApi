@@ -3,7 +3,7 @@ package ru.example.rickandmortyproject.data.db.lists
 import androidx.room.Dao
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
-import ru.example.rickandmortyproject.data.characters.list.model.CharacterDbModel
+import ru.example.rickandmortyproject.data.characters.model.CharacterDbModel
 import ru.example.rickandmortyproject.data.db.BaseDao
 
 @Dao

@@ -1,11 +1,9 @@
-package ru.example.rickandmortyproject.data.characters.list
+package ru.example.rickandmortyproject.data.characters
 
-import android.content.Context
-import android.content.SharedPreferences
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.map
-import ru.example.rickandmortyproject.data.characters.list.api.CharactersApi
-import ru.example.rickandmortyproject.data.characters.list.mapper.CharactersMapper
+import ru.example.rickandmortyproject.data.characters.api.CharactersApi
+import ru.example.rickandmortyproject.data.characters.mapper.CharactersMapper
 import ru.example.rickandmortyproject.data.db.lists.CharacterListDao
 import ru.example.rickandmortyproject.domain.characters.list.CharactersRepository
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterFilterSettings

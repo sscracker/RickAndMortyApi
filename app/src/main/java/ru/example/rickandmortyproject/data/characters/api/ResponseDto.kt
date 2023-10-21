@@ -1,4 +1,4 @@
-package ru.example.rickandmortyproject.data.characters.list.api
+package ru.example.rickandmortyproject.data.characters.api
 
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
