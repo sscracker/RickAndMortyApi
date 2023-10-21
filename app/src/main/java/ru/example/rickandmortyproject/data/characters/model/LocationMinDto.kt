@@ -1,4 +1,4 @@
-package ru.example.rickandmortyproject.data.characters.list.model
+package ru.example.rickandmortyproject.data.characters.model
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
