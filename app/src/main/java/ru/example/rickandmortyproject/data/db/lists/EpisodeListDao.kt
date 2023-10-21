@@ -5,8 +5,9 @@ import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
 import ru.example.rickandmortyproject.data.db.BaseDao
 import ru.example.rickandmortyproject.data.episodes.model.EpisodeDbModel
+
 @Dao
-interface EpisodeListDao: BaseDao<EpisodeDbModel> {
+interface EpisodeListDao : BaseDao<EpisodeDbModel> {
 
     @Query("SELECT * FROM EpisodesListEntity ORDER BY id")
     fun getAllEpisodes(): Flow<List<EpisodeDbModel>>
