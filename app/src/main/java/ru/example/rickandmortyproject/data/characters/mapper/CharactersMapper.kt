@@ -1,9 +1,9 @@
-package ru.example.rickandmortyproject.data.characters.list.mapper
+package ru.example.rickandmortyproject.data.characters.mapper
 
 import com.google.gson.Gson
-import ru.example.rickandmortyproject.data.characters.list.model.CharacterDto
-import ru.example.rickandmortyproject.data.characters.list.api.ResponseDto
-import ru.example.rickandmortyproject.data.characters.list.model.CharacterDbModel
+import ru.example.rickandmortyproject.data.characters.model.CharacterDto
+import ru.example.rickandmortyproject.data.characters.api.ResponseDto
+import ru.example.rickandmortyproject.data.characters.model.CharacterDbModel
 import ru.example.rickandmortyproject.di.scope.ActivityScope
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterGender
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterStatus
