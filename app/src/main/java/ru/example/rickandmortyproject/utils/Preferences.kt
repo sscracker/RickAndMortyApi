@@ -13,7 +13,14 @@ class Preferences @Inject constructor(
         )
     }
 
+    fun getEpisodeRepositoryPreferences(): SharedPreferences {
+        return context.getSharedPreferences(
+            EPISODES_PREFERENCES_NAME, Context.MODE_PRIVATE
+        )
+    }
+
     companion object {
         private const val CHARACTERS_PREFERENCES_NAME = "charactersRepositoryPreferences"
+        private const val EPISODES_PREFERENCES_NAME = "episodesRepositoryPreferences"
     }
 }

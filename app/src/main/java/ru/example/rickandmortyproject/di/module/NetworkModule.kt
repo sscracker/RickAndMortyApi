@@ -9,6 +9,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import ru.example.rickandmortyproject.data.characters.api.CharactersApi
+import ru.example.rickandmortyproject.data.episodes.api.EpisodesApi
 import ru.example.rickandmortyproject.di.scope.ActivityScope
 import ru.example.rickandmortyproject.utils.interceptors.AppChuckerInterceptor
 import ru.example.rickandmortyproject.utils.interceptors.ConnectivityInterceptor
@@ -71,4 +72,9 @@ class NetworkModule {
     @ActivityScope
     fun providesCharacterListNetworkSource(retrofit: Retrofit): CharactersApi =
         retrofit.create(CharactersApi::class.java)
+
+    @Provides
+    @ActivityScope
+    fun providesEpisodesListNetwork(retrofit: Retrofit): EpisodesApi =
+        retrofit.create(EpisodesApi::class.java)
 }

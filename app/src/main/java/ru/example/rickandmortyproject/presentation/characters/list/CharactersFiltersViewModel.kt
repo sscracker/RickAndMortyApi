@@ -8,8 +8,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterFilterSettings
-import ru.example.rickandmortyproject.domain.characters.list.usecases.GetCharacterFilterUseCaseImpl
-import ru.example.rickandmortyproject.domain.characters.list.usecases.SaveCharacterFilterUseCaseImpl
+import ru.example.rickandmortyproject.data.characters.usecases.GetCharacterFilterUseCaseImpl
+import ru.example.rickandmortyproject.data.characters.usecases.SaveCharacterFilterUseCaseImpl
 import javax.inject.Inject
 
 class CharactersFiltersViewModel @Inject constructor(
