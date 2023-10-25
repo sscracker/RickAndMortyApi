@@ -17,7 +17,7 @@ class EpisodesMapper @Inject constructor() {
             Gson().fromJson(json, EpisodesDto::class.java)?.let(::mapDtoToDbModel)
         }
 
-    fun mapDtoListToDbModelList(dtoList: List<EpisodesDto>) = dtoList.map { mapDtoToDbModel(it) }
+    fun mapDtoListToDbModelList(dtoList: List<EpisodesDto>) = dtoList.map(::mapDtoToDbModel)
 
     fun mapDtoToDbModel(dto: EpisodesDto) = EpisodeDbModel(
         id = dto.id,
@@ -29,21 +29,24 @@ class EpisodesMapper @Inject constructor() {
         created = dto.created
     )
 
-    fun mapDbModelsListToEntitiesList(dbModels: List<EpisodeDbModel>) = dbModels.map {
-        mapDbModelToEntity(it)
-    }
+    fun mapDbModelsListToEntitiesList(dbModels: List<EpisodeDbModel>) =
+        dbModels.map(::mapDbModelToEntity)
 
     fun mapDbModelToEntity(dbModel: EpisodeDbModel) = EpisodeEntity(
         id = dbModel.id,
         name = dbModel.name,
         airDate = dbModel.airDate,
         episode = dbModel.episode,
-        charactersId = if (dbModel.characterId != ""){
-            dbModel.characterId.split(",").map { it.trim().toInt() }
-        } else{
+        charactersId = if (dbModel.characterId.isNotEmpty()) {
+            mapCharactersId(dbModel)
+        } else {
             emptyList()
         },
         url = dbModel.url,
         created = dbModel.created
     )
+
+    private fun mapCharactersId(dbModel: EpisodeDbModel): List<Int> {
+        return dbModel.characterId.split(",").map { it.trim().toInt() }
+    }
 }

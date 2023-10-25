@@ -15,47 +15,41 @@ class EpisodesRepositoryImpl @Inject constructor(
     private val episodesApi: EpisodesApi,
     private val mapper: EpisodesMapper,
     private val episodeListDao: EpisodeListDao
-): EpisodesRepository {
-
+) : EpisodesRepository {
     private val preferences = preferences.getEpisodeRepositoryPreferences()
-    override fun getAllEpisodes(): Flow<List<EpisodeEntity>> = episodeListDao.getAllEpisodes().map {
-        mapper.mapDbModelsListToEntitiesList(it)
-    }
+    override fun getAllEpisodes(): Flow<List<EpisodeEntity>> =
+        episodeListDao.getAllEpisodes().map(mapper::mapDbModelsListToEntitiesList)
 
     override suspend fun loadEpisodesPage(pageNumber: Int): Boolean {
-        return try {
+        kotlin.runCatching {
             val page = episodesApi.loadPage(pageNumber)
             episodeListDao.insertList(
                 mapper.mapPageToDbModelList(page)
             )
-            true
-        } catch (exception: Throwable) {
-            false
-        }
+        }.fold(
+            onSuccess = {return true},
+            onFailure = {return false}
+        )
     }
 
     override fun getEpisode(episodeId: Int) =
-        episodeListDao.getSingleEpisode(episodeId).map {
-            mapper.mapDbModelToEntity(it)
-        }
+        episodeListDao.getSingleEpisode(episodeId).map(mapper::mapDbModelToEntity)
 
     override fun getEpisodesByIds(ids: List<Int>) =
-        episodeListDao.getEpisodesByIds(ids).map {
-            mapper.mapDbModelsListToEntitiesList(it)
-        }
+        episodeListDao.getEpisodesByIds(ids).map(mapper::mapDbModelsListToEntitiesList)
 
     override suspend fun loadEpisodesByIds(ids: List<Int>): Boolean {
-        if (ids.isEmpty()){
+        if (ids.isEmpty()) {
             return true
         }
-        return try {
+        kotlin.runCatching {
             val episodes = episodesApi.loadEpisodesByIds(ids.joinToString(","))
             episodeListDao.insertList(
                 mapper.mapDtoListToDbModelList(episodes)
             )
-            true
-        } catch (exception: Throwable){
-            false
-        }
+        }.fold(
+            onSuccess = { return true },
+            onFailure = { return false }
+        )
     }
 }

@@ -7,6 +7,7 @@ import com.google.gson.JsonArray
 fun Context.showToast(message: String) {
     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }
-fun JsonArray.getIdListFromUrls() = toList().map {
-    it.asString.split("/").last().toInt()
+
+fun JsonArray.getIdListFromUrls() = toList().map { url ->
+    url.asString.split("/").last().toInt()
 }
