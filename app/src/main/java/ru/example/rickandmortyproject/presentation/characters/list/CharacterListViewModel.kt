@@ -13,10 +13,10 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterFilterSettings
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterEntity
-import ru.example.rickandmortyproject.domain.characters.list.usecases.GetCharacterFilterUseCaseImpl
-import ru.example.rickandmortyproject.domain.characters.list.usecases.GetCharactersUseCaseImpl
-import ru.example.rickandmortyproject.domain.characters.list.usecases.LoadCharactersPageUseCaseImpl
-import ru.example.rickandmortyproject.domain.characters.list.usecases.SaveCharacterFilterUseCaseImpl
+import ru.example.rickandmortyproject.data.characters.usecases.GetCharacterFilterUseCaseImpl
+import ru.example.rickandmortyproject.data.characters.usecases.GetCharactersUseCaseImpl
+import ru.example.rickandmortyproject.data.characters.usecases.LoadCharactersPageUseCaseImpl
+import ru.example.rickandmortyproject.data.characters.usecases.SaveCharacterFilterUseCaseImpl
 import javax.inject.Inject
 
 class CharacterListViewModel @Inject constructor(

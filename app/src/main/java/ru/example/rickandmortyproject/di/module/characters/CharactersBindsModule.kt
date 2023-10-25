@@ -16,9 +16,4 @@ interface CharactersBindsModule {
     fun bindsCharacterListRepository(
         charactersRepositoryImpl: CharactersRepositoryImpl
     ): CharactersRepository
-
-    @Binds
-    fun bindViewModelFactory(
-        viewModelFactory: ViewModelFactory
-    ): ViewModelProvider.Factory
 }
