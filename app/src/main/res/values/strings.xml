@@ -2,43 +2,4 @@
     <string name="app_name">RickAndMortyProject</string>
     <string name="character_name">Character Name</string>
     <string name="character_gender">Character gender</string>
-    <string name="button_back">Button back</string>
-    <string name="filter_characters">Filter Characters</string>
-    <string name="name">Name:</string>
-    <string name="enter_character_name">Enter character name</string>
-    <string name="status">Status:</string>
-    <string name="species">Species:</string>
-    <string name="enter_character_species">Enter character species</string>
-    <string name="type">Type:</string>
-    <string name="enter_character_type">Enter character type</string>
-    <string name="gender">Gender:</string>
-    <string name="apply_filters">Apply filters</string>
-    <string name="filter">Filter</string>
-    <string name="clear">Clear</string>
-    <string name="character_species">Character species</string>
-    <string name="character_status">Character status</string>
-    <string name="status_alive">Alive</string>
-    <string name="status_dead">Dead</string>
-    <string name="status_unknown">Unknown</string>
-    <string name="gender_female">Female</string>
-    <string name="gender_male">Male</string>
-    <string name="gender_genderless">Genderless</string>
-    <string name="gender_unknown">Unknown</string>
-    <string name="fail_to_download_data_please_try_again">Fail to download data: Please try again!</string>
-    <string name="reload">Reload</string>
-    <string name="location_moon">Location : Moon</string>
-    <string name="origin_moon">Origin : Moon</string>
-    <string-array name="character_status_selection">
-        <item>Not selected</item>
-        <item>Alive</item>
-        <item>Dead</item>
-        <item>Unknown</item>
-    </string-array>
-    <string-array name="character_gender_selection">
-        <item>Not selected</item>
-        <item>Female</item>
-        <item>Male</item>
-        <item>Genderless</item>
-        <item>Unknown</item>
-    </string-array>
 </resources>
