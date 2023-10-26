@@ -2,4 +2,13 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.RickAndMortyProject" parent="Theme.MaterialComponents.DayNight.DarkActionBar"/>
     <style name="Theme.RickAndMortyProject" parent="Base.Theme.RickAndMortyProject" />
+    <style name="ToolBarAppearance" parent="TextAppearance.MaterialComponents.Button">
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="RickAndMortyToolbar" parent="Widget.AppCompat.Toolbar">
+        <item name="android:background">@color/app_green</item>
+        <item name="android:theme">@style/Base.Theme.RickAndMortyProject</item>
+        <item name="android:popupTheme">@style/Widget.AppCompat.Toolbar</item>
+        <item name="android:textAppearance">@style/ToolBarAppearance</item>
+    </style>
 </resources>
