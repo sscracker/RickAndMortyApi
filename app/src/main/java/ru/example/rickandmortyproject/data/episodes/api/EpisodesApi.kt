@@ -10,17 +10,17 @@ interface EpisodesApi {
 
     @GET("episode")
     suspend fun loadPage(
-        @Query(QUERY_PARAM_PAGE) page: Int
+        @Query("page") page: Int
     ): ResponseDto
 
-    @GET("episode/{$PATH_ITEM_ID}")
+    @GET("episode/itemId")
     suspend fun loadItem(
-        @Path(PATH_ITEM_ID) itemId: Int
+        @Path("itemId") itemId: Int
     ): EpisodesDto
 
-    @GET("episode/{$PATH_ITEM_IDS_STRING}")
+    @GET("episode/itemIdsString")
     suspend fun loadEpisodesByIds(
-        @Path(PATH_ITEM_IDS_STRING) itemIds: String
+        @Path("itemIdsString") itemIds: String
     ): List<EpisodesDto>
 
     companion object {

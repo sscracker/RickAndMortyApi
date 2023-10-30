@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import ru.example.rickandmortyproject.R
 import ru.example.rickandmortyproject.databinding.FragmentEpisodesBinding
 import ru.example.rickandmortyproject.di.AppComponent
 import ru.example.rickandmortyproject.domain.episodes.list.EpisodeEntity
@@ -58,14 +59,13 @@ class EpisodesListFragment :
         configSwipeRefreshLayout()
         setOnRefreshListener()
         subscribeEpisodesFlow()
-        notifyViewModel()
         startProgress()
+        notifyViewModel()
     }
 
-    private fun notifyViewModel() {
+    private fun notifyViewModel(){
         viewModel.onViewCreated()
     }
-
     private fun initEpisodesList() {
         with(binding.recyclerViewEpisodes) {
             layoutManager = GridLayoutManager(requireActivity(), COLUMN_COUNT)
@@ -117,12 +117,12 @@ class EpisodesListFragment :
     }
 
     private fun showErrorToast() {
-        val message = "Pull the list and retry loading"
+        val message = requireContext().getString(R.string.pull_the_list)
         requireContext().showToast(message)
     }
 
     private fun showEmptyResultToast() {
-        val message = "The list is empty!"
+        val message = requireContext().getString(R.string.empty_list)
         requireContext().showToast(message)
     }
 

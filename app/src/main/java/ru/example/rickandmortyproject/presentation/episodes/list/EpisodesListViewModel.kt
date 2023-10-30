@@ -25,10 +25,10 @@ class EpisodesListViewModel @Inject constructor(
     private val _episodesListStateFlow = MutableSharedFlow<List<EpisodeEntity>>(1)
     val episodesListStateFlow = _episodesListStateFlow.asSharedFlow()
 
-    private val _errorStateFlow = MutableStateFlow<Any?>(null)
+    private val _errorStateFlow = MutableStateFlow<Unit?>(null)
     val errorStateFlow = _errorStateFlow.asStateFlow().filterNotNull()
 
-    private val _emptyStateFlow = MutableStateFlow<Any?>(null)
+    private val _emptyStateFlow = MutableStateFlow<Unit?>(null)
     val emptyStateFlow = _emptyStateFlow.asStateFlow().filterNotNull()
 
     private var job: Job? = null
@@ -72,11 +72,11 @@ class EpisodesListViewModel @Inject constructor(
     }
 
     private fun emitErrorState() {
-        _errorStateFlow.tryEmit(Any())
+        _errorStateFlow.tryEmit(Unit)
     }
 
     private fun emitEmptyResultState() {
-        _emptyStateFlow.tryEmit(Any())
+        _emptyStateFlow.tryEmit(Unit)
     }
 
     fun onListEnded() {
