@@ -13,11 +13,11 @@ class EpisodesPageHolder @Inject constructor(
 
     fun currentPageNumber() = preferences.getInt(KEY_EPISODES_PAGE_NUMBER, DEFAULT_PAGE_NUMBER)
 
-    fun savePageNumber(pageNumber: Int){
-        preferences.edit().putInt(KEY_EPISODES_PAGE_NUMBER,pageNumber).apply()
+    fun savePageNumber(pageNumber: Int) {
+        preferences.edit().putInt(KEY_EPISODES_PAGE_NUMBER, pageNumber).apply()
     }
 
-    companion object{
+    companion object {
         private const val PREFERENCES_NAME = "episodesPagePreferences"
         private const val KEY_EPISODES_PAGE_NUMBER = "episodesPageNumber"
         private const val DEFAULT_PAGE_NUMBER = 1

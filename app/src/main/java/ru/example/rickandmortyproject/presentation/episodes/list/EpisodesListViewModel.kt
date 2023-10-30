@@ -20,54 +20,71 @@ class EpisodesListViewModel @Inject constructor(
     private val getEpisodesUseCaseImpl: GetEpisodesUseCaseImpl,
     private val loadEpisodesPagesUseCaseImpl: LoadEpisodesPagesUseCaseImpl,
     private val pageHolder: EpisodesPageHolder
-): ViewModel() {
+) : ViewModel() {
 
-    private val _episodesListState = MutableSharedFlow<List<EpisodeEntity>>(1)
-    val episodesListState = _episodesListState.asSharedFlow()
+    private val _episodesListStateFlow = MutableSharedFlow<List<EpisodeEntity>>(1)
+    val episodesListStateFlow = _episodesListStateFlow.asSharedFlow()
 
-    private val _errorState = MutableStateFlow<Any?>(null)
-    val errorState = _errorState.asStateFlow().filterNotNull()
+    private val _errorStateFlow = MutableStateFlow<Any?>(null)
+    val errorStateFlow = _errorStateFlow.asStateFlow().filterNotNull()
+
+    private val _emptyStateFlow = MutableStateFlow<Any?>(null)
+    val emptyStateFlow = _emptyStateFlow.asStateFlow().filterNotNull()
 
     private var job: Job? = null
 
-    fun onViewCreated(){
-        if (pageHolder.currentPageNumber() == INITIAL_EPISODE_PAGE_NUMBER){
+    fun onViewCreated() {
+        if (pageHolder.currentPageNumber() == INITIAL_EPISODE_PAGE_NUMBER) {
             loadEpisodesPage()
         }
         provideEpisodesFlow()
     }
 
     private fun provideEpisodesFlow() {
-        job = viewModelScope.launch(Dispatchers.IO){
+        job = viewModelScope.launch(Dispatchers.IO) {
             getEpisodesUseCaseImpl.invoke()
                 .catch {
                     emitErrorState()
                 }
+                .collect { episodesList ->
+                    emitEpisodeListState(episodesList)
+                }
+        }
+    }
+
+    private fun emitEpisodeListState(episodes: List<EpisodeEntity>) {
+        _episodesListStateFlow.tryEmit(episodes)
+        if (episodes.isEmpty()) {
+            emitEmptyResultState()
         }
     }
 
     private fun loadEpisodesPage() {
-        viewModelScope.launch(Dispatchers.IO){
+        viewModelScope.launch(Dispatchers.IO) {
             val pageNumber = pageHolder.currentPageNumber()
             val success = loadEpisodesPagesUseCaseImpl.invoke(pageNumber)
-            if (success){
+            if (success) {
                 pageHolder.savePageNumber(pageNumber)
-            } else{
+            } else {
                 emitErrorState()
             }
         }
     }
 
-    private fun emitErrorState(){
-        _errorState.tryEmit(Any())
+    private fun emitErrorState() {
+        _errorStateFlow.tryEmit(Any())
     }
 
-    fun onListEnded(){
+    private fun emitEmptyResultState() {
+        _emptyStateFlow.tryEmit(Any())
+    }
+
+    fun onListEnded() {
         loadEpisodesPage()
     }
 
-    fun onListSwiped(){
-      resetData()
+    fun onListSwiped() {
+        resetData()
     }
 
     private fun resetData() {
@@ -75,7 +92,7 @@ class EpisodesListViewModel @Inject constructor(
         provideEpisodesFlow()
     }
 
-    companion object{
+    companion object {
         private const val INITIAL_EPISODE_PAGE_NUMBER = 1
     }
 }

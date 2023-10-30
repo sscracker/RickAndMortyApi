@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -14,8 +13,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import ru.example.rickandmortyproject.R
-import ru.example.rickandmortyproject.databinding.FragmentCharactersBinding
 import ru.example.rickandmortyproject.databinding.FragmentEpisodesBinding
 import ru.example.rickandmortyproject.di.AppComponent
 import ru.example.rickandmortyproject.domain.episodes.list.EpisodeEntity
@@ -25,7 +22,8 @@ import ru.example.rickandmortyproject.utils.showToast
 
 private const val COLUMN_COUNT = 2
 
-class EpisodesListFragment : BaseFragment<EpisodesListViewModel>(EpisodesListViewModel::class.java) {
+class EpisodesListFragment :
+    BaseFragment<EpisodesListViewModel>(EpisodesListViewModel::class.java) {
     private var _binding: FragmentEpisodesBinding? = null
     private val binding get() = _binding!!
 
@@ -64,7 +62,7 @@ class EpisodesListFragment : BaseFragment<EpisodesListViewModel>(EpisodesListVie
         startProgress()
     }
 
-    private fun notifyViewModel(){
+    private fun notifyViewModel() {
         viewModel.onViewCreated()
     }
 
@@ -75,47 +73,56 @@ class EpisodesListFragment : BaseFragment<EpisodesListViewModel>(EpisodesListVie
         }
     }
 
-    private fun subscribeEpisodesFlow(){
+    private fun subscribeEpisodesFlow() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModel.episodesListState.onEach {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.episodesListStateFlow.onEach {
                     processEpisodesList(it)
                 }.launchIn(this)
 
-                viewModel.errorState.onEach {
-                    showError()
+                viewModel.errorStateFlow.onEach {
+                    showErrorToast()
                     stopProgress()
+                }.launchIn(this)
+
+                viewModel.errorStateFlow.onEach {
+                    showEmptyResultToast()
                 }.launchIn(this)
             }
         }
     }
 
-    private fun processEpisodesList(episodes: List<EpisodeEntity>){
+    private fun processEpisodesList(episodes: List<EpisodeEntity>) {
         episodesAdapter.submitList(episodes)
         stopProgress()
     }
 
-    private fun startProgress(){
+    private fun startProgress() {
         binding.progressBar.isVisible = true
     }
 
-    private fun stopProgress(){
+    private fun stopProgress() {
         binding.progressBar.isVisible = false
     }
 
-    private fun configSwipeRefreshLayout(){
+    private fun configSwipeRefreshLayout() {
         binding.swipeRefreshLayoutEpisodesList.setProgressViewEndTarget(false, 0)
     }
 
-    private fun setOnRefreshListener(){
+    private fun setOnRefreshListener() {
         binding.swipeRefreshLayoutEpisodesList.setOnRefreshListener {
             viewModel.onListSwiped()
             startProgress()
         }
     }
 
-    private fun showError(){
+    private fun showErrorToast() {
         val message = "Pull the list and retry loading"
+        requireContext().showToast(message)
+    }
+
+    private fun showEmptyResultToast() {
+        val message = "The list is empty!"
         requireContext().showToast(message)
     }
 
