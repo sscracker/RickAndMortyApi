@@ -9,7 +9,7 @@ import javax.inject.Inject
 class GetEpisodesUseCaseImpl @Inject constructor(
     private val repository: EpisodesRepository
 ) : GetEpisodesUseCase {
-    override fun invoke(ids: List<Int>): Flow<List<EpisodeEntity>> {
-        return repository.getEpisodesByIds(ids)
+    override fun invoke(): Flow<List<EpisodeEntity>> {
+        return repository.getAllEpisodes()
     }
 }

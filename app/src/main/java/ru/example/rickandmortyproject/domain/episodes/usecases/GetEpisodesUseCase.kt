@@ -5,5 +5,5 @@ import ru.example.rickandmortyproject.domain.episodes.list.EpisodeEntity
 
 
 interface GetEpisodesUseCase {
-    operator fun invoke(ids: List<Int>): Flow<List<EpisodeEntity>>
+    operator fun invoke(): Flow<List<EpisodeEntity>>
 }
