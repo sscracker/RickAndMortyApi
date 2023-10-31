@@ -41,4 +41,6 @@
         <item>Genderless</item>
         <item>Unknown</item>
     </string-array>
+    <string name="pull_the_list">Pull the list and retry loading</string>
+    <string name="empty_list">The list is empty!</string>
 </resources>

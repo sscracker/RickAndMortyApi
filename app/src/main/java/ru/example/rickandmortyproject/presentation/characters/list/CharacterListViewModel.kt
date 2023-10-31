@@ -28,19 +28,19 @@ class CharacterListViewModel @Inject constructor(
     private val matcher: CharactersMatcher
 ) : ViewModel() {
 
-    private val _charactersListState = MutableSharedFlow<List<CharacterEntity>>(1)
-    val charactersListState = _charactersListState.asSharedFlow()
+    private val _charactersListStateFlow = MutableSharedFlow<List<CharacterEntity>>(1)
+    val charactersListStateFlow = _charactersListStateFlow.asSharedFlow()
 
-    private val _notEmptyFilterState = MutableStateFlow<Boolean?>(null)
-    val notEmptyFilterState = _notEmptyFilterState.asStateFlow()
+    private val _notEmptyFilterStateFlow = MutableStateFlow<Boolean?>(null)
+    val notEmptyFilterStateFlow = _notEmptyFilterStateFlow.asStateFlow()
         .filterNotNull()
 
-    private val _errorState = MutableStateFlow<Any?>(null)
-    val errorState = _errorState.asStateFlow()
+    private val _errorStateFlow = MutableStateFlow<Any?>(null)
+    val errorStateFlow = _errorStateFlow.asStateFlow()
         .filterNotNull()
 
-    private val _emptyResultState = MutableStateFlow<Any?>(null)
-    val emptyResultState = _emptyResultState.asStateFlow()
+    private val _emptyResultStateFLow = MutableStateFlow<Any?>(null)
+    val emptyResultStateFLow = _emptyResultStateFLow.asStateFlow()
         .filterNotNull()
 
     private var job: Job? = null
@@ -62,9 +62,9 @@ class CharacterListViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val filterSettings = getCharacterFilterUseCase.invoke()
             if (filterSettings != emptyFilterSettings) {
-                _notEmptyFilterState.tryEmit(true)
+                _notEmptyFilterStateFlow.tryEmit(true)
             } else {
-                _notEmptyFilterState.tryEmit(false)
+                _notEmptyFilterStateFlow.tryEmit(false)
             }
         }
     }
@@ -88,13 +88,13 @@ class CharacterListViewModel @Inject constructor(
             charactersList.filter { characters ->
                 characters.name.contains(searchQuery, true)
             }.also { characters ->
-                _charactersListState.tryEmit(characters)
+                _charactersListStateFlow.tryEmit(characters)
                 if (characters.isEmpty()) {
                     emitEmptyResultState()
                 }
             }
         } else {
-            _charactersListState.tryEmit(charactersList)
+            _charactersListStateFlow.tryEmit(charactersList)
             if (charactersList.isEmpty()) {
                 emitEmptyResultState()
             }
@@ -131,7 +131,7 @@ class CharacterListViewModel @Inject constructor(
             val emptySettingsSaved = saveCharacterFilterUseCaseImpl.invoke(emptyFilterSettings)
             if (emptySettingsSaved) {
                 resetData()
-                _notEmptyFilterState.tryEmit(false)
+                _notEmptyFilterStateFlow.tryEmit(false)
             }
         }
     }
@@ -143,11 +143,11 @@ class CharacterListViewModel @Inject constructor(
 
 
     private fun emitErrorState() {
-        _errorState.tryEmit(Any())
+        _errorStateFlow.tryEmit(Any())
     }
 
     private fun emitEmptyResultState() {
-        _emptyResultState.tryEmit(Any())
+        _emptyResultStateFLow.tryEmit(Any())
     }
 
     private fun resetData() {

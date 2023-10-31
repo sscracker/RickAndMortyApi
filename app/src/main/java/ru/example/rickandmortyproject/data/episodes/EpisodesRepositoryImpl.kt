@@ -17,7 +17,7 @@ class EpisodesRepositoryImpl @Inject constructor(
     private val episodeListDao: EpisodeListDao
 ) : EpisodesRepository {
     private val preferences = preferences.getEpisodeRepositoryPreferences()
-    override fun getAllEpisodes(): Flow<List<EpisodeEntity>> =
+    override fun getAllEpisodes() =
         episodeListDao.getAllEpisodes().map(mapper::mapDbModelsListToEntitiesList)
 
     override suspend fun loadEpisodesPage(pageNumber: Int): Boolean {

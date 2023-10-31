@@ -14,7 +14,7 @@ interface EpisodesApi {
     ): ResponseDto
 
     @GET("episode/itemId")
-    suspend fun loadEpisode(
+    suspend fun loadItem(
         @Path("itemId") itemId: Int
     ): EpisodesDto
 
@@ -22,4 +22,11 @@ interface EpisodesApi {
     suspend fun loadEpisodesByIds(
         @Path("itemIdsString") itemIds: String
     ): List<EpisodesDto>
+
+    companion object {
+
+        private const val QUERY_PARAM_PAGE = "page"
+        private const val PATH_ITEM_ID = "itemId"
+        private const val PATH_ITEM_IDS_STRING = "itemIdsString"
+    }
 }

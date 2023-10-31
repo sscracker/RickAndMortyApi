@@ -36,7 +36,7 @@ class EpisodesMapper @Inject constructor() {
         id = dbModel.id,
         name = dbModel.name,
         airDate = dbModel.airDate,
-        episode = dbModel.episode,
+        episodeCode = dbModel.episode,
         charactersId = if (dbModel.characterId.isNotEmpty()) {
             mapCharactersId(dbModel)
         } else {
