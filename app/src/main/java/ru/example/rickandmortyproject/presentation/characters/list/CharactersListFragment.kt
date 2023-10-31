@@ -12,7 +12,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -33,14 +32,16 @@ class CharactersListFragment :
     private var _binding: FragmentCharactersBinding? = null
     private val binding get() = _binding!!
     private val characterAdapter by lazy {
-        CharacterListAdapter(onListEnded =
-        {
-            viewModel.onListEnded()
-            startProgress()
-        },
+        CharacterListAdapter(
+            onListEnded =
+            {
+                viewModel.onListEnded()
+                startProgress()
+            },
             onItemClick = { character ->
                 launchDetailsFragment(character.id)
-            })
+            }
+        )
     }
 
     private val tabName by lazy {
@@ -94,7 +95,6 @@ class CharactersListFragment :
     private fun subscribeCharactersFlow() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-
                 viewModel.charactersListStateFlow.onEach {
                     processCharactersList(it)
                 }.launchIn(this)
@@ -210,5 +210,4 @@ class CharactersListFragment :
             arguments = bundleOf(KEY_TAB_NAME to tabName)
         }
     }
-
 }

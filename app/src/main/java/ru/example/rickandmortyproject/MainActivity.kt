@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private var selectedTabName: String? = null
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) { // asfdfgbf
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setNavigationListener()

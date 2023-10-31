@@ -1,14 +1,12 @@
 package ru.example.rickandmortyproject.data.episodes
 
-import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 import kotlinx.coroutines.flow.map
 import ru.example.rickandmortyproject.data.db.lists.EpisodeListDao
 import ru.example.rickandmortyproject.data.episodes.api.EpisodesApi
 import ru.example.rickandmortyproject.data.episodes.mapper.EpisodesMapper
 import ru.example.rickandmortyproject.domain.episodes.EpisodesRepository
-import ru.example.rickandmortyproject.domain.episodes.list.EpisodeEntity
 import ru.example.rickandmortyproject.utils.Preferences
-import javax.inject.Inject
 
 class EpisodesRepositoryImpl @Inject constructor(
     preferences: Preferences,
@@ -27,8 +25,8 @@ class EpisodesRepositoryImpl @Inject constructor(
                 mapper.mapPageToDbModelList(page)
             )
         }.fold(
-            onSuccess = {return true},
-            onFailure = {return false}
+            onSuccess = { return true },
+            onFailure = { return false }
         )
     }
 

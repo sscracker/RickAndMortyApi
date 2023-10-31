@@ -63,7 +63,7 @@ class EpisodesListFragment :
         notifyViewModel()
     }
 
-    private fun notifyViewModel(){
+    private fun notifyViewModel() {
         viewModel.onViewCreated()
     }
     private fun initEpisodesList() {

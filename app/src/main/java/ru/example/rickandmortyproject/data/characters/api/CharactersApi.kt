@@ -16,7 +16,7 @@ interface CharactersApi {
         @Path(PATH_ITEM_ID) itemId: Int
     ): CharacterDto
 
-    @GET("character/{${PATH_ITEM_IDS_STRING}}")
+    @GET("character/{$PATH_ITEM_IDS_STRING}")
     suspend fun loadItemsByIds(
         @Path(PATH_ITEM_IDS_STRING) itemIds: String
     ): List<CharacterDto>
