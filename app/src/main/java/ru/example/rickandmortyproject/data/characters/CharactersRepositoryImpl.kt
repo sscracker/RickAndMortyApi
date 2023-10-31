@@ -1,6 +1,7 @@
 package ru.example.rickandmortyproject.data.characters
 
 import com.google.gson.Gson
+import javax.inject.Inject
 import kotlinx.coroutines.flow.map
 import ru.example.rickandmortyproject.data.characters.api.CharactersApi
 import ru.example.rickandmortyproject.data.characters.mapper.CharactersMapper
@@ -8,7 +9,6 @@ import ru.example.rickandmortyproject.data.db.lists.CharacterListDao
 import ru.example.rickandmortyproject.domain.characters.list.CharactersRepository
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterFilterSettings
 import ru.example.rickandmortyproject.utils.Preferences
-import javax.inject.Inject
 
 class CharactersRepositoryImpl @Inject constructor(
     preferences: Preferences,
@@ -65,7 +65,11 @@ class CharactersRepositoryImpl @Inject constructor(
         return json?.let {
             Gson().fromJson(json, CharacterFilterSettings::class.java)
         } ?: CharacterFilterSettings(
-            EMPTY_VALUE, null, EMPTY_VALUE, EMPTY_VALUE, null
+            EMPTY_VALUE,
+            null,
+            EMPTY_VALUE,
+            EMPTY_VALUE,
+            null
         )
     }
 
@@ -79,5 +83,4 @@ class CharactersRepositoryImpl @Inject constructor(
         private const val KEY_CHARACTERS_FILTER = "charactersFilter"
         private const val EMPTY_VALUE = ""
     }
-
 }

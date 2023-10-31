@@ -1,13 +1,13 @@
 package ru.example.rickandmortyproject.data.episodes.mapper
 
 import com.google.gson.Gson
+import javax.inject.Inject
 import ru.example.rickandmortyproject.data.characters.api.ResponseDto
 import ru.example.rickandmortyproject.data.episodes.model.EpisodeDbModel
 import ru.example.rickandmortyproject.data.episodes.model.EpisodesDto
 import ru.example.rickandmortyproject.di.scope.ActivityScope
 import ru.example.rickandmortyproject.domain.episodes.list.EpisodeEntity
 import ru.example.rickandmortyproject.utils.getIdListFromUrls
-import javax.inject.Inject
 
 @ActivityScope
 class EpisodesMapper @Inject constructor() {

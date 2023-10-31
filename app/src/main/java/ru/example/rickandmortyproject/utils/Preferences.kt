@@ -9,13 +9,15 @@ class Preferences @Inject constructor(
 ) {
     fun getCharacterRepositoryPreferences(): SharedPreferences {
         return context.getSharedPreferences(
-            CHARACTERS_PREFERENCES_NAME, Context.MODE_PRIVATE
+            CHARACTERS_PREFERENCES_NAME,
+            Context.MODE_PRIVATE
         )
     }
 
     fun getEpisodeRepositoryPreferences(): SharedPreferences {
         return context.getSharedPreferences(
-            EPISODES_PREFERENCES_NAME, Context.MODE_PRIVATE
+            EPISODES_PREFERENCES_NAME,
+            Context.MODE_PRIVATE
         )
     }
 

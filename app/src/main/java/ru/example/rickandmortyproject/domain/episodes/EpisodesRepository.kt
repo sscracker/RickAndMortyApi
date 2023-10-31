@@ -3,7 +3,6 @@ package ru.example.rickandmortyproject.domain.episodes
 import kotlinx.coroutines.flow.Flow
 import ru.example.rickandmortyproject.domain.episodes.list.EpisodeEntity
 
-
 interface EpisodesRepository {
 
     fun getAllEpisodes(): Flow<List<EpisodeEntity>>

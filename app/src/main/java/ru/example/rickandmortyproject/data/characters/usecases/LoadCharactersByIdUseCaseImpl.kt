@@ -1,8 +1,8 @@
 package ru.example.rickandmortyproject.data.characters.usecases
 
+import javax.inject.Inject
 import ru.example.rickandmortyproject.domain.characters.list.CharactersRepository
 import ru.example.rickandmortyproject.domain.characters.list.usecases.LoadCharactersByIdUseCase
-import javax.inject.Inject
 
 class LoadCharactersByIdUseCaseImpl @Inject constructor(
     private val repository: CharactersRepository

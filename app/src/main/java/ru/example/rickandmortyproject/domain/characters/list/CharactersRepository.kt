@@ -1,8 +1,8 @@
 package ru.example.rickandmortyproject.domain.characters.list
 
 import kotlinx.coroutines.flow.Flow
-import ru.example.rickandmortyproject.domain.characters.list.model.CharacterFilterSettings
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterEntity
+import ru.example.rickandmortyproject.domain.characters.list.model.CharacterFilterSettings
 
 interface CharactersRepository {
     fun getAllCharacters(): Flow<List<CharacterEntity>>

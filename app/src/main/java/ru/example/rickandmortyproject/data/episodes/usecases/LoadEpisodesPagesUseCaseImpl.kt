@@ -1,8 +1,8 @@
 package ru.example.rickandmortyproject.data.episodes.usecases
 
+import javax.inject.Inject
 import ru.example.rickandmortyproject.domain.episodes.EpisodesRepository
 import ru.example.rickandmortyproject.domain.episodes.usecases.LoadEpisodesPageUseCase
-import javax.inject.Inject
 
 class LoadEpisodesPagesUseCaseImpl @Inject constructor(
     private val repository: EpisodesRepository
