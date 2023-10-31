@@ -12,6 +12,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -105,11 +106,11 @@ class CharactersListFragment :
                 viewModel.errorStateFlow.onEach {
                     showError()
                     stopProgress()
-                }.launchIn(this)
+                }
 
                 viewModel.emptyResultStateFLow.onEach {
                     showEmptyResult()
-                }.launchIn(this)
+                }
             }
         }
     }
