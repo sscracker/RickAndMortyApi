@@ -2,6 +2,7 @@ package ru.example.rickandmortyproject.presentation.episodes.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -14,7 +15,6 @@ import kotlinx.coroutines.launch
 import ru.example.rickandmortyproject.data.episodes.usecases.GetEpisodesUseCaseImpl
 import ru.example.rickandmortyproject.data.episodes.usecases.LoadEpisodesPagesUseCaseImpl
 import ru.example.rickandmortyproject.domain.episodes.list.EpisodeEntity
-import javax.inject.Inject
 
 class EpisodesListViewModel @Inject constructor(
     private val getEpisodesUseCaseImpl: GetEpisodesUseCaseImpl,

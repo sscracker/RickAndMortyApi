@@ -8,7 +8,8 @@ class EpisodesPageHolder @Inject constructor(
     context: Context
 ) {
     private val preferences: SharedPreferences = context.getSharedPreferences(
-        PREFERENCES_NAME, Context.MODE_PRIVATE
+        PREFERENCES_NAME,
+        Context.MODE_PRIVATE
     )
 
     fun currentPageNumber() = preferences.getInt(KEY_EPISODES_PAGE_NUMBER, DEFAULT_PAGE_NUMBER)

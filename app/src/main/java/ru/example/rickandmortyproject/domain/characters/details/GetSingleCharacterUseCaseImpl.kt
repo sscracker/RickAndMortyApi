@@ -1,7 +1,7 @@
 package ru.example.rickandmortyproject.domain.characters.details
 
-import ru.example.rickandmortyproject.domain.characters.list.CharactersRepository
 import javax.inject.Inject
+import ru.example.rickandmortyproject.domain.characters.list.CharactersRepository
 
 class GetSingleCharacterUseCaseImpl @Inject constructor(
     private val repository: CharactersRepository

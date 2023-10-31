@@ -2,6 +2,7 @@ package ru.example.rickandmortyproject.presentation.characters.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -11,13 +12,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
-import ru.example.rickandmortyproject.domain.characters.list.model.CharacterFilterSettings
-import ru.example.rickandmortyproject.domain.characters.list.model.CharacterEntity
 import ru.example.rickandmortyproject.data.characters.usecases.GetCharacterFilterUseCaseImpl
 import ru.example.rickandmortyproject.data.characters.usecases.GetCharactersUseCaseImpl
 import ru.example.rickandmortyproject.data.characters.usecases.LoadCharactersPageUseCaseImpl
 import ru.example.rickandmortyproject.data.characters.usecases.SaveCharacterFilterUseCaseImpl
-import javax.inject.Inject
+import ru.example.rickandmortyproject.domain.characters.list.model.CharacterEntity
+import ru.example.rickandmortyproject.domain.characters.list.model.CharacterFilterSettings
 
 class CharacterListViewModel @Inject constructor(
     private val getCharacterFilterUseCase: GetCharacterFilterUseCaseImpl,
@@ -45,7 +45,11 @@ class CharacterListViewModel @Inject constructor(
 
     private var job: Job? = null
     private val emptyFilterSettings = CharacterFilterSettings(
-        EMPTY_STRING, null, EMPTY_STRING, EMPTY_STRING, null
+        EMPTY_STRING,
+        null,
+        EMPTY_STRING,
+        EMPTY_STRING,
+        null
     )
 
     private var searchQuery = EMPTY_STRING
@@ -140,7 +144,6 @@ class CharacterListViewModel @Inject constructor(
         searchQuery = query?.trim() ?: EMPTY_STRING
         resetData()
     }
-
 
     private fun emitErrorState() {
         _errorStateFlow.tryEmit(Any())

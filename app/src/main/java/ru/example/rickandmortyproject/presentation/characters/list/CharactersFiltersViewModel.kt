@@ -2,15 +2,15 @@ package ru.example.rickandmortyproject.presentation.characters.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
-import ru.example.rickandmortyproject.domain.characters.list.model.CharacterFilterSettings
 import ru.example.rickandmortyproject.data.characters.usecases.GetCharacterFilterUseCaseImpl
 import ru.example.rickandmortyproject.data.characters.usecases.SaveCharacterFilterUseCaseImpl
-import javax.inject.Inject
+import ru.example.rickandmortyproject.domain.characters.list.model.CharacterFilterSettings
 
 class CharactersFiltersViewModel @Inject constructor(
     private val getCharactersFilterUseCase: GetCharacterFilterUseCaseImpl,

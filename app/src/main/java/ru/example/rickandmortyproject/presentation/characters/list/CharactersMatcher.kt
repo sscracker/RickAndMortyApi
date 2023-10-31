@@ -1,8 +1,8 @@
 package ru.example.rickandmortyproject.presentation.characters.list
 
-import ru.example.rickandmortyproject.domain.characters.list.model.CharacterFilterSettings
-import ru.example.rickandmortyproject.domain.characters.list.model.CharacterEntity
 import javax.inject.Inject
+import ru.example.rickandmortyproject.domain.characters.list.model.CharacterEntity
+import ru.example.rickandmortyproject.domain.characters.list.model.CharacterFilterSettings
 
 class CharactersMatcher @Inject constructor() {
 
