@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -16,7 +18,7 @@ import kotlinx.coroutines.launch
 import ru.example.rickandmortyproject.R
 import ru.example.rickandmortyproject.databinding.FragmentEpisodesBinding
 import ru.example.rickandmortyproject.di.AppComponent
-import ru.example.rickandmortyproject.domain.episodes.list.EpisodeEntity
+import ru.example.rickandmortyproject.domain.episodes.list.model.EpisodeEntity
 import ru.example.rickandmortyproject.presentation.base.BaseFragment
 import ru.example.rickandmortyproject.presentation.episodes.list.adapter.EpisodesListAdapter
 import ru.example.rickandmortyproject.utils.showToast
@@ -58,9 +60,13 @@ class EpisodesListFragment :
         initEpisodesList()
         configSwipeRefreshLayout()
         setOnRefreshListener()
+        setButtonFilterListener()
+        setFilterResultListener()
+        setSearchViewListener()
         subscribeEpisodesFlow()
         startProgress()
         notifyViewModel()
+        startProgress()
     }
 
     private fun notifyViewModel() {
@@ -80,15 +86,32 @@ class EpisodesListFragment :
                     processEpisodesList(it)
                 }.launchIn(this)
 
+                viewModel.notEmptyFilterStateFlow.onEach {
+                    setButtonClearState(it)
+                }.launchIn(this)
+
                 viewModel.errorStateFlow.onEach {
                     showErrorToast()
                     stopProgress()
                 }.launchIn(this)
 
-                viewModel.errorStateFlow.onEach {
+                viewModel.emptyStateFlow.onEach {
                     showEmptyResultToast()
                 }.launchIn(this)
             }
+        }
+    }
+
+    private fun setButtonClearState(notEmptyFilter: Boolean) {
+        if (notEmptyFilter) {
+            binding.episodesFilterClearButton.setBackgroundResource(R.drawable.app_rectangle_button)
+            binding.episodesFilterClearButton.setOnClickListener {
+                viewModel.onButtonClearPressed()
+                startProgress()
+            }
+        } else {
+            binding.episodesFilterClearButton.setBackgroundResource(R.drawable.app_gray_button)
+            binding.episodesFilterClearButton.setOnClickListener(null)
         }
     }
 
@@ -126,7 +149,45 @@ class EpisodesListFragment :
         requireContext().showToast(message)
     }
 
+    private fun setFilterResultListener() {
+        setFragmentResultListener(KEY_FILTER_CHANGED) { key, bundle ->
+            val isChanged = bundle.getBoolean(key)
+            if (isChanged) {
+                viewModel.onFilterSettingsChanged()
+            }
+        }
+    }
+
+    private fun setButtonFilterListener() {
+        binding.episodesFilterButton.setOnClickListener {
+            launchFilterFragment()
+        }
+    }
+
+    private fun launchFilterFragment() {
+        tabName?.let {
+            parentFragmentManager.beginTransaction()
+                .setReorderingAllowed(true)
+                .replace(R.id.fragment_container, EpisodesFilterFragment.newInstance())
+                .addToBackStack(it)
+                .commit()
+        }
+    }
+
+    private fun setSearchViewListener() {
+        val listener = object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?) = true
+
+            override fun onQueryTextChange(changedQuery: String?): Boolean {
+                viewModel.onSearchQueryChanged(changedQuery)
+                return true
+            }
+        }
+        binding.episodesSearchView.setOnQueryTextListener(listener)
+    }
+
     companion object {
+        const val KEY_FILTER_CHANGED = "episodesFilterChanged"
         private const val KEY_TAB_NAME = "tabName"
 
         fun newInstance(tabName: String) = EpisodesListFragment().apply {

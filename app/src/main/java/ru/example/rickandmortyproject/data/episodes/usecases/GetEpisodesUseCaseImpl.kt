@@ -3,8 +3,8 @@ package ru.example.rickandmortyproject.data.episodes.usecases
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import ru.example.rickandmortyproject.domain.episodes.EpisodesRepository
-import ru.example.rickandmortyproject.domain.episodes.list.EpisodeEntity
-import ru.example.rickandmortyproject.domain.episodes.usecases.GetEpisodesUseCase
+import ru.example.rickandmortyproject.domain.episodes.list.model.EpisodeEntity
+import ru.example.rickandmortyproject.domain.episodes.list.usecases.GetEpisodesUseCase
 
 class GetEpisodesUseCaseImpl @Inject constructor(
     private val repository: EpisodesRepository

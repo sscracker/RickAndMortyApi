@@ -1,11 +1,13 @@
 package ru.example.rickandmortyproject.data.episodes
 
+import com.google.gson.Gson
 import javax.inject.Inject
 import kotlinx.coroutines.flow.map
 import ru.example.rickandmortyproject.data.db.lists.EpisodeListDao
 import ru.example.rickandmortyproject.data.episodes.api.EpisodesApi
 import ru.example.rickandmortyproject.data.episodes.mapper.EpisodesMapper
 import ru.example.rickandmortyproject.domain.episodes.EpisodesRepository
+import ru.example.rickandmortyproject.domain.episodes.list.model.EpisodeFilterSettings
 import ru.example.rickandmortyproject.utils.Preferences
 
 class EpisodesRepositoryImpl @Inject constructor(
@@ -49,5 +51,26 @@ class EpisodesRepositoryImpl @Inject constructor(
             onSuccess = { return true },
             onFailure = { return false }
         )
+    }
+
+    override suspend fun getFilterSettings(): EpisodeFilterSettings {
+        val json = preferences.getString(KEY_EPISODES_FILTER, null)
+        return json?.let {
+            Gson().fromJson(json, EpisodeFilterSettings::class.java)
+        } ?: EpisodeFilterSettings(
+            EMPTY_VALUE,
+            EMPTY_VALUE
+        )
+    }
+
+    override suspend fun saveFilterSettings(settings: EpisodeFilterSettings): Boolean {
+        val json = Gson().toJson(settings)
+        preferences.edit().putString(KEY_EPISODES_FILTER, json).apply()
+        return true
+    }
+
+    companion object {
+        private const val KEY_EPISODES_FILTER = "episodesFilter"
+        private const val EMPTY_VALUE = ""
     }
 }

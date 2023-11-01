@@ -1,7 +1,8 @@
 package ru.example.rickandmortyproject.domain.episodes
 
 import kotlinx.coroutines.flow.Flow
-import ru.example.rickandmortyproject.domain.episodes.list.EpisodeEntity
+import ru.example.rickandmortyproject.domain.episodes.list.model.EpisodeEntity
+import ru.example.rickandmortyproject.domain.episodes.list.model.EpisodeFilterSettings
 
 interface EpisodesRepository {
 
@@ -14,4 +15,8 @@ interface EpisodesRepository {
     fun getEpisodesByIds(ids: List<Int>): Flow<List<EpisodeEntity>>
 
     suspend fun loadEpisodesByIds(ids: List<Int>): Boolean
+
+    suspend fun getFilterSettings(): EpisodeFilterSettings
+
+    suspend fun saveFilterSettings(settings: EpisodeFilterSettings): Boolean
 }
