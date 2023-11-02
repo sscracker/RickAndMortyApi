@@ -57,10 +57,7 @@ class EpisodesRepositoryImpl @Inject constructor(
         val json = preferences.getString(KEY_EPISODES_FILTER, null)
         return json?.let {
             Gson().fromJson(json, EpisodeFilterSettings::class.java)
-        } ?: EpisodeFilterSettings(
-            EMPTY_VALUE,
-            EMPTY_VALUE
-        )
+        } ?: EpisodeFilterSettings()
     }
 
     override suspend fun saveFilterSettings(settings: EpisodeFilterSettings): Boolean {
@@ -71,6 +68,5 @@ class EpisodesRepositoryImpl @Inject constructor(
 
     companion object {
         private const val KEY_EPISODES_FILTER = "episodesFilter"
-        private const val EMPTY_VALUE = ""
     }
 }

@@ -9,7 +9,6 @@ import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ru.example.rickandmortyproject.databinding.FragmentEpisodesFilterBinding
 import ru.example.rickandmortyproject.di.AppComponent
@@ -43,7 +42,6 @@ class EpisodesFilterFragment :
         setButtonApplyListener()
         subscribeFilterSettingsFlow()
         subscribeOnFilterSavedFlow()
-        notifyViewModel()
     }
 
     private fun subscribeOnFilterSavedFlow() {
@@ -68,9 +66,9 @@ class EpisodesFilterFragment :
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.getEpisodesFilterStateFlow
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
-                .collect() {
+                .collect() { settings ->
                     if (!restored) {
-                        setFilterSettings(it)
+                        setFilterSettings(settings)
                     }
                 }
         }
@@ -84,7 +82,7 @@ class EpisodesFilterFragment :
     private fun setButtonApplyListener() {
         binding.episodesFilterApplyButton.setOnClickListener {
             val settings = currentSettings()
-            viewModel.onApplyPressed(settings)
+            viewModel.onApplyClick(settings)
         }
     }
 
@@ -98,10 +96,6 @@ class EpisodesFilterFragment :
         binding.episodesFilterBackButton.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
-    }
-
-    private fun notifyViewModel() {
-        viewModel.onViewCreated()
     }
 
     companion object {

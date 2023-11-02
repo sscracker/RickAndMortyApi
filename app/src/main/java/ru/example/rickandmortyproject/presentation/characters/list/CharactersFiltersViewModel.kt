@@ -25,7 +25,7 @@ class CharactersFiltersViewModel @Inject constructor(
     val filterSavedState = _filterSavedState.asStateFlow()
         .filterNotNull()
 
-    fun onViewCreated() {
+    init {
         viewModelScope.launch(Dispatchers.IO) {
             val settings = getCharactersFilterUseCase.invoke()
             _charactersFilterState.tryEmit(settings)

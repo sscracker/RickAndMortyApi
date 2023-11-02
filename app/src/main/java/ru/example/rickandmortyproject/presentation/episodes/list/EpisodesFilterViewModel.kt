@@ -17,6 +17,13 @@ class EpisodesFilterViewModel @Inject constructor(
     private val saveEpisodeFilterUseCase: SaveEpisodesFilterUseCaseImpl
 ) : ViewModel() {
 
+    init {
+        viewModelScope.launch(Dispatchers.IO) {
+            val settings = getEpisodesFilterUseCase.invoke()
+            _getEpisodesFilterStateFlow.tryEmit(settings)
+        }
+    }
+
     private val _getEpisodesFilterStateFlow = MutableStateFlow<EpisodeFilterSettings?>(null)
     val getEpisodesFilterStateFlow = _getEpisodesFilterStateFlow.asStateFlow()
         .filterNotNull()
@@ -25,14 +32,7 @@ class EpisodesFilterViewModel @Inject constructor(
     val saveFilterStateFlow = _saveFilterStateFlow.asStateFlow()
         .filterNotNull()
 
-    fun onViewCreated() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val settings = getEpisodesFilterUseCase.invoke()
-            _getEpisodesFilterStateFlow.tryEmit(settings)
-        }
-    }
-
-    fun onApplyPressed(settings: EpisodeFilterSettings) {
+    fun onApplyClick(settings: EpisodeFilterSettings) {
         viewModelScope.launch(Dispatchers.IO) {
             val success = saveEpisodeFilterUseCase.invoke(settings)
             if (success) {

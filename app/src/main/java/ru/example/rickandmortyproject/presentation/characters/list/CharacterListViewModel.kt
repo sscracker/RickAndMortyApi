@@ -44,15 +44,9 @@ class CharacterListViewModel @Inject constructor(
         .filterNotNull()
 
     private var job: Job? = null
-    private val emptyFilterSettings = CharacterFilterSettings(
-        EMPTY_STRING,
-        null,
-        EMPTY_STRING,
-        EMPTY_STRING,
-        null
-    )
+    private val emptyFilterSettings = CharacterFilterSettings()
 
-    private var searchQuery = EMPTY_STRING
+    private var searchQuery = ""
 
     fun onViewCreated() {
         if (pageHolder.currentPageNumber() == INITIAL_PAGE_NUMBER) {
@@ -88,7 +82,7 @@ class CharacterListViewModel @Inject constructor(
     }
 
     private fun emitFilteredWithQuery(charactersList: List<CharacterEntity>) {
-        if (searchQuery != EMPTY_STRING) {
+        if (searchQuery.isNotEmpty()) {
             charactersList.filter { characters ->
                 characters.name.contains(searchQuery, true)
             }.also { characters ->
@@ -141,7 +135,7 @@ class CharacterListViewModel @Inject constructor(
     }
 
     fun onSearchQueryChanged(query: String?) {
-        searchQuery = query?.trim() ?: EMPTY_STRING
+        searchQuery = query?.trim().orEmpty()
         resetData()
     }
 
@@ -159,7 +153,6 @@ class CharacterListViewModel @Inject constructor(
     }
 
     companion object {
-        private const val EMPTY_STRING = ""
         private const val INITIAL_PAGE_NUMBER = 1
     }
 }

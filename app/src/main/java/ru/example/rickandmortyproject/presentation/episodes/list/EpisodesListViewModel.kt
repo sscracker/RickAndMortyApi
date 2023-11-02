@@ -43,12 +43,9 @@ class EpisodesListViewModel @Inject constructor(
 
     private var job: Job? = null
 
-    private val emptyFilterSettings = EpisodeFilterSettings(
-        EMPTY_STRING,
-        EMPTY_STRING
-    )
+    private val emptyFilterSettings = EpisodeFilterSettings()
 
-    private var searchQuery = EMPTY_STRING
+    private var searchQuery = ""
 
     fun onViewCreated() {
         if (pageHolder.currentPageNumber() == INITIAL_EPISODE_PAGE_NUMBER) {
@@ -141,7 +138,7 @@ class EpisodesListViewModel @Inject constructor(
     }
 
     fun onSearchQueryChanged(query: String?) {
-        searchQuery = query?.trim() ?: EMPTY_STRING
+        searchQuery = query?.trim().orEmpty()
         resetData()
     }
 
@@ -155,7 +152,6 @@ class EpisodesListViewModel @Inject constructor(
     }
 
     companion object {
-        private const val EMPTY_STRING = ""
         private const val INITIAL_EPISODE_PAGE_NUMBER = 1
     }
 }
