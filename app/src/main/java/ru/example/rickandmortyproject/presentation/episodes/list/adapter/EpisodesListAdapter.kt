@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import ru.example.rickandmortyproject.R
-import ru.example.rickandmortyproject.domain.episodes.list.EpisodeEntity
+import ru.example.rickandmortyproject.domain.episodes.list.model.EpisodeEntity
 
 class EpisodesListAdapter(
     private val onListEnded: (() -> Unit)?

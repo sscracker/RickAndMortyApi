@@ -6,7 +6,7 @@ import ru.example.rickandmortyproject.data.characters.api.ResponseDto
 import ru.example.rickandmortyproject.data.episodes.model.EpisodeDbModel
 import ru.example.rickandmortyproject.data.episodes.model.EpisodesDto
 import ru.example.rickandmortyproject.di.scope.ActivityScope
-import ru.example.rickandmortyproject.domain.episodes.list.EpisodeEntity
+import ru.example.rickandmortyproject.domain.episodes.list.model.EpisodeEntity
 import ru.example.rickandmortyproject.utils.getIdListFromUrls
 
 @ActivityScope

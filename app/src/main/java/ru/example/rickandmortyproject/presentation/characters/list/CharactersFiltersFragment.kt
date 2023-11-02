@@ -44,7 +44,6 @@ class CharactersFiltersFragment :
         setButtonApplyListener()
         subscribeFilterSettingsFlow()
         subscribeFilterSavedFlow()
-        notifyViewModel()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -151,10 +150,6 @@ class CharactersFiltersFragment :
             bundleOf(CharactersListFragment.KEY_FILTER_CHANGED to true)
         )
         requireActivity().supportFragmentManager.popBackStack()
-    }
-
-    private fun notifyViewModel() {
-        viewModel.onViewCreated()
     }
 
     companion object {

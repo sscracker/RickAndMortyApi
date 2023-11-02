@@ -1,4 +1,4 @@
-package ru.example.rickandmortyproject.domain.episodes.list
+package ru.example.rickandmortyproject.domain.episodes.list.model
 
 data class EpisodeEntity(
     val id: Int,
