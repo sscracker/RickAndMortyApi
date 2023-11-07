@@ -10,7 +10,8 @@ import ru.example.rickandmortyproject.R
 import ru.example.rickandmortyproject.domain.episodes.list.model.EpisodeEntity
 
 class EpisodesListAdapter(
-    private val onListEnded: (() -> Unit)?
+    private val onListEnded: (() -> Unit)?,
+    private val onItemClick: (EpisodeEntity) -> Unit
 ) : ListAdapter<EpisodeEntity, EpisodesListAdapter.EpisodesListViewHolder>(EpisodesDiffCallback) {
 
     class EpisodesListViewHolder(itemView: View) : ViewHolder(itemView) {
@@ -31,6 +32,9 @@ class EpisodesListAdapter(
         holder.name.text = entity.name
         holder.code.text = entity.episodeCode
         holder.airDate.text = entity.airDate
+        holder.itemView.setOnClickListener {
+            onItemClick.invoke(entity)
+        }
         if (position == currentList.size - 1) {
             onListEnded?.invoke()
         }

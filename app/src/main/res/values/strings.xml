@@ -47,4 +47,7 @@
     <string name="enter_episode_name">Enter episode name</string>
     <string name="enter_episode_code">Enter episode code</string>
     <string name="code">Code:</string>
+    <string name="air_date">Air date:</string>
+    <string name="code_details">Code:</string>
+    <string name="characters">Characters:</string>
 </resources>

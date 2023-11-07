@@ -20,6 +20,7 @@ import ru.example.rickandmortyproject.databinding.FragmentEpisodesBinding
 import ru.example.rickandmortyproject.di.AppComponent
 import ru.example.rickandmortyproject.domain.episodes.list.model.EpisodeEntity
 import ru.example.rickandmortyproject.presentation.base.BaseFragment
+import ru.example.rickandmortyproject.presentation.episodes.details.EpisodeDetailsFragment
 import ru.example.rickandmortyproject.presentation.episodes.list.adapter.EpisodesListAdapter
 import ru.example.rickandmortyproject.utils.showToast
 
@@ -38,6 +39,9 @@ class EpisodesListFragment :
             onListEnded = {
                 viewModel.onListEnded()
                 startProgress()
+            },
+            onItemClick = { episode ->
+                launchEpisodeDetailsFragment(episode.id)
             }
         )
     }
@@ -184,6 +188,20 @@ class EpisodesListFragment :
             }
         }
         binding.episodesSearchView.setOnQueryTextListener(listener)
+    }
+
+    private fun launchEpisodeDetailsFragment(id: Int) {
+        tabName?.let { episodeDetailsTabName ->
+            parentFragmentManager
+                .beginTransaction()
+                .setReorderingAllowed(true)
+                .replace(
+                    R.id.fragment_container,
+                    EpisodeDetailsFragment.newInstance(id, episodeDetailsTabName)
+                )
+                .addToBackStack(episodeDetailsTabName)
+                .commit()
+        }
     }
 
     companion object {
