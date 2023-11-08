@@ -109,7 +109,7 @@ class EpisodeDetailsFragment :
     }
 
     private fun setEpisodeData(episodeEntity: EpisodeEntity) {
-        viewModel.episode = episodeEntity
+        viewModel.saveEpisode(episodeEntity)
         binding.episodeDetailsNameTextView.text = episodeEntity.name
         binding.episodeDetailsAirDateText.text = episodeEntity.airDate
         binding.episodeDetailsCodeText.text = episodeEntity.episodeCode
