@@ -62,6 +62,10 @@ class EpisodesDetailsViewModel @Inject constructor(
         }
     }
 
+    fun saveEpisode(episodeEntity: EpisodeEntity) {
+        episode = episodeEntity
+    }
+
     private fun provideEpisodeDetails(episodeEntity: EpisodeEntity) {
         loadCharacters(episodeEntity.charactersId)
         provideCharactersFlow(episodeEntity.charactersId)
