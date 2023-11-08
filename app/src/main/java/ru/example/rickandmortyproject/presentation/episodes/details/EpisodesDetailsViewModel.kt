@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
@@ -48,7 +49,7 @@ class EpisodesDetailsViewModel @Inject constructor(
         provideEpisodeFlow(episodeId)
     }
 
-    fun loading(): Boolean {
+    private fun loading(): Boolean {
         loadedCount++
         return loadedCount == COUNT_EXPECTED
     }
@@ -60,8 +61,10 @@ class EpisodesDetailsViewModel @Inject constructor(
                     emitError()
                 }
                 .collect {
+                    delay(1000)
                     _episodeStateFlow.tryEmit(it)
                     provideEpisodeDetails(it)
+                    loading()
                 }
         }
     }
@@ -93,6 +96,7 @@ class EpisodesDetailsViewModel @Inject constructor(
                 }
                 .collect {
                     _charactersListStateFlow.tryEmit(it)
+                    loading()
                 }
         }
     }

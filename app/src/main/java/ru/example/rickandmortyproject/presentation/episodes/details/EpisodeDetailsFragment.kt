@@ -60,6 +60,7 @@ class EpisodeDetailsFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        startProgress()
         setAdapter()
         setButtonBackClickListener()
         observeData()
@@ -100,12 +101,12 @@ class EpisodeDetailsFragment :
 
     private fun showEpisode(episodeEntity: EpisodeEntity) {
         setEpisodeData(episodeEntity)
-        isLoadingCompleted()
+        stopProgress()
     }
 
     private fun showCharacters(characters: List<CharacterEntity>) {
         setCharactersData(characters)
-        isLoadingCompleted()
+        stopProgress()
     }
 
     private fun setEpisodeData(episodeEntity: EpisodeEntity) {
@@ -147,12 +148,6 @@ class EpisodeDetailsFragment :
 
     private fun showContentViews() {
         binding.contentViewsGroup.isVisible = true
-    }
-
-    private fun isLoadingCompleted() {
-        if (viewModel.loading()) {
-            stopProgress()
-        }
     }
 
     private fun startProgress() {
