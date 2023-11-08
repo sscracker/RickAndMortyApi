@@ -177,7 +177,6 @@ class EpisodeDetailsFragment :
     companion object {
         private const val KEY_EPISODE_ID = "episodeId"
         private const val KEY_TAB_NAME = "tabName"
-        private const val COUNT_EXPECTED = 2
 
         fun newInstance(id: Int, tabName: String) = EpisodeDetailsFragment().apply {
             arguments = bundleOf(KEY_EPISODE_ID to id, KEY_TAB_NAME to tabName)
