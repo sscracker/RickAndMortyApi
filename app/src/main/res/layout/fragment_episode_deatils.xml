@@ -85,6 +85,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/episode_details_error_text_view" />
 
+   <androidx.constraintlayout.widget.Group
+       android:id="@+id/content_views_group"
+       android:visibility="visible"
+       app:constraint_referenced_ids="episode_details_air_date_label, episode_details_air_date_text, episode_details_code_label, episode_details_code_text, episode_details_characters_label"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content">
+
+   </androidx.constraintlayout.widget.Group>
+
     <TextView
         android:id="@+id/episode_details_air_date_label"
         android:layout_width="wrap_content"

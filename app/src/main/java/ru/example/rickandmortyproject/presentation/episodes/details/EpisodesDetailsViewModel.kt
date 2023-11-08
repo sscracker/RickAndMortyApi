@@ -8,7 +8,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import ru.example.rickandmortyproject.data.characters.usecases.GetCharacterByIdUseCaseImpl
@@ -35,18 +34,23 @@ class EpisodesDetailsViewModel @Inject constructor(
     private var episodeJob: Job? = null
     private var charactersJob: Job? = null
 
-    var loadedCount = COUNT_START
+    private var loadedCount = COUNT_START
 
-    var episode: EpisodeEntity? = null
+    private var episode: EpisodeEntity? = null
 
-    fun onViewCreated(id: Int) {
-        provideEpisodeFlow(id)
+    fun onViewCreated(episodeId: Int) {
+        provideEpisodeFlow(episodeId)
     }
 
     fun onButtonReloadClick(episodeId: Int) {
         episodeJob?.cancel()
         charactersJob?.cancel()
         provideEpisodeFlow(episodeId)
+    }
+
+    fun loading(): Boolean {
+        loadedCount++
+        return loadedCount == COUNT_EXPECTED
     }
 
     private fun provideEpisodeFlow(id: Int) {
@@ -99,5 +103,6 @@ class EpisodesDetailsViewModel @Inject constructor(
 
     companion object {
         private const val COUNT_START = 0
+        private const val COUNT_EXPECTED = 2
     }
 }

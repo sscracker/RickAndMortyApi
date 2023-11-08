@@ -62,7 +62,7 @@ class EpisodeDetailsFragment :
         super.onViewCreated(view, savedInstanceState)
         setAdapter()
         setButtonBackClickListener()
-        subscribeEpisodeDetailsFlow()
+        observeData()
         notifyViewModel()
     }
 
@@ -74,18 +74,18 @@ class EpisodeDetailsFragment :
         binding.episodeDetailsRecyclerCharacters.adapter = characterListAdapter
     }
 
-    private fun subscribeEpisodeDetailsFlow() {
+    private fun observeData() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.episodeStateFlow
                     .onEach { episode ->
-                        loadEpisode(episode)
+                        showEpisode(episode)
                     }
                     .launchIn(this)
 
                 viewModel.charactersListStateFlow
                     .onEach { characters ->
-                        loadCharacters(characters)
+                        showCharacters(characters)
                     }
                     .launchIn(this)
 
@@ -98,14 +98,14 @@ class EpisodeDetailsFragment :
         }
     }
 
-    private fun loadEpisode(episodeEntity: EpisodeEntity) {
+    private fun showEpisode(episodeEntity: EpisodeEntity) {
         setEpisodeData(episodeEntity)
-        checkLoadingCompleted()
+        isLoadingCompleted()
     }
 
-    private fun loadCharacters(characters: List<CharacterEntity>) {
+    private fun showCharacters(characters: List<CharacterEntity>) {
         setCharactersData(characters)
-        checkLoadingCompleted()
+        isLoadingCompleted()
     }
 
     private fun setEpisodeData(episodeEntity: EpisodeEntity) {
@@ -126,12 +126,7 @@ class EpisodeDetailsFragment :
     }
 
     private fun hideContentViews() {
-        binding.episodeDetailsNameTextView.isVisible = false
-        binding.episodeDetailsCodeLabel.isVisible = false
-        binding.episodeDetailsCodeText.isVisible = false
-        binding.episodeDetailsAirDateText.isVisible = false
-        binding.episodeDetailsAirDateLabel.isVisible = false
-        binding.episodeDetailsCharactersLabel.isVisible = false
+        binding.contentViewsGroup.isVisible = false
     }
 
     private fun showErrorViews() {
@@ -151,17 +146,11 @@ class EpisodeDetailsFragment :
     }
 
     private fun showContentViews() {
-        binding.episodeDetailsNameTextView.isVisible = true
-        binding.episodeDetailsCodeLabel.isVisible = true
-        binding.episodeDetailsCodeText.isVisible = true
-        binding.episodeDetailsAirDateText.isVisible = true
-        binding.episodeDetailsAirDateLabel.isVisible = true
-        binding.episodeDetailsCharactersLabel.isVisible = true
+        binding.contentViewsGroup.isVisible = true
     }
 
-    private fun checkLoadingCompleted() {
-        viewModel.loadedCount++
-        if (viewModel.loadedCount == COUNT_EXPECTED) {
+    private fun isLoadingCompleted() {
+        if (viewModel.loading()) {
             stopProgress()
         }
     }
