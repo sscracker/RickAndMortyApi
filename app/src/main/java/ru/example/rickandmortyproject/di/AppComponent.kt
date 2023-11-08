@@ -14,6 +14,7 @@ import ru.example.rickandmortyproject.di.scope.ActivityScope
 import ru.example.rickandmortyproject.presentation.characters.details.CharacterDetailsFragment
 import ru.example.rickandmortyproject.presentation.characters.list.CharactersFiltersFragment
 import ru.example.rickandmortyproject.presentation.characters.list.CharactersListFragment
+import ru.example.rickandmortyproject.presentation.episodes.details.EpisodeDetailsFragment
 import ru.example.rickandmortyproject.presentation.episodes.list.EpisodesFilterFragment
 import ru.example.rickandmortyproject.presentation.episodes.list.EpisodesListFragment
 
@@ -35,6 +36,7 @@ interface AppComponent {
     fun inject(characterDetailsFragment: CharacterDetailsFragment)
     fun inject(episodesListFragment: EpisodesListFragment)
     fun inject(episodesFilterFragment: EpisodesFilterFragment)
+    fun inject(episodeDetailsFragment: EpisodeDetailsFragment)
 
     @Component.Factory
     interface AppComponentFactory {
