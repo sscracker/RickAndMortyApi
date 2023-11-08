@@ -35,6 +35,10 @@ class EpisodesDetailsViewModel @Inject constructor(
     private var episodeJob: Job? = null
     private var charactersJob: Job? = null
 
+    var loadedCount = COUNT_START
+
+    var episode: EpisodeEntity? = null
+
     fun onViewCreated(id: Int) {
         provideEpisodeFlow(id)
     }
@@ -87,5 +91,9 @@ class EpisodesDetailsViewModel @Inject constructor(
 
     private fun emitError() {
         _errorStateFlow.tryEmit(Any())
+    }
+
+    companion object {
+        private const val COUNT_START = 0
     }
 }

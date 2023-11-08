@@ -37,10 +37,6 @@ class EpisodeDetailsFragment :
         )
     }
 
-    private var loadedCount = COUNT_START
-
-    private var episode: EpisodeEntity? = null
-
     private val tabName by lazy {
         requireArguments().getString(KEY_TAB_NAME)
     }
@@ -113,7 +109,7 @@ class EpisodeDetailsFragment :
     }
 
     private fun setEpisodeData(episodeEntity: EpisodeEntity) {
-        episode = episodeEntity
+        viewModel.episode = episodeEntity
         binding.episodeDetailsNameTextView.text = episodeEntity.name
         binding.episodeDetailsAirDateText.text = episodeEntity.airDate
         binding.episodeDetailsCodeText.text = episodeEntity.episodeCode
@@ -135,6 +131,7 @@ class EpisodeDetailsFragment :
         binding.episodeDetailsCodeText.isVisible = false
         binding.episodeDetailsAirDateText.isVisible = false
         binding.episodeDetailsAirDateLabel.isVisible = false
+        binding.episodeDetailsCharactersLabel.isVisible = false
     }
 
     private fun showErrorViews() {
@@ -159,11 +156,12 @@ class EpisodeDetailsFragment :
         binding.episodeDetailsCodeText.isVisible = true
         binding.episodeDetailsAirDateText.isVisible = true
         binding.episodeDetailsAirDateLabel.isVisible = true
+        binding.episodeDetailsCharactersLabel.isVisible = true
     }
 
     private fun checkLoadingCompleted() {
-        loadedCount++
-        if (loadedCount == COUNT_EXPECTED) {
+        viewModel.loadedCount++
+        if (viewModel.loadedCount == COUNT_EXPECTED) {
             stopProgress()
         }
     }
@@ -195,7 +193,6 @@ class EpisodeDetailsFragment :
     companion object {
         private const val KEY_EPISODE_ID = "episodeId"
         private const val KEY_TAB_NAME = "tabName"
-        private const val COUNT_START = 0
         private const val COUNT_EXPECTED = 2
 
         fun newInstance(id: Int, tabName: String) = EpisodeDetailsFragment().apply {
