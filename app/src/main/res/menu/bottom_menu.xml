@@ -10,4 +10,9 @@
         android:icon="@drawable/icon_episode"
         android:title="Episodes" />
 
+    <item
+        android:id="@+id/menu_item_locations"
+        android:icon="@drawable/icon_locations"
+        android:title="Locations" />
+
 </menu>
