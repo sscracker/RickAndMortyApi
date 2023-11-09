@@ -12,7 +12,7 @@
 
     <item
         android:id="@+id/menu_item_locations"
-        android:icon="@drawable/icon_locations"
+        android:icon="@drawable/icon_location"
         android:title="Locations" />
 
 </menu>
