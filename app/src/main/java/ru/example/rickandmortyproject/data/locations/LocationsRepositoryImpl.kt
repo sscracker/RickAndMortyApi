@@ -1,6 +1,5 @@
 package ru.example.rickandmortyproject.data.locations
 
-import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import ru.example.rickandmortyproject.data.db.lists.LocationsListDao
@@ -9,6 +8,7 @@ import ru.example.rickandmortyproject.data.locations.mapper.LocationsMapper
 import ru.example.rickandmortyproject.domain.locations.LocationsRepository
 import ru.example.rickandmortyproject.domain.locations.list.model.LocationEntity
 import ru.example.rickandmortyproject.utils.Preferences
+import javax.inject.Inject
 
 class LocationsRepositoryImpl @Inject constructor(
     preferences: Preferences,
@@ -18,6 +18,7 @@ class LocationsRepositoryImpl @Inject constructor(
 ) : LocationsRepository {
 
     private val preferences = preferences.getLocationRepositoryPreferences()
+
     override fun getAllLocations(): Flow<List<LocationEntity>> =
         locationsListDao.getAllLocations().map(mapper::mapDbModelsListToEntitiesList)
 
