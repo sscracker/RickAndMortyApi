@@ -10,6 +10,7 @@ import ru.example.rickandmortyproject.di.module.characters.CharactersViewModelMo
 import ru.example.rickandmortyproject.di.module.episodes.EpisodesBindsModule
 import ru.example.rickandmortyproject.di.module.episodes.EpisodesViewModelModule
 import ru.example.rickandmortyproject.di.module.factory.ViewModelFactoryModule
+import ru.example.rickandmortyproject.di.module.locations.LocationsBindsModule
 import ru.example.rickandmortyproject.di.scope.ActivityScope
 import ru.example.rickandmortyproject.presentation.characters.details.CharacterDetailsFragment
 import ru.example.rickandmortyproject.presentation.characters.list.CharactersFiltersFragment
@@ -26,6 +27,7 @@ import ru.example.rickandmortyproject.presentation.episodes.list.EpisodesListFra
         CharactersViewModelModule::class,
         EpisodesViewModelModule::class,
         EpisodesBindsModule::class,
+        LocationsBindsModule::class,
         ViewModelFactoryModule::class
     ]
 )

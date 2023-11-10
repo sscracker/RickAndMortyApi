@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import ru.example.rickandmortyproject.R
 
 class LocationsListAdapter : Adapter<LocationsListAdapter.LocationsListViewHolder>() {
+    // todo убрать после изменения адаптера
+    private val locationsList = emptyList<String>()
 
     class LocationsListViewHolder(itemView: View) : ViewHolder(itemView) {
         val name: TextView = itemView.findViewById(R.id.item_location_name_text_view)
@@ -24,7 +26,8 @@ class LocationsListAdapter : Adapter<LocationsListAdapter.LocationsListViewHolde
             }
 
     override fun getItemCount(): Int {
-        TODO("Not yet implemented")
+        return locationsList.size
+        // todo тут потом будет реализован ListAdapter с DiffUtil
     }
 
     override fun onBindViewHolder(holder: LocationsListViewHolder, position: Int) {
