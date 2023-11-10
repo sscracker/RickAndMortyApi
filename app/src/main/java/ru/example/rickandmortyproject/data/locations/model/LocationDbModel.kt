@@ -10,7 +10,7 @@ data class LocationDbModel(
     val name: String,
     val type: String,
     val dimension: String,
-    val characterId: String,
+    val residentsId: String,
     val url: String,
     val created: String
 )
