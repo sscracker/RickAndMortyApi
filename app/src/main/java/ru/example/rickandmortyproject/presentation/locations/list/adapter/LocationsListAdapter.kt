@@ -4,14 +4,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.recyclerview.widget.RecyclerView.Adapter
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import ru.example.rickandmortyproject.R
+import ru.example.rickandmortyproject.domain.locations.list.model.LocationEntity
 
-class LocationsListAdapter : Adapter<LocationsListAdapter.LocationsListViewHolder>() {
-    // todo убрать после изменения адаптера
-    private val locationsList = emptyList<String>()
-
+class LocationsListAdapter(
+    private val onListEnded: (() -> Unit)?
+) : ListAdapter<LocationEntity, LocationsListAdapter.LocationsListViewHolder>(LocationsDiffCallback) {
     class LocationsListViewHolder(itemView: View) : ViewHolder(itemView) {
         val name: TextView = itemView.findViewById(R.id.item_location_name_text_view)
         val type: TextView = itemView.findViewById(R.id.item_location_type_text_view)
@@ -25,14 +25,10 @@ class LocationsListAdapter : Adapter<LocationsListAdapter.LocationsListViewHolde
                 LocationsListViewHolder(it)
             }
 
-    override fun getItemCount(): Int {
-        return locationsList.size
-        // todo тут потом будет реализован ListAdapter с DiffUtil
-    }
-
     override fun onBindViewHolder(holder: LocationsListViewHolder, position: Int) {
-        holder.name.text = "Earth"
-        holder.type.text = "Planet"
-        holder.dimension.text = "Dimension C-122"
+        val locationEntity = getItem(position)
+        holder.name.text = locationEntity.name
+        holder.type.text = locationEntity.type
+        holder.dimension.text = locationEntity.dimension
     }
 }
