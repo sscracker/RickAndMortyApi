@@ -1,14 +1,14 @@
 package ru.example.rickandmortyproject.data.characters.mapper
 
 import com.google.gson.Gson
-import javax.inject.Inject
+import ru.example.rickandmortyproject.data.characters.model.CharacterDto
 import ru.example.rickandmortyproject.data.characters.api.ResponseDto
 import ru.example.rickandmortyproject.data.characters.model.CharacterDbModel
-import ru.example.rickandmortyproject.data.characters.model.CharacterDto
 import ru.example.rickandmortyproject.di.scope.ActivityScope
-import ru.example.rickandmortyproject.domain.characters.list.model.CharacterEntity
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterGender
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterStatus
+import ru.example.rickandmortyproject.domain.characters.list.model.CharacterEntity
+import javax.inject.Inject
 
 const val ALIVE = "Alive"
 const val DEAD = "Dead"

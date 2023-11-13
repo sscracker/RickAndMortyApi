@@ -2,7 +2,6 @@ package ru.example.rickandmortyproject.presentation.characters.details
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,8 +10,10 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
+import ru.example.rickandmortyproject.domain.characters.details.GetSingleCharacterUseCase
 import ru.example.rickandmortyproject.domain.characters.details.GetSingleCharacterUseCaseImpl
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterEntity
+import javax.inject.Inject
 
 class CharacterDetailsViewModel @Inject constructor(
     private val getSingleCharacterUseCaseImpl: GetSingleCharacterUseCaseImpl

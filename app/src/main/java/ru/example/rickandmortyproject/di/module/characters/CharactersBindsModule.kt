@@ -1,10 +1,12 @@
 package ru.example.rickandmortyproject.di.module.characters
 
+import androidx.lifecycle.ViewModelProvider
 import dagger.Binds
 import dagger.Module
 import ru.example.rickandmortyproject.data.characters.CharactersRepositoryImpl
 import ru.example.rickandmortyproject.di.scope.ActivityScope
 import ru.example.rickandmortyproject.domain.characters.list.CharactersRepository
+import ru.example.rickandmortyproject.utils.ViewModelFactory
 
 @Module
 interface CharactersBindsModule {
@@ -14,4 +16,9 @@ interface CharactersBindsModule {
     fun bindsCharacterListRepository(
         charactersRepositoryImpl: CharactersRepositoryImpl
     ): CharactersRepository
+
+    @Binds
+    fun bindViewModelFactory(
+        viewModelFactory: ViewModelFactory
+    ): ViewModelProvider.Factory
 }

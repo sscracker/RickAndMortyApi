@@ -41,13 +41,4 @@
         <item>Genderless</item>
         <item>Unknown</item>
     </string-array>
-    <string name="pull_the_list">Pull the list and retry loading</string>
-    <string name="empty_list">The list is empty!</string>
-    <string name="filter_episodes">Filter Episodes</string>
-    <string name="enter_episode_name">Enter episode name</string>
-    <string name="enter_episode_code">Enter episode code</string>
-    <string name="code">Code:</string>
-    <string name="air_date">Air date:</string>
-    <string name="code_details">Code:</string>
-    <string name="characters">Characters:</string>
 </resources>

@@ -7,7 +7,6 @@ import com.google.android.material.navigation.NavigationBarView
 import ru.example.rickandmortyproject.databinding.ActivityMainBinding
 import ru.example.rickandmortyproject.presentation.characters.list.CharactersListFragment
 import ru.example.rickandmortyproject.presentation.episodes.list.EpisodesListFragment
-import ru.example.rickandmortyproject.presentation.locations.list.LocationsListFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,11 +24,6 @@ class MainActivity : AppCompatActivity() {
             R.id.menu_item_episodes -> {
                 val startFragment = EpisodesListFragment.newInstance(TAB_NAME_EPISODES)
                 showTab(startFragment, TAB_NAME_EPISODES)
-            }
-
-            R.id.menu_item_locations -> {
-                val startFragment = LocationsListFragment.newInstance(TAB_NAME_LOCATIONS)
-                showTab(startFragment, TAB_NAME_LOCATIONS)
             }
         }
         true
@@ -68,6 +62,5 @@ class MainActivity : AppCompatActivity() {
     companion object {
         private const val TAB_NAME_CHARACTERS = "tabCharacters"
         private const val TAB_NAME_EPISODES = "tabEpisodes"
-        private const val TAB_NAME_LOCATIONS = "tabLocations"
     }
 }

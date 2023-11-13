@@ -1,21 +1,19 @@
 package ru.example.rickandmortyproject.di.module
 
 import android.content.Context
-import com.chuckerteam.chucker.api.ChuckerInterceptor
 import dagger.Module
 import dagger.Provides
-import java.util.concurrent.TimeUnit
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import com.chuckerteam.chucker.api.ChuckerInterceptor
 import ru.example.rickandmortyproject.data.characters.api.CharactersApi
-import ru.example.rickandmortyproject.data.episodes.api.EpisodesApi
-import ru.example.rickandmortyproject.data.locations.api.LocationsApi
 import ru.example.rickandmortyproject.di.scope.ActivityScope
 import ru.example.rickandmortyproject.utils.interceptors.AppChuckerInterceptor
 import ru.example.rickandmortyproject.utils.interceptors.ConnectivityInterceptor
 import ru.example.rickandmortyproject.utils.interceptors.NetworkExceptionInterceptor
+import java.util.concurrent.TimeUnit
 
 private const val BASE_URL = "https://rickandmortyapi.com/api/"
 
@@ -73,14 +71,4 @@ class NetworkModule {
     @ActivityScope
     fun providesCharacterListNetworkSource(retrofit: Retrofit): CharactersApi =
         retrofit.create(CharactersApi::class.java)
-
-    @Provides
-    @ActivityScope
-    fun providesEpisodesListNetworkSource(retrofit: Retrofit): EpisodesApi =
-        retrofit.create(EpisodesApi::class.java)
-
-    @Provides
-    @ActivityScope
-    fun provideLocationsListNetworkSource(retrofit: Retrofit): LocationsApi =
-        retrofit.create(LocationsApi::class.java)
 }

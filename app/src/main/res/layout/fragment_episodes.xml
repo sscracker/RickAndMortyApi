@@ -7,17 +7,20 @@
 
     <SearchView
         android:id="@+id/episodes_search_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/app_base_margin"
         android:layout_marginTop="@dimen/app_base_margin"
         android:background="@drawable/search_view_background"
-        app:layout_constraintEnd_toStartOf="@id/episodes_filter_clear_button"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/episodes_filter_button"
+        android:id="@+id/episodes_button_filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="@dimen/app_base_margin"
         android:background="@drawable/app_rectangle_button"
         android:minHeight="0dp"
@@ -28,26 +31,24 @@
         android:textColor="@color/black"
         android:textSize="@dimen/app_base_text_size"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/episodes_search_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        app:layout_constraintTop_toBottomOf="@id/episodes_search_view" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/episodes_filter_clear_button"
+        android:id="@+id/episodes_button_clear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="@dimen/app_base_margin"
         android:background="@drawable/app_gray_button"
         android:minHeight="0dp"
-        app:layout_goneMarginEnd="@dimen/app_base_margin"
         android:paddingHorizontal="@dimen/app_base_padding"
         android:paddingVertical="8dp"
         android:text="@string/clear"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toStartOf="@id/episodes_filter_button"
-        app:layout_constraintBottom_toBottomOf="@id/episodes_search_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:textSize="@dimen/app_base_text_size"
+        app:layout_constraintEnd_toStartOf="@id/episodes_button_filter"
+        app:layout_constraintTop_toBottomOf="@id/episodes_search_view" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh_layout_episodes_list"
@@ -56,7 +57,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/episodes_search_view">
+        app:layout_constraintTop_toBottomOf="@id/episodes_button_clear">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_episodes"

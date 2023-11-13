@@ -4,15 +4,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import ru.example.rickandmortyproject.R
-import ru.example.rickandmortyproject.domain.episodes.list.model.EpisodeEntity
+import ru.example.rickandmortyproject.domain.episodes.list.EpisodeEntity
 
-class EpisodesListAdapter(
-    private val onListEnded: (() -> Unit)?,
-    private val onItemClick: (EpisodeEntity) -> Unit
-) : ListAdapter<EpisodeEntity, EpisodesListAdapter.EpisodesListViewHolder>(EpisodesDiffCallback) {
+class EpisodesListAdapter : Adapter<EpisodesListAdapter.EpisodesListViewHolder>() {
+
+    private var episodesList = mutableListOf<EpisodeEntity>()
 
     class EpisodesListViewHolder(itemView: View) : ViewHolder(itemView) {
         val name: TextView = itemView.findViewById(R.id.item_episode_name_text_view)
@@ -27,16 +26,11 @@ class EpisodesListAdapter(
                 EpisodesListViewHolder(it)
             }
 
+    override fun getItemCount(): Int = episodesList.size
+
     override fun onBindViewHolder(holder: EpisodesListViewHolder, position: Int) {
-        val entity = getItem(position)
-        holder.name.text = entity.name
-        holder.code.text = entity.episodeCode
-        holder.airDate.text = entity.airDate
-        holder.itemView.setOnClickListener {
-            onItemClick.invoke(entity)
-        }
-        if (position == currentList.size - 1) {
-            onListEnded?.invoke()
-        }
+        holder.name.text = "Episode_Name"
+        holder.code.text = "Episode Code"
+        holder.airDate.text = "Episode Airdate"
     }
 }

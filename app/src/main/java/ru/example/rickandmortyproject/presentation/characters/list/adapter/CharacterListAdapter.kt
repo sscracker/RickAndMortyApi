@@ -9,9 +9,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import coil.load
 import ru.example.rickandmortyproject.R
-import ru.example.rickandmortyproject.domain.characters.list.model.CharacterEntity
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterGender
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterStatus
+import ru.example.rickandmortyproject.domain.characters.list.model.CharacterEntity
 
 class CharacterListAdapter(
     private val onListEnded: (() -> Unit)?,
@@ -73,3 +73,4 @@ class CharacterListAdapter(
         private const val GENDER_UNKNOWN = "Unknown"
     }
 }
+

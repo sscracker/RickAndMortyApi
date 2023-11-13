@@ -1,8 +1,8 @@
 package ru.example.rickandmortyproject
 
 import android.app.Application
-import ru.example.rickandmortyproject.di.App
 import ru.example.rickandmortyproject.di.AppComponent
+import ru.example.rickandmortyproject.di.App
 
 class Application : Application(), App {
     private var appComponent: AppComponent? = null
