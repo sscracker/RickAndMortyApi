@@ -32,14 +32,16 @@ class CharactersListFragment :
     private var _binding: FragmentCharactersBinding? = null
     private val binding get() = _binding!!
     private val characterAdapter by lazy {
-        CharacterListAdapter(onListEnded =
-        {
-            viewModel.onListEnded()
-            startProgress()
-        },
+        CharacterListAdapter(
+            onListEnded =
+            {
+                viewModel.onListEnded()
+                startProgress()
+            },
             onItemClick = { character ->
                 launchDetailsFragment(character.id)
-            })
+            }
+        )
     }
 
     private val tabName by lazy {
@@ -93,23 +95,22 @@ class CharactersListFragment :
     private fun subscribeCharactersFlow() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-
-                viewModel.charactersListState.onEach {
+                viewModel.charactersListStateFlow.onEach {
                     processCharactersList(it)
                 }.launchIn(this)
 
-                viewModel.notEmptyFilterState.onEach {
+                viewModel.notEmptyFilterStateFlow.onEach {
                     setButtonClearState(it)
                 }.launchIn(this)
 
-                viewModel.errorState.onEach {
+                viewModel.errorStateFlow.onEach {
                     showError()
                     stopProgress()
-                }.launchIn(this)
+                }
 
-                viewModel.emptyResultState.onEach {
+                viewModel.emptyResultStateFLow.onEach {
                     showEmptyResult()
-                }.launchIn(this)
+                }
             }
         }
     }
@@ -209,5 +210,4 @@ class CharactersListFragment :
             arguments = bundleOf(KEY_TAB_NAME to tabName)
         }
     }
-
 }

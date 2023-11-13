@@ -7,7 +7,7 @@ import ru.example.rickandmortyproject.data.characters.model.CharacterDbModel
 import ru.example.rickandmortyproject.data.db.BaseDao
 
 @Dao
-interface CharacterListDao: BaseDao<CharacterDbModel> {
+interface CharacterListDao : BaseDao<CharacterDbModel> {
     @Query("SELECT * FROM CharacterListEntity ORDER BY id")
     fun getCharacterList(): Flow<List<CharacterDbModel>>
 

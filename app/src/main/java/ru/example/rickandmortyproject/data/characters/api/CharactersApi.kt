@@ -22,7 +22,6 @@ interface CharactersApi {
     ): List<CharacterDto>
 
     companion object {
-
         private const val QUERY_PARAM_PAGE = "page"
         private const val PATH_ITEM_ID = "itemId"
         private const val PATH_ITEM_IDS_STRING = "itemIdsString"

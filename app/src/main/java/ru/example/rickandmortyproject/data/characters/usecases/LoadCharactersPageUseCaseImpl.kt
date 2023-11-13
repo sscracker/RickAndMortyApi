@@ -1,7 +1,8 @@
-package ru.example.rickandmortyproject.domain.characters.list.usecases
+package ru.example.rickandmortyproject.data.characters.usecases
 
-import ru.example.rickandmortyproject.domain.characters.list.CharactersRepository
 import javax.inject.Inject
+import ru.example.rickandmortyproject.domain.characters.list.CharactersRepository
+import ru.example.rickandmortyproject.domain.characters.list.usecases.LoadCharactersPageUseCase
 
 class LoadCharactersPageUseCaseImpl @Inject constructor(
     private val repository: CharactersRepository

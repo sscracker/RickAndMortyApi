@@ -33,7 +33,7 @@ class CharactersFiltersFragment :
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentFilterCharactersBinding.inflate(inflater,container,false)
+        _binding = FragmentFilterCharactersBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -44,8 +44,6 @@ class CharactersFiltersFragment :
         setButtonApplyListener()
         subscribeFilterSettingsFlow()
         subscribeFilterSavedFlow()
-        notifyViewModel()
-
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -56,7 +54,7 @@ class CharactersFiltersFragment :
         outState.putInt(KEY_GENDER_POSITION, genderPosition)
     }
 
-    private fun restoreState(savedInstanceState: Bundle?){
+    private fun restoreState(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
             val statusPosition = it.getInt(KEY_STATUS_POSITION)
             val genderPosition = it.getInt(KEY_GENDER_POSITION)
@@ -66,8 +64,8 @@ class CharactersFiltersFragment :
         }
     }
 
-    private fun setButtonBackListener(){
-        binding.charactersFilterBackButton.setOnClickListener{
+    private fun setButtonBackListener() {
+        binding.charactersFilterBackButton.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
     }
@@ -81,32 +79,32 @@ class CharactersFiltersFragment :
 
     private fun currentSettings(): CharacterFilterSettings {
         val name = binding.charactersFilterNameEditText.text.toString()
-        val status = when(val statusPosition = binding.charactersFilterStatusSpinner.selectedItemPosition){
+        val status = when (val statusPosition = binding.charactersFilterStatusSpinner.selectedItemPosition) {
             0 -> null
             1 -> CharacterStatus.ALIVE
             2 -> CharacterStatus.DEAD
             3 -> CharacterStatus.UNKNOWN
-            else -> throw RuntimeException("Unknown spinner position: ${statusPosition} ")
+            else -> throw RuntimeException("Unknown spinner position: $statusPosition ")
         }
         val species = binding.charactersFilterSpeciesEditText.text.toString()
         val type = binding.charactersFilterTypeEditText.text.toString()
-        val gender = when(val genderPosition = binding.charactersFilterGenderSpinner.selectedItemPosition){
+        val gender = when (val genderPosition = binding.charactersFilterGenderSpinner.selectedItemPosition) {
             0 -> null
             1 -> CharacterGender.FEMALE
             2 -> CharacterGender.MALE
             3 -> CharacterGender.GENDERLESS
             4 -> CharacterGender.UNKNOWN
-            else -> throw RuntimeException("Unknown spinner position: ${genderPosition}")
+            else -> throw RuntimeException("Unknown spinner position: $genderPosition")
         }
         return CharacterFilterSettings(name, status, species, type, gender)
     }
 
-    private fun subscribeFilterSettingsFlow(){
+    private fun subscribeFilterSettingsFlow() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.charactersFilterState
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
-                .collect{
-                    if (!restored){
+                .collect {
+                    if (!restored) {
                         setFilterSettings(it)
                     }
                 }
@@ -116,7 +114,7 @@ class CharactersFiltersFragment :
     private fun setFilterSettings(settings: CharacterFilterSettings) {
         binding.charactersFilterNameEditText.setText(settings.name)
         binding.charactersFilterStatusSpinner.setSelection(
-            when(settings.status){
+            when (settings.status) {
                 null -> 0
                 CharacterStatus.ALIVE -> 1
                 CharacterStatus.DEAD -> 2
@@ -126,7 +124,7 @@ class CharactersFiltersFragment :
         binding.charactersFilterSpeciesEditText.setText(settings.species)
         binding.charactersFilterTypeEditText.setText(settings.type)
         binding.charactersFilterGenderSpinner.setSelection(
-            when(settings.gender){
+            when (settings.gender) {
                 null -> 0
                 CharacterGender.FEMALE -> 1
                 CharacterGender.MALE -> 2
@@ -140,7 +138,7 @@ class CharactersFiltersFragment :
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.filterSavedState
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
-                .collect{
+                .collect {
                     saveFilterSettings()
                 }
         }
@@ -154,11 +152,7 @@ class CharactersFiltersFragment :
         requireActivity().supportFragmentManager.popBackStack()
     }
 
-    private fun notifyViewModel(){
-        viewModel.onViewCreated()
-    }
-
-    companion object{
+    companion object {
         private const val KEY_STATUS_POSITION = "statusPosition"
         private const val KEY_GENDER_POSITION = "genderPosition"
 

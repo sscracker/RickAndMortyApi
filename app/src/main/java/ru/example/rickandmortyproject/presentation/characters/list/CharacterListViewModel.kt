@@ -2,6 +2,7 @@ package ru.example.rickandmortyproject.presentation.characters.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -11,13 +12,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
-import ru.example.rickandmortyproject.domain.characters.list.model.CharacterFilterSettings
+import ru.example.rickandmortyproject.data.characters.usecases.GetCharacterFilterUseCaseImpl
+import ru.example.rickandmortyproject.data.characters.usecases.GetCharactersUseCaseImpl
+import ru.example.rickandmortyproject.data.characters.usecases.LoadCharactersPageUseCaseImpl
+import ru.example.rickandmortyproject.data.characters.usecases.SaveCharacterFilterUseCaseImpl
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterEntity
-import ru.example.rickandmortyproject.domain.characters.list.usecases.GetCharacterFilterUseCaseImpl
-import ru.example.rickandmortyproject.domain.characters.list.usecases.GetCharactersUseCaseImpl
-import ru.example.rickandmortyproject.domain.characters.list.usecases.LoadCharactersPageUseCaseImpl
-import ru.example.rickandmortyproject.domain.characters.list.usecases.SaveCharacterFilterUseCaseImpl
-import javax.inject.Inject
+import ru.example.rickandmortyproject.domain.characters.list.model.CharacterFilterSettings
 
 class CharacterListViewModel @Inject constructor(
     private val getCharacterFilterUseCase: GetCharacterFilterUseCaseImpl,
@@ -28,27 +28,25 @@ class CharacterListViewModel @Inject constructor(
     private val matcher: CharactersMatcher
 ) : ViewModel() {
 
-    private val _charactersListState = MutableSharedFlow<List<CharacterEntity>>(1)
-    val charactersListState = _charactersListState.asSharedFlow()
+    private val _charactersListStateFlow = MutableSharedFlow<List<CharacterEntity>>(1)
+    val charactersListStateFlow = _charactersListStateFlow.asSharedFlow()
 
-    private val _notEmptyFilterState = MutableStateFlow<Boolean?>(null)
-    val notEmptyFilterState = _notEmptyFilterState.asStateFlow()
+    private val _notEmptyFilterStateFlow = MutableStateFlow<Boolean?>(null)
+    val notEmptyFilterStateFlow = _notEmptyFilterStateFlow.asStateFlow()
         .filterNotNull()
 
-    private val _errorState = MutableStateFlow<Any?>(null)
-    val errorState = _errorState.asStateFlow()
+    private val _errorStateFlow = MutableStateFlow<Any?>(null)
+    val errorStateFlow = _errorStateFlow.asStateFlow()
         .filterNotNull()
 
-    private val _emptyResultState = MutableStateFlow<Any?>(null)
-    val emptyResultState = _emptyResultState.asStateFlow()
+    private val _emptyResultStateFLow = MutableStateFlow<Any?>(null)
+    val emptyResultStateFLow = _emptyResultStateFLow.asStateFlow()
         .filterNotNull()
 
     private var job: Job? = null
-    private val emptyFilterSettings = CharacterFilterSettings(
-        EMPTY_STRING, null, EMPTY_STRING, EMPTY_STRING, null
-    )
+    private val emptyFilterSettings = CharacterFilterSettings()
 
-    private var searchQuery = EMPTY_STRING
+    private var searchQuery = ""
 
     fun onViewCreated() {
         if (pageHolder.currentPageNumber() == INITIAL_PAGE_NUMBER) {
@@ -62,9 +60,9 @@ class CharacterListViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val filterSettings = getCharacterFilterUseCase.invoke()
             if (filterSettings != emptyFilterSettings) {
-                _notEmptyFilterState.tryEmit(true)
+                _notEmptyFilterStateFlow.tryEmit(true)
             } else {
-                _notEmptyFilterState.tryEmit(false)
+                _notEmptyFilterStateFlow.tryEmit(false)
             }
         }
     }
@@ -84,17 +82,17 @@ class CharacterListViewModel @Inject constructor(
     }
 
     private fun emitFilteredWithQuery(charactersList: List<CharacterEntity>) {
-        if (searchQuery != EMPTY_STRING) {
+        if (searchQuery.isNotEmpty()) {
             charactersList.filter { characters ->
                 characters.name.contains(searchQuery, true)
             }.also { characters ->
-                _charactersListState.tryEmit(characters)
+                _charactersListStateFlow.tryEmit(characters)
                 if (characters.isEmpty()) {
                     emitEmptyResultState()
                 }
             }
         } else {
-            _charactersListState.tryEmit(charactersList)
+            _charactersListStateFlow.tryEmit(charactersList)
             if (charactersList.isEmpty()) {
                 emitEmptyResultState()
             }
@@ -131,23 +129,22 @@ class CharacterListViewModel @Inject constructor(
             val emptySettingsSaved = saveCharacterFilterUseCaseImpl.invoke(emptyFilterSettings)
             if (emptySettingsSaved) {
                 resetData()
-                _notEmptyFilterState.tryEmit(false)
+                _notEmptyFilterStateFlow.tryEmit(false)
             }
         }
     }
 
     fun onSearchQueryChanged(query: String?) {
-        searchQuery = query?.trim() ?: EMPTY_STRING
+        searchQuery = query?.trim().orEmpty()
         resetData()
     }
 
-
     private fun emitErrorState() {
-        _errorState.tryEmit(Any())
+        _errorStateFlow.tryEmit(Any())
     }
 
     private fun emitEmptyResultState() {
-        _emptyResultState.tryEmit(Any())
+        _emptyResultStateFLow.tryEmit(Any())
     }
 
     private fun resetData() {
@@ -156,7 +153,6 @@ class CharacterListViewModel @Inject constructor(
     }
 
     companion object {
-        private const val EMPTY_STRING = ""
         private const val INITIAL_PAGE_NUMBER = 1
     }
 }
