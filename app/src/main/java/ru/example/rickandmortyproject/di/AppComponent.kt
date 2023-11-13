@@ -11,7 +11,6 @@ import ru.example.rickandmortyproject.di.module.episodes.EpisodesBindsModule
 import ru.example.rickandmortyproject.di.module.episodes.EpisodesViewModelModule
 import ru.example.rickandmortyproject.di.module.factory.ViewModelFactoryModule
 import ru.example.rickandmortyproject.di.module.locations.LocationsBindsModule
-import ru.example.rickandmortyproject.di.module.locations.LocationsViewModelModule
 import ru.example.rickandmortyproject.di.scope.ActivityScope
 import ru.example.rickandmortyproject.presentation.characters.details.CharacterDetailsFragment
 import ru.example.rickandmortyproject.presentation.characters.list.CharactersFiltersFragment
@@ -19,7 +18,6 @@ import ru.example.rickandmortyproject.presentation.characters.list.CharactersLis
 import ru.example.rickandmortyproject.presentation.episodes.details.EpisodeDetailsFragment
 import ru.example.rickandmortyproject.presentation.episodes.list.EpisodesFilterFragment
 import ru.example.rickandmortyproject.presentation.episodes.list.EpisodesListFragment
-import ru.example.rickandmortyproject.presentation.locations.list.LocationsListFragment
 
 @Component(
     modules = [
@@ -30,7 +28,6 @@ import ru.example.rickandmortyproject.presentation.locations.list.LocationsListF
         EpisodesViewModelModule::class,
         EpisodesBindsModule::class,
         LocationsBindsModule::class,
-        LocationsViewModelModule::class,
         ViewModelFactoryModule::class
     ]
 )
@@ -42,7 +39,6 @@ interface AppComponent {
     fun inject(episodesListFragment: EpisodesListFragment)
     fun inject(episodesFilterFragment: EpisodesFilterFragment)
     fun inject(episodeDetailsFragment: EpisodeDetailsFragment)
-    fun inject(locationsListFragment: LocationsListFragment)
 
     @Component.Factory
     interface AppComponentFactory {

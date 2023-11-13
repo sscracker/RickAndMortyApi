@@ -4,15 +4,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import ru.example.rickandmortyproject.R
 import ru.example.rickandmortyproject.domain.locations.list.model.LocationEntity
 
-class LocationsListAdapter(
-    private val onListEnded: (() -> Unit)?
-) :
-    ListAdapter<LocationEntity, LocationsListAdapter.LocationsListViewHolder>(LocationsDiffCallback) {
+class LocationsListAdapter() : Adapter<LocationsListAdapter.LocationsListViewHolder>() {
+
+    val locationList = listOf<LocationEntity>()
 
     class LocationsListViewHolder(itemView: View) : ViewHolder(itemView) {
         val name: TextView = itemView.findViewById(R.id.item_location_name_text_view)
@@ -27,13 +26,13 @@ class LocationsListAdapter(
                 LocationsListViewHolder(it)
             }
 
+    override fun getItemCount(): Int {
+        return locationList.size
+    }
+
     override fun onBindViewHolder(holder: LocationsListViewHolder, position: Int) {
-        val locationEntity = getItem(position)
-        holder.name.text = locationEntity.name
-        holder.type.text = locationEntity.type
-        holder.dimension.text = locationEntity.dimension
-        if (position == currentList.size - 1) {
-            onListEnded?.invoke()
-        }
+        holder.name.text = "Earth"
+        holder.type.text = "Planet"
+        holder.dimension.text = "C-012d"
     }
 }
