@@ -57,11 +57,38 @@ class LocationsListFragment :
         configSwipeRefreshLayout()
         setOnRefreshListener()
         subscribeLocationsFlow()
-        setFilterButtonClickListener()
-        setFilterResultListener()
-        setSearchViewListener()
+        initListeners()
         notifyViewModel()
         startProgress()
+    }
+
+    private fun initListeners() {
+        binding.locationsFilterButton.setOnClickListener {
+            tabName?.let {
+                parentFragmentManager.beginTransaction()
+                    .setReorderingAllowed(true)
+                    .replace(R.id.fragment_container, LocationsFilterFragment.newInstance())
+                    .addToBackStack(it)
+                    .commit()
+            }
+        }
+
+        val listener = object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean = true
+
+            override fun onQueryTextChange(query: String?): Boolean {
+                viewModel.onSearchQueryChanged(query)
+                return true
+            }
+        }
+        binding.locationsSearchView.setOnQueryTextListener(listener)
+
+        setFragmentResultListener(KEY_FILTER_CHANGED) { key, bundle ->
+            val isChanged = bundle.getBoolean(key)
+            if (isChanged) {
+                viewModel.onFilterSettingsChanged()
+            }
+        }
     }
 
     private fun notifyViewModel() {
@@ -99,39 +126,6 @@ class LocationsListFragment :
         } else {
             binding.locationsFilterClearButton.setBackgroundResource(R.drawable.app_gray_button)
             binding.locationsFilterClearButton.setOnClickListener(null)
-        }
-    }
-
-    private fun setSearchViewListener() {
-        val listener = object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean = true
-
-            override fun onQueryTextChange(query: String?): Boolean {
-                viewModel.onSearchQueryChanged(query)
-                return true
-            }
-        }
-        binding.locationsSearchView.setOnQueryTextListener(listener)
-    }
-
-    private fun setFilterButtonClickListener() {
-        binding.locationsFilterButton.setOnClickListener {
-            tabName?.let {
-                parentFragmentManager.beginTransaction()
-                    .setReorderingAllowed(true)
-                    .replace(R.id.fragment_container, LocationsFilterFragment.newInstance())
-                    .addToBackStack(it)
-                    .commit()
-            }
-        }
-    }
-
-    private fun setFilterResultListener() {
-        setFragmentResultListener(KEY_FILTER_CHANGED) { key, bundle ->
-            val isChanged = bundle.getBoolean(key)
-            if (isChanged) {
-                viewModel.onFilterSettingsChanged()
-            }
         }
     }
 

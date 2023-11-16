@@ -21,11 +21,11 @@ class LocationsFilterFragment :
     private var _binding: FragmentLocationFiltersBinding? = null
     private val binding get() = _binding!!
 
+    private var restored: Boolean = false
+
     override fun injectDependencies(appComponent: AppComponent) {
         appComponent.inject(this)
     }
-
-    private var restored: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,19 +38,35 @@ class LocationsFilterFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        subscribeFilterSettingsFlow()
-        subscribeOnSaveFiltersFlow()
-        setButtonBackClickListener()
-        setButtonApplyClickListener()
+        subscribeData()
+        initListeners()
     }
 
-    private fun setButtonBackClickListener() {
-        binding.locationFilterBackButton.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
+    private fun subscribeData() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.getLocationsFilterStateFlow
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+                .collect { settings ->
+                    if (!restored) {
+                        setLocationFilterSettings(settings)
+                    }
+                }
+
+            viewModel.getLocationsFilterStateFlow
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+                .collect { settings ->
+                    if (!restored) {
+                        setLocationFilterSettings(settings)
+                    }
+                }
         }
     }
 
-    private fun setButtonApplyClickListener() {
+    private fun initListeners() {
+        binding.locationFilterBackButton.setOnClickListener {
+            requireActivity().supportFragmentManager.popBackStack()
+        }
+
         binding.locationsFilterApplyButton.setOnClickListener {
             val settings = currentLocationSettings()
             viewModel.onApplyClick(settings)
@@ -68,32 +84,10 @@ class LocationsFilterFragment :
         )
     }
 
-    private fun subscribeFilterSettingsFlow() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.getLocationsFilterStateFlow
-                .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
-                .collect { settings ->
-                    if (!restored) {
-                        setLocationFilterSettings(settings)
-                    }
-                }
-        }
-    }
-
     private fun setLocationFilterSettings(settings: LocationFilterSettings) {
         binding.locationFilterNameEditText.setText(settings.name)
         binding.locationsFilterTypeEditText.setText(settings.type)
         binding.locationsFilterDimensionEditText.setText(settings.dimension)
-    }
-
-    private fun subscribeOnSaveFiltersFlow() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.saveLocationsFilterStateFlow
-                .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
-                .collect {
-                    saveLocationsFilterSettings()
-                }
-        }
     }
 
     private fun saveLocationsFilterSettings() {
