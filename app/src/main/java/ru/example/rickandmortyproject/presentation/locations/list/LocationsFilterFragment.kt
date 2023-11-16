@@ -52,13 +52,13 @@ class LocationsFilterFragment :
                     }
                 }
 
-            viewModel.getLocationsFilterStateFlow
-                .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
-                .collect { settings ->
-                    if (!restored) {
-                        setLocationFilterSettings(settings)
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewModel.saveLocationsFilterStateFlow
+                    .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+                    .collect {
+                        saveLocationsFilterSettings()
                     }
-                }
+            }
         }
     }
 
