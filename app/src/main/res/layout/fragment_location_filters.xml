@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <ImageButton
-        android:id="@+id/episodes_filter_back_button"
+        android:id="@+id/location_filter_back_button"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginStart="@dimen/app_base_margin"
@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/episodes_filter_header_text_view"
+        android:id="@+id/locations_filter_header_text_view"
         android:layout_width="343dp"
         android:layout_height="29dp"
         android:layout_marginHorizontal="10dp"
@@ -25,69 +25,102 @@
         android:layout_marginTop="16dp"
         android:ellipsize="end"
         android:maxLines="2"
-        android:text="@string/filter_episodes"
+        android:text="@string/filter_locations"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@id/episodes_filter_back_button"
+        app:layout_constraintHorizontal_bias="0.291"
+        app:layout_constraintStart_toEndOf="@id/locations_guideline_labels"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/locations_guideline_labels"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="100dp" />
+
     <TextView
-        android:id="@+id/episodes_filter_name_label_text_view"
+        android:id="@+id/locations_filter_name_label_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/app_base_margin"
         android:text="@string/name"
         android:textSize="@dimen/app_base_text_size"
-        app:layout_constraintBottom_toBottomOf="@id/episodes_filter_name_edit_text"
+        app:layout_constraintBottom_toBottomOf="@id/location_filter_name_edit_text"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/episodes_filter_name_edit_text" />
+        app:layout_constraintTop_toTopOf="@id/location_filter_name_edit_text" />
 
     <EditText
-        android:id="@+id/episodes_filter_name_edit_text"
+        android:id="@+id/location_filter_name_edit_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/app_base_margin"
         android:layout_marginStart="40dp"
         android:layout_marginTop="12dp"
-        android:hint="@string/enter_episode_name"
+        android:hint="@string/enter_location_name"
         android:importantForAutofill="no"
         android:inputType="textCapSentences"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/episodes_filter_name_label_text_view"
-        app:layout_constraintTop_toBottomOf="@id/episodes_filter_back_button" />
+        app:layout_constraintStart_toEndOf="@id/locations_guideline_labels"
+        app:layout_constraintTop_toBottomOf="@id/location_filter_back_button" />
 
     <TextView
-        android:id="@+id/episodes_filter_code_label_text_view"
+        android:id="@+id/locations_filter_type_label_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/app_base_margin"
-        android:text="@string/code"
+        android:text="@string/type"
         android:textSize="@dimen/app_base_text_size"
-        app:layout_constraintBottom_toBottomOf="@id/episodes_filter_code_edit_text"
+        app:layout_constraintBottom_toBottomOf="@id/locations_filter_type_edit_text"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/episodes_filter_code_edit_text" />
+        app:layout_constraintTop_toTopOf="@id/locations_filter_type_edit_text" />
 
     <EditText
-        android:id="@+id/episodes_filter_code_edit_text"
+        android:id="@+id/locations_filter_type_edit_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/app_base_margin"
         android:layout_marginStart="40dp"
         android:layout_marginTop="12dp"
-        android:hint="@string/enter_episode_code"
+        android:hint="@string/enter_location_type"
         android:importantForAutofill="no"
         android:inputType="textCapSentences"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/episodes_filter_code_label_text_view"
-        app:layout_constraintTop_toBottomOf="@id/episodes_filter_name_edit_text" />
+        app:layout_constraintStart_toEndOf="@id/locations_guideline_labels"
+        app:layout_constraintTop_toBottomOf="@id/location_filter_name_edit_text" />
+
+    <TextView
+        android:id="@+id/locations_filter_dimension_label_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/app_base_margin"
+        android:text="@string/dimension"
+        android:textSize="@dimen/app_base_text_size"
+        app:layout_constraintBottom_toBottomOf="@id/locations_filter_dimension_edit_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/locations_filter_dimension_edit_text" />
+
+    <EditText
+        android:id="@+id/locations_filter_dimension_edit_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/app_base_margin"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="12dp"
+        android:hint="@string/enter_location_dimension"
+        android:importantForAutofill="no"
+        android:inputType="textCapSentences"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/locations_guideline_labels"
+        app:layout_constraintTop_toBottomOf="@id/locations_filter_type_edit_text" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/episodes_filter_apply_button"
+        android:id="@+id/locations_filter_apply_button"
         android:layout_width="150dp"
         android:layout_height="50dp"
         android:layout_marginBottom="16dp"

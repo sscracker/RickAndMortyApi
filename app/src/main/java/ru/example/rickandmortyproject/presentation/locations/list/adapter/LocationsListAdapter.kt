@@ -31,5 +31,8 @@ class LocationsListAdapter(
         holder.name.text = locationEntity.name
         holder.type.text = locationEntity.type
         holder.dimension.text = locationEntity.dimension
+        if (position == currentList.size - 1) {
+            onListEnded?.invoke()
+        }
     }
 }

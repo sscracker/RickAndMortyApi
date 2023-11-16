@@ -76,6 +76,7 @@ class EpisodesListFragment :
     private fun notifyViewModel() {
         viewModel.onViewCreated()
     }
+
     private fun initEpisodesList() {
         with(binding.recyclerViewEpisodes) {
             layoutManager = GridLayoutManager(requireActivity(), COLUMN_COUNT)

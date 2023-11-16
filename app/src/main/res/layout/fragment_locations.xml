@@ -4,6 +4,50 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <SearchView
+        android:id="@+id/locations_search_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/app_base_margin"
+        android:layout_marginTop="@dimen/app_base_margin"
+        android:background="@drawable/search_view_background"
+        app:layout_constraintEnd_toStartOf="@id/locations_filter_clear_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/locations_filter_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/app_base_margin"
+        android:background="@drawable/app_rectangle_button"
+        android:minHeight="0dp"
+        android:paddingHorizontal="@dimen/app_base_padding"
+        android:paddingVertical="8dp"
+        android:text="@string/filter"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textSize="@dimen/app_base_text_size"
+        app:layout_constraintBottom_toBottomOf="@id/locations_search_view"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/locations_filter_clear_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/app_base_margin"
+        android:background="@drawable/app_gray_button"
+        android:minHeight="0dp"
+        android:paddingHorizontal="@dimen/app_base_padding"
+        android:paddingVertical="8dp"
+        android:text="@string/clear"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/locations_search_view"
+        app:layout_constraintEnd_toStartOf="@id/locations_filter_button"
+        app:layout_goneMarginEnd="@dimen/app_base_margin" />
+
     <ProgressBar
         android:id="@+id/locations_list_progress_bar"
         android:layout_width="wrap_content"
@@ -21,10 +65,11 @@
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/locations_list_swipe_refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/locations_search_view">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/locations_list_recycler_view"
