@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -32,6 +34,10 @@ class LocationsListFragment :
         )
     }
 
+    private val tabName by lazy {
+        requireArguments().getString(KEY_TAB_NAME)
+    }
+
     override fun injectDependencies(appComponent: AppComponent) {
         appComponent.inject(this)
     }
@@ -47,12 +53,42 @@ class LocationsListFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        startProgress()
         setAdapter()
-        notifyViewModel()
         configSwipeRefreshLayout()
         setOnRefreshListener()
         subscribeLocationsFlow()
+        initListeners()
+        notifyViewModel()
+        startProgress()
+    }
+
+    private fun initListeners() {
+        binding.locationsFilterButton.setOnClickListener {
+            tabName?.let {
+                parentFragmentManager.beginTransaction()
+                    .setReorderingAllowed(true)
+                    .replace(R.id.fragment_container, LocationsFilterFragment.newInstance())
+                    .addToBackStack(it)
+                    .commit()
+            }
+        }
+
+        val listener = object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean = true
+
+            override fun onQueryTextChange(query: String?): Boolean {
+                viewModel.onSearchQueryChanged(query)
+                return true
+            }
+        }
+        binding.locationsSearchView.setOnQueryTextListener(listener)
+
+        setFragmentResultListener(KEY_FILTER_CHANGED) { key, bundle ->
+            val isChanged = bundle.getBoolean(key)
+            if (isChanged) {
+                viewModel.onFilterSettingsChanged()
+            }
+        }
     }
 
     private fun notifyViewModel() {
@@ -68,17 +104,36 @@ class LocationsListFragment :
 
                 viewModel.errorStateFlow.onEach {
                     showErrorToast()
+                    stopProgress()
                 }.launchIn(this)
 
-                viewModel.emptyStateFlow.onEach {
-                    showEmptyResultToast()
+                viewModel.notEmptyFilterStateFlow.onEach {
+                    setClearButtonClickListener(it)
                 }.launchIn(this)
             }
         }
     }
 
+    private fun setClearButtonClickListener(notEmptyLocationFilter: Boolean) {
+        if (notEmptyLocationFilter) {
+            binding.locationsFilterClearButton.setBackgroundResource(
+                R.drawable.app_rectangle_button
+            )
+            binding.locationsFilterClearButton.setOnClickListener {
+                viewModel.onFilterClearButtonClick()
+                startProgress()
+            }
+        } else {
+            binding.locationsFilterClearButton.setBackgroundResource(R.drawable.app_gray_button)
+            binding.locationsFilterClearButton.setOnClickListener(null)
+        }
+    }
+
     private fun processLocationsList(locations: List<LocationEntity>) {
         locationsAdapter.submitList(locations)
+        if (locations.isEmpty()) {
+            showEmptyResultToast()
+        }
         stopProgress()
     }
 
@@ -115,6 +170,7 @@ class LocationsListFragment :
 
     companion object {
         private const val KEY_TAB_NAME = "tabName"
+        const val KEY_FILTER_CHANGED = "locationFiltersChanged"
 
         fun newInstance(tabName: String) = LocationsListFragment().apply {
             arguments = bundleOf(KEY_TAB_NAME to tabName)

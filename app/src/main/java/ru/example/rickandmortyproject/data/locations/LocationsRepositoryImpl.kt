@@ -1,5 +1,6 @@
 package ru.example.rickandmortyproject.data.locations
 
+import com.google.gson.Gson
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -8,6 +9,7 @@ import ru.example.rickandmortyproject.data.locations.api.LocationsApi
 import ru.example.rickandmortyproject.data.locations.mapper.LocationsMapper
 import ru.example.rickandmortyproject.domain.locations.LocationsRepository
 import ru.example.rickandmortyproject.domain.locations.list.model.LocationEntity
+import ru.example.rickandmortyproject.domain.locations.list.model.LocationFilterSettings
 import ru.example.rickandmortyproject.utils.Preferences
 
 class LocationsRepositoryImpl @Inject constructor(
@@ -28,10 +30,7 @@ class LocationsRepositoryImpl @Inject constructor(
             locationsListDao.insertList(
                 mapper.mapPageToDbModelList(locationPage)
             )
-        }.fold(
-            onSuccess = { return true },
-            onFailure = { return false }
-        )
+        }.fold(onSuccess = { return true }, onFailure = { return false })
     }
 
     override fun getSingleLocation(locationId: Int): Flow<LocationEntity> =
@@ -49,9 +48,23 @@ class LocationsRepositoryImpl @Inject constructor(
             locationsListDao.insertList(
                 mapper.mapDtoListToDbModelList(locations)
             )
-        }.fold(
-            onSuccess = { return true },
-            onFailure = { return false }
-        )
+        }.fold(onSuccess = { return true }, onFailure = { return false })
+    }
+
+    override suspend fun getLocationsFilterSettings(): LocationFilterSettings {
+        val json = preferences.getString(KEY_LOCATIONS_FILTER, null)
+        return json?.let {
+            Gson().fromJson(json, LocationFilterSettings::class.java)
+        } ?: LocationFilterSettings()
+    }
+
+    override suspend fun saveLocationsFilterSettings(settings: LocationFilterSettings): Boolean {
+        val json = Gson().toJson(settings)
+        preferences.edit().putString(KEY_LOCATIONS_FILTER, json).apply()
+        return true
+    }
+
+    companion object {
+        private const val KEY_LOCATIONS_FILTER = "locationsFilter"
     }
 }

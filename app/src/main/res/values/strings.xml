@@ -50,4 +50,9 @@
     <string name="air_date">Air date:</string>
     <string name="code_details">Code:</string>
     <string name="characters">Characters:</string>
+    <string name="filter_locations">Filter Locations</string>
+    <string name="dimension">Dimension:</string>
+    <string name="enter_location_name">Enter location name</string>
+    <string name="enter_location_dimension">Enter location dimension</string>
+    <string name="enter_location_type">Enter location type</string>
 </resources>
