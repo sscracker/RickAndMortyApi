@@ -1,5 +1,6 @@
 package ru.example.rickandmortyproject.utils
 
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import javax.inject.Inject
