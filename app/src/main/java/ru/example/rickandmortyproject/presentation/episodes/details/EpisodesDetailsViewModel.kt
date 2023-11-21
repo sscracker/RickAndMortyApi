@@ -113,7 +113,7 @@ class EpisodesDetailsViewModel @AssistedInject constructor(
     }
 
     @AssistedFactory
-    interface EpisodesDetailsViewModelFactory {
+    interface Factory {
         fun create(@Assisted id: Int): EpisodesDetailsViewModel
     }
 

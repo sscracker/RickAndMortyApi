@@ -1,6 +1,5 @@
 package ru.example.rickandmortyproject.utils
 
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import javax.inject.Inject
@@ -10,6 +9,7 @@ class ViewModelFactory @Inject constructor(
     private val viewModels: Map<Class<out ViewModel>, @JvmSuppressWildcards Provider<ViewModel>>
 ) : ViewModelProvider.Factory {
 
+    @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         val viewModelsProvider = viewModels[modelClass]
             ?: throw IllegalStateException("$modelClass not found")

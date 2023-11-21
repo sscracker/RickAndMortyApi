@@ -8,10 +8,7 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import javax.inject.Inject
@@ -21,11 +18,11 @@ import kotlinx.coroutines.launch
 import ru.example.rickandmortyproject.R
 import ru.example.rickandmortyproject.databinding.FragmentEpisodeDeatilsBinding
 import ru.example.rickandmortyproject.di.App
-import ru.example.rickandmortyproject.di.AppComponent
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterEntity
 import ru.example.rickandmortyproject.domain.episodes.list.model.EpisodeEntity
 import ru.example.rickandmortyproject.presentation.characters.details.CharacterDetailsFragment
 import ru.example.rickandmortyproject.presentation.characters.list.adapter.CharacterListAdapter
+import ru.example.rickandmortyproject.utils.viewModelFactory
 
 class EpisodeDetailsFragment :
     Fragment(R.layout.fragment_episode_deatils) {
@@ -43,16 +40,11 @@ class EpisodeDetailsFragment :
         )
     }
 
-    private var appComponent: AppComponent = (activity as App).appComponent()
+    @Inject
+    internal lateinit var factory: EpisodesDetailsViewModel.Factory
 
-    @Inject internal lateinit var factory: EpisodesDetailsViewModel.EpisodesDetailsViewModelFactory
-
-    private val viewModel: EpisodesDetailsViewModel by viewModels {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return factory.create(episodeId) as T
-            }
-        }
+    private val viewModel: EpisodesDetailsViewModel by viewModelFactory {
+        factory.create(episodeId)
     }
 
     private val tabName by lazy {
@@ -65,7 +57,7 @@ class EpisodeDetailsFragment :
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        appComponent.inject(this)
+        (requireActivity().application as App).appComponent().inject(this)
     }
 
     override fun onCreateView(
