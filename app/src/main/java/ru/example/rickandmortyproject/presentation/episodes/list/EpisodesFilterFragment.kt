@@ -9,14 +9,16 @@ import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import javax.inject.Inject
+import javax.inject.Provider
 import kotlinx.coroutines.launch
 import ru.example.rickandmortyproject.databinding.FragmentEpisodesFilterBinding
 import ru.example.rickandmortyproject.di.AppComponent
 import ru.example.rickandmortyproject.domain.episodes.list.model.EpisodeFilterSettings
 import ru.example.rickandmortyproject.presentation.base.BaseFragment
+import ru.example.rickandmortyproject.utils.viewModelFactory
 
-class EpisodesFilterFragment :
-    BaseFragment<EpisodesFilterViewModel>(EpisodesFilterViewModel::class.java) {
+class EpisodesFilterFragment : BaseFragment() {
 
     private var _binding: FragmentEpisodesFilterBinding? = null
 
@@ -26,6 +28,12 @@ class EpisodesFilterFragment :
     }
 
     private var restored: Boolean = false
+
+    @Inject
+    lateinit var viewModelProvider: Provider<EpisodesFilterViewModel>
+    private val viewModel: EpisodesFilterViewModel by viewModelFactory {
+        viewModelProvider.get()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

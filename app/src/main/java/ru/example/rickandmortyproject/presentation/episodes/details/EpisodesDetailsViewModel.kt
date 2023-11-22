@@ -2,7 +2,9 @@ package ru.example.rickandmortyproject.presentation.episodes.details
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import javax.inject.Inject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -17,10 +19,11 @@ import ru.example.rickandmortyproject.data.episodes.usecases.GetSingleEpisodeUse
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterEntity
 import ru.example.rickandmortyproject.domain.episodes.list.model.EpisodeEntity
 
-class EpisodesDetailsViewModel @Inject constructor(
+class EpisodesDetailsViewModel @AssistedInject constructor(
     private val getSingleEpisodeUseCase: GetSingleEpisodeUseCaseImpl,
     private val getCharacterByIdUseCaseImpl: GetCharacterByIdUseCaseImpl,
-    private val loadCharactersByIdUseCaseImpl: LoadCharactersByIdUseCaseImpl
+    private val loadCharactersByIdUseCaseImpl: LoadCharactersByIdUseCaseImpl,
+    @Assisted private val episodeId: Int
 ) : ViewModel() {
 
     private val _episodeStateFlow = MutableStateFlow<EpisodeEntity?>(null)
@@ -39,7 +42,7 @@ class EpisodesDetailsViewModel @Inject constructor(
 
     private var episode: EpisodeEntity? = null
 
-    fun onViewCreated(episodeId: Int) {
+    init {
         provideEpisodeFlow(episodeId)
     }
 
@@ -103,6 +106,11 @@ class EpisodesDetailsViewModel @Inject constructor(
 
     private fun emitError() {
         _errorStateFlow.tryEmit(Any())
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(@Assisted id: Int): EpisodesDetailsViewModel
     }
 
     companion object {

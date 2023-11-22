@@ -9,6 +9,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -20,9 +21,9 @@ import ru.example.rickandmortyproject.domain.episodes.list.model.EpisodeEntity
 import ru.example.rickandmortyproject.presentation.base.BaseFragment
 import ru.example.rickandmortyproject.presentation.characters.details.CharacterDetailsFragment
 import ru.example.rickandmortyproject.presentation.characters.list.adapter.CharacterListAdapter
+import ru.example.rickandmortyproject.utils.viewModelFactory
 
-class EpisodeDetailsFragment :
-    BaseFragment<EpisodesDetailsViewModel>(EpisodesDetailsViewModel::class.java) {
+class EpisodeDetailsFragment : BaseFragment() {
 
     private var _binding: FragmentEpisodeDeatilsBinding? = null
 
@@ -35,6 +36,13 @@ class EpisodeDetailsFragment :
                 launchCharacterDetailsFragment(character.id)
             }
         )
+    }
+
+    @Inject
+    internal lateinit var factory: EpisodesDetailsViewModel.Factory
+
+    private val viewModel: EpisodesDetailsViewModel by viewModelFactory {
+        factory.create(episodeId)
     }
 
     private val tabName by lazy {
@@ -64,11 +72,6 @@ class EpisodeDetailsFragment :
         setAdapter()
         setButtonBackClickListener()
         observeData()
-        notifyViewModel()
-    }
-
-    private fun notifyViewModel() {
-        viewModel.onViewCreated(episodeId)
     }
 
     private fun setAdapter() {

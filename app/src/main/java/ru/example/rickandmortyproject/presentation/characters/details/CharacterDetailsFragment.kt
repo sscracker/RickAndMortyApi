@@ -10,6 +10,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import coil.load
+import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -20,9 +21,9 @@ import ru.example.rickandmortyproject.domain.characters.list.model.CharacterEnti
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterGender
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterStatus
 import ru.example.rickandmortyproject.presentation.base.BaseFragment
+import ru.example.rickandmortyproject.utils.viewModelFactory
 
-class CharacterDetailsFragment :
-    BaseFragment<CharacterDetailsViewModel>(CharacterDetailsViewModel::class.java) {
+class CharacterDetailsFragment : BaseFragment() {
 
     private var _binding: FragmentCharactersDetailsBinding? = null
     private val binding get() = _binding!!
@@ -31,16 +32,23 @@ class CharacterDetailsFragment :
 
     private var characterEntity: CharacterEntity? = null
 
-    override fun injectDependencies(appComponent: AppComponent) {
-        appComponent.inject(this)
-    }
-
     private val tabName by lazy {
         requireArguments().getString(KEY_TAB_NAME)
     }
 
     private val characterId by lazy {
         requireArguments().getInt(KEY_CHARACTER_ID)
+    }
+
+    @Inject
+    internal lateinit var factory: CharacterDetailsViewModel.Factory
+
+    private val viewModel: CharacterDetailsViewModel by viewModelFactory {
+        factory.create(characterId)
+    }
+
+    override fun injectDependencies(appComponent: AppComponent) {
+        appComponent.inject(this)
     }
 
     override fun onCreateView(
@@ -56,15 +64,10 @@ class CharacterDetailsFragment :
         super.onViewCreated(view, savedInstanceState)
         setButtonBackListener()
         subscribeFlow()
-        notifyViewModel()
 
         if (loadedCount == COUNT_START) {
             startProgress()
         }
-    }
-
-    private fun notifyViewModel() {
-        viewModel.onViewCreated(characterId)
     }
 
     private fun setButtonBackListener() {

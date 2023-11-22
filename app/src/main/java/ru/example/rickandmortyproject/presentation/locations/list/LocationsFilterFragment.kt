@@ -9,19 +9,27 @@ import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import javax.inject.Inject
+import javax.inject.Provider
 import kotlinx.coroutines.launch
 import ru.example.rickandmortyproject.databinding.FragmentLocationFiltersBinding
 import ru.example.rickandmortyproject.di.AppComponent
 import ru.example.rickandmortyproject.domain.locations.list.model.LocationFilterSettings
 import ru.example.rickandmortyproject.presentation.base.BaseFragment
+import ru.example.rickandmortyproject.utils.viewModelFactory
 
-class LocationsFilterFragment :
-    BaseFragment<LocationsFilterViewModel>(LocationsFilterViewModel::class.java) {
+class LocationsFilterFragment : BaseFragment() {
 
     private var _binding: FragmentLocationFiltersBinding? = null
     private val binding get() = _binding!!
 
     private var restored: Boolean = false
+
+    @Inject
+    lateinit var viewModelProvider: Provider<LocationsFilterViewModel>
+    private val viewModel: LocationsFilterViewModel by viewModelFactory {
+        viewModelProvider.get()
+    }
 
     override fun injectDependencies(appComponent: AppComponent) {
         appComponent.inject(this)

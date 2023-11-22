@@ -11,6 +11,8 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import javax.inject.Inject
+import javax.inject.Provider
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -21,12 +23,18 @@ import ru.example.rickandmortyproject.domain.locations.list.model.LocationEntity
 import ru.example.rickandmortyproject.presentation.base.BaseFragment
 import ru.example.rickandmortyproject.presentation.locations.list.adapter.LocationsListAdapter
 import ru.example.rickandmortyproject.utils.showToast
+import ru.example.rickandmortyproject.utils.viewModelFactory
 
-class LocationsListFragment :
-    BaseFragment<LocationsListViewModel>(LocationsListViewModel::class.java) {
+class LocationsListFragment : BaseFragment() {
     private var _binding: FragmentLocationsBinding? = null
 
     private val binding get() = _binding!!
+
+    @Inject
+    lateinit var viewModelProvider: Provider<LocationsListViewModel>
+    private val viewModel: LocationsListViewModel by viewModelFactory {
+        viewModelProvider.get()
+    }
 
     private val locationsAdapter by lazy {
         LocationsListAdapter(
