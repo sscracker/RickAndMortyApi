@@ -46,10 +46,6 @@ class EpisodesDetailsViewModel @AssistedInject constructor(
         provideEpisodeFlow(episodeId)
     }
 
-   /* fun onViewCreated(episodeId: Int) {
-        provideEpisodeFlow(episodeId)
-    }*/
-
     fun onButtonReloadClick(episodeId: Int) {
         episodeJob?.cancel()
         charactersJob?.cancel()

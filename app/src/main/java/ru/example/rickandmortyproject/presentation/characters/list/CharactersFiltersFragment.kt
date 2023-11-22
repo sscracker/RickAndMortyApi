@@ -9,6 +9,8 @@ import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import javax.inject.Inject
+import javax.inject.Provider
 import kotlinx.coroutines.launch
 import ru.example.rickandmortyproject.databinding.FragmentFilterCharactersBinding
 import ru.example.rickandmortyproject.di.AppComponent
@@ -16,14 +18,21 @@ import ru.example.rickandmortyproject.domain.characters.list.model.CharacterFilt
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterGender
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterStatus
 import ru.example.rickandmortyproject.presentation.base.BaseFragment
+import ru.example.rickandmortyproject.utils.viewModelFactory
 
-class CharactersFiltersFragment :
-    BaseFragment<CharactersFiltersViewModel>(CharactersFiltersViewModel::class.java) {
+class CharactersFiltersFragment : BaseFragment() {
 
     private var _binding: FragmentFilterCharactersBinding? = null
     private val binding get() = _binding!!
 
     private var restored: Boolean = false
+
+    @Inject
+    lateinit var viewModelProvider: Provider<CharactersFiltersViewModel>
+    private val viewModel: CharactersFiltersViewModel by viewModelFactory {
+        viewModelProvider.get()
+    }
+
     override fun injectDependencies(appComponent: AppComponent) {
         appComponent.inject(this)
     }
@@ -79,23 +88,25 @@ class CharactersFiltersFragment :
 
     private fun currentSettings(): CharacterFilterSettings {
         val name = binding.charactersFilterNameEditText.text.toString()
-        val status = when (val statusPosition = binding.charactersFilterStatusSpinner.selectedItemPosition) {
-            0 -> null
-            1 -> CharacterStatus.ALIVE
-            2 -> CharacterStatus.DEAD
-            3 -> CharacterStatus.UNKNOWN
-            else -> throw RuntimeException("Unknown spinner position: $statusPosition ")
-        }
+        val status =
+            when (val statusPosition = binding.charactersFilterStatusSpinner.selectedItemPosition) {
+                0 -> null
+                1 -> CharacterStatus.ALIVE
+                2 -> CharacterStatus.DEAD
+                3 -> CharacterStatus.UNKNOWN
+                else -> throw RuntimeException("Unknown spinner position: $statusPosition ")
+            }
         val species = binding.charactersFilterSpeciesEditText.text.toString()
         val type = binding.charactersFilterTypeEditText.text.toString()
-        val gender = when (val genderPosition = binding.charactersFilterGenderSpinner.selectedItemPosition) {
-            0 -> null
-            1 -> CharacterGender.FEMALE
-            2 -> CharacterGender.MALE
-            3 -> CharacterGender.GENDERLESS
-            4 -> CharacterGender.UNKNOWN
-            else -> throw RuntimeException("Unknown spinner position: $genderPosition")
-        }
+        val gender =
+            when (val genderPosition = binding.charactersFilterGenderSpinner.selectedItemPosition) {
+                0 -> null
+                1 -> CharacterGender.FEMALE
+                2 -> CharacterGender.MALE
+                3 -> CharacterGender.GENDERLESS
+                4 -> CharacterGender.UNKNOWN
+                else -> throw RuntimeException("Unknown spinner position: $genderPosition")
+            }
         return CharacterFilterSettings(name, status, species, type, gender)
     }
 

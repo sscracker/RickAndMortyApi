@@ -12,6 +12,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
+import javax.inject.Inject
+import javax.inject.Provider
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -23,17 +25,24 @@ import ru.example.rickandmortyproject.presentation.base.BaseFragment
 import ru.example.rickandmortyproject.presentation.episodes.details.EpisodeDetailsFragment
 import ru.example.rickandmortyproject.presentation.episodes.list.adapter.EpisodesListAdapter
 import ru.example.rickandmortyproject.utils.showToast
+import ru.example.rickandmortyproject.utils.viewModelFactory
 
 private const val COLUMN_COUNT = 2
 
-class EpisodesListFragment :
-    BaseFragment<EpisodesListViewModel>(EpisodesListViewModel::class.java) {
+class EpisodesListFragment : BaseFragment() {
     private var _binding: FragmentEpisodesBinding? = null
     private val binding get() = _binding!!
 
     private val tabName by lazy {
         requireArguments().getString(KEY_TAB_NAME)
     }
+
+    @Inject
+    lateinit var viewModelProvider: Provider<EpisodesListViewModel>
+    private val viewModel: EpisodesListViewModel by viewModelFactory {
+        viewModelProvider.get()
+    }
+
     private val episodesAdapter by lazy {
         EpisodesListAdapter(
             onListEnded = {

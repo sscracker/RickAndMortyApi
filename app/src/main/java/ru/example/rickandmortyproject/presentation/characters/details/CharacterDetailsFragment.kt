@@ -35,10 +35,6 @@ class CharacterDetailsFragment :
 
     private var characterEntity: CharacterEntity? = null
 
-//    override fun injectDependencies(appComponent: AppComponent) {
-//        appComponent.inject(this)
-//    }
-
     @Inject
     lateinit var viewModelProvider: Provider<CharacterDetailsViewModel>
     private val viewModel: CharacterDetailsViewModel by viewModelFactory { viewModelProvider.get() }

@@ -1,13 +1,11 @@
 package ru.example.rickandmortyproject.presentation.episodes.details
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -17,15 +15,15 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.example.rickandmortyproject.R
 import ru.example.rickandmortyproject.databinding.FragmentEpisodeDeatilsBinding
-import ru.example.rickandmortyproject.di.App
+import ru.example.rickandmortyproject.di.AppComponent
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterEntity
 import ru.example.rickandmortyproject.domain.episodes.list.model.EpisodeEntity
+import ru.example.rickandmortyproject.presentation.base.BaseFragment
 import ru.example.rickandmortyproject.presentation.characters.details.CharacterDetailsFragment
 import ru.example.rickandmortyproject.presentation.characters.list.adapter.CharacterListAdapter
 import ru.example.rickandmortyproject.utils.viewModelFactory
 
-class EpisodeDetailsFragment :
-    Fragment(R.layout.fragment_episode_deatils) {
+class EpisodeDetailsFragment : BaseFragment() {
 
     private var _binding: FragmentEpisodeDeatilsBinding? = null
 
@@ -55,9 +53,8 @@ class EpisodeDetailsFragment :
         requireArguments().getInt(KEY_EPISODE_ID)
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        (requireActivity().application as App).appComponent().inject(this)
+    override fun injectDependencies(appComponent: AppComponent) {
+        appComponent.inject(this)
     }
 
     override fun onCreateView(

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
@@ -44,6 +45,7 @@ class CharacterDetailsViewModel @Inject constructor(
                     emitError()
                 }
                 .collect { character ->
+                    delay(1000)
                     _characterState.tryEmit(character)
                 }
         }

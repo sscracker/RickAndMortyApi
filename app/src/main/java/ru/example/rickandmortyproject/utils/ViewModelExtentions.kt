@@ -10,16 +10,16 @@ import androidx.lifecycle.ViewModelProvider
 inline fun <reified VM : ViewModel> Fragment.viewModelFactory(
     noinline factory: () -> VM
 ): Lazy<VM> = viewModels {
-    ViewModelFactoryAssisted(factory)
+    ViewModelFactory(factory)
 }
 
 inline fun <reified VM : ViewModel> AppCompatActivity.viewModelFactory(
     noinline factory: () -> VM
 ): Lazy<VM> = viewModels {
-    ViewModelFactoryAssisted(factory)
+    ViewModelFactory(factory)
 }
 
-class ViewModelFactoryAssisted<VM : ViewModel>(
+class ViewModelFactory<VM : ViewModel>(
     private val factory: () -> VM
 ) : ViewModelProvider.Factory {
 
