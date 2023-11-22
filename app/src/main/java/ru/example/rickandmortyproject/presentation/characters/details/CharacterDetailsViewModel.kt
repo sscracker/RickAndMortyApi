@@ -18,6 +18,7 @@ import ru.example.rickandmortyproject.domain.characters.details.GetSingleCharact
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterEntity
 
 private const val TIME_MILLIS = 1000L
+
 class CharacterDetailsViewModel @AssistedInject constructor(
     private val getSingleCharacterUseCaseImpl: GetSingleCharacterUseCaseImpl,
     @Assisted
