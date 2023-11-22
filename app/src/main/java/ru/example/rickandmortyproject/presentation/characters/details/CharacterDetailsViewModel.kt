@@ -2,7 +2,9 @@ package ru.example.rickandmortyproject.presentation.characters.details
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import javax.inject.Inject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -15,8 +17,11 @@ import kotlinx.coroutines.launch
 import ru.example.rickandmortyproject.domain.characters.details.GetSingleCharacterUseCaseImpl
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterEntity
 
-class CharacterDetailsViewModel @Inject constructor(
-    private val getSingleCharacterUseCaseImpl: GetSingleCharacterUseCaseImpl
+private const val TIME_MILLIS = 1000L
+class CharacterDetailsViewModel @AssistedInject constructor(
+    private val getSingleCharacterUseCaseImpl: GetSingleCharacterUseCaseImpl,
+    @Assisted
+    private val characterId: Int
 ) : ViewModel() {
 
     private val _characterState = MutableStateFlow<CharacterEntity?>(null)
@@ -29,8 +34,8 @@ class CharacterDetailsViewModel @Inject constructor(
 
     private var job: Job? = null
 
-    fun onViewCreated(id: Int) {
-        provideCharacterFlow(id)
+    init {
+        provideCharacterFlow(characterId)
     }
 
     fun onButtonReloadPressed(id: Int) {
@@ -45,7 +50,7 @@ class CharacterDetailsViewModel @Inject constructor(
                     emitError()
                 }
                 .collect { character ->
-                    delay(1000)
+                    delay(TIME_MILLIS)
                     _characterState.tryEmit(character)
                 }
         }
@@ -53,5 +58,10 @@ class CharacterDetailsViewModel @Inject constructor(
 
     private fun emitError() {
         _errorState.tryEmit(Any())
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(@Assisted id: Int): CharacterDetailsViewModel
     }
 }

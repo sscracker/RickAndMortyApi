@@ -1,32 +1,29 @@
 package ru.example.rickandmortyproject.presentation.characters.details
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import coil.load
 import javax.inject.Inject
-import javax.inject.Provider
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.example.rickandmortyproject.R
 import ru.example.rickandmortyproject.databinding.FragmentCharactersDetailsBinding
-import ru.example.rickandmortyproject.di.App
+import ru.example.rickandmortyproject.di.AppComponent
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterEntity
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterGender
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterStatus
+import ru.example.rickandmortyproject.presentation.base.BaseFragment
 import ru.example.rickandmortyproject.utils.viewModelFactory
 
-class CharacterDetailsFragment :
-    Fragment() {
+class CharacterDetailsFragment : BaseFragment() {
 
     private var _binding: FragmentCharactersDetailsBinding? = null
     private val binding get() = _binding!!
@@ -35,16 +32,23 @@ class CharacterDetailsFragment :
 
     private var characterEntity: CharacterEntity? = null
 
-    @Inject
-    lateinit var viewModelProvider: Provider<CharacterDetailsViewModel>
-    private val viewModel: CharacterDetailsViewModel by viewModelFactory { viewModelProvider.get() }
-
     private val tabName by lazy {
         requireArguments().getString(KEY_TAB_NAME)
     }
 
     private val characterId by lazy {
         requireArguments().getInt(KEY_CHARACTER_ID)
+    }
+
+    @Inject
+    internal lateinit var factory: CharacterDetailsViewModel.Factory
+
+    private val viewModel: CharacterDetailsViewModel by viewModelFactory {
+        factory.create(characterId)
+    }
+
+    override fun injectDependencies(appComponent: AppComponent) {
+        appComponent.inject(this)
     }
 
     override fun onCreateView(
@@ -60,20 +64,10 @@ class CharacterDetailsFragment :
         super.onViewCreated(view, savedInstanceState)
         setButtonBackListener()
         subscribeFlow()
-        notifyViewModel()
 
         if (loadedCount == COUNT_START) {
             startProgress()
         }
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        (requireActivity().application as App).appComponent().inject(this)
-    }
-
-    private fun notifyViewModel() {
-        viewModel.onViewCreated(characterId)
     }
 
     private fun setButtonBackListener() {
