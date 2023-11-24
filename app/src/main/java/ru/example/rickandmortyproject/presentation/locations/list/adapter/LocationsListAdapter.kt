@@ -10,6 +10,7 @@ import ru.example.rickandmortyproject.R
 import ru.example.rickandmortyproject.domain.locations.list.model.LocationEntity
 
 class LocationsListAdapter(
+    private val onItemClick: (LocationEntity) -> Unit,
     private val onListEnded: (() -> Unit)?
 ) : ListAdapter<LocationEntity, LocationsListAdapter.LocationsListViewHolder>(LocationsDiffCallback) {
 
@@ -31,6 +32,9 @@ class LocationsListAdapter(
         holder.name.text = locationEntity.name
         holder.type.text = locationEntity.type
         holder.dimension.text = locationEntity.dimension
+        holder.itemView.setOnClickListener {
+            onItemClick.invoke(locationEntity)
+        }
         if (position == currentList.size - 1) {
             onListEnded?.invoke()
         }
