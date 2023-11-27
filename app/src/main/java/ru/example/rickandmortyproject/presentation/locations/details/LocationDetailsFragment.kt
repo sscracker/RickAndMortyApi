@@ -9,7 +9,6 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -22,6 +21,7 @@ import ru.example.rickandmortyproject.presentation.base.BaseFragment
 import ru.example.rickandmortyproject.presentation.characters.details.CharacterDetailsFragment
 import ru.example.rickandmortyproject.presentation.characters.list.adapter.CharacterListAdapter
 import ru.example.rickandmortyproject.utils.viewModelFactory
+import javax.inject.Inject
 
 class LocationDetailsFragment : BaseFragment() {
 
@@ -90,35 +90,20 @@ class LocationDetailsFragment : BaseFragment() {
 
                 viewModel.errorStateFlow
                     .onEach {
-                        showErrorBlock()
+                        showErrorViews(true)
                     }
                     .launchIn(this)
             }
         }
     }
 
-    private fun showErrorBlock() {
-        hideContentViews()
-        stopProgress()
-        showErrorViews()
-    }
-
-    private fun hideContentViews() {
-        binding.contentViewsGroup.isVisible = false
-    }
-
-    private fun showErrorViews() {
-        binding.errorViewsGroup.isVisible = true
+    private fun showErrorViews(show: Boolean) {
+        binding.errorViewsGroup.isVisible = show
         binding.locationDetailsButtonReload.setOnClickListener {
             viewModel.onButtonReloadClick(locationId)
-            hideErrorViews(false)
             showContentViews(true)
             startProgress()
         }
-    }
-
-    private fun hideErrorViews(show: Boolean) {
-        binding.errorViewsGroup.isVisible = show
     }
 
     private fun showContentViews(show: Boolean) {
