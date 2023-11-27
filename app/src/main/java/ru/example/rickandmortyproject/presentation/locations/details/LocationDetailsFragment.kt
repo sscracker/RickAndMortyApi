@@ -70,6 +70,7 @@ class LocationDetailsFragment : BaseFragment() {
         setAdapter()
         setButtonBackClickListener()
         observeData()
+        showContentViews(true)
     }
 
     private fun observeData() {
@@ -91,6 +92,7 @@ class LocationDetailsFragment : BaseFragment() {
                 viewModel.errorStateFlow
                     .onEach {
                         showErrorViews(true)
+                        reload()
                     }
                     .launchIn(this)
             }
@@ -98,11 +100,13 @@ class LocationDetailsFragment : BaseFragment() {
     }
 
     private fun showErrorViews(show: Boolean) {
-        showContentViews(false)
+        showContentViews(!show)
         binding.errorViewsGroup.isVisible = show
+    }
+
+    private fun reload() {
         binding.locationDetailsButtonReload.setOnClickListener {
             viewModel.onButtonReloadClick(locationId)
-            showContentViews(true)
             startProgress()
         }
     }
@@ -143,7 +147,7 @@ class LocationDetailsFragment : BaseFragment() {
     }
 
     private fun setAdapter() {
-        binding.locationDetailsRecyclerCharacters.adapter = residentsListAdapter
+        binding.locationDetailsRecyclerResidents.adapter = residentsListAdapter
     }
 
     private fun setButtonBackClickListener() {
