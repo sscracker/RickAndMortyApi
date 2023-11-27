@@ -111,18 +111,18 @@ class LocationDetailsFragment : BaseFragment() {
         binding.errorViewsGroup.isVisible = true
         binding.locationDetailsButtonReload.setOnClickListener {
             viewModel.onButtonReloadClick(locationId)
-            hideErrorViews()
-            showContentViews()
+            hideErrorViews(false)
+            showContentViews(true)
             startProgress()
         }
     }
 
-    private fun hideErrorViews() {
-        binding.errorViewsGroup.isVisible = false
+    private fun hideErrorViews(show: Boolean) {
+        binding.errorViewsGroup.isVisible = show
     }
 
-    private fun showContentViews() {
-        binding.contentViewsGroup.isVisible = true
+    private fun showContentViews(show: Boolean) {
+        binding.contentViewsGroup.isVisible = show
     }
 
     private fun startProgress() {
@@ -140,9 +140,11 @@ class LocationDetailsFragment : BaseFragment() {
 
     private fun setLocationData(locationEntity: LocationEntity) {
         viewModel.saveLocation(locationEntity)
-        binding.locationDetailsNameTextView.text = locationEntity.name
-        binding.locationDetailsTypeText.text = locationEntity.type
-        binding.locationDetailsDimensionText.text = locationEntity.dimension
+        with(binding) {
+            locationDetailsNameTextView.text = locationEntity.name
+            locationDetailsTypeText.text = locationEntity.type
+            locationDetailsDimensionText.text = locationEntity.dimension
+        }
     }
 
     private fun showResidents(residents: List<CharacterEntity>) {

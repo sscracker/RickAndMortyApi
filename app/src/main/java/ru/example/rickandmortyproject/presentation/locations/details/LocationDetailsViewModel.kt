@@ -49,6 +49,16 @@ class LocationDetailsViewModel @AssistedInject constructor(
         provideLocationFlow(locationId)
     }
 
+    fun onButtonReloadClick(locationId: Int) {
+        locationJob?.cancel()
+        residentsJob?.cancel()
+        provideLocationFlow(locationId)
+    }
+
+    fun saveLocation(locationEntity: LocationEntity) {
+        location = locationEntity
+    }
+
     private fun provideLocationFlow(locationId: Int) {
         locationJob = viewModelScope.launch(Dispatchers.IO) {
             getSingleLocationUseCaseImpl.invoke(locationId)
@@ -99,16 +109,6 @@ class LocationDetailsViewModel @AssistedInject constructor(
     private fun loading(): Boolean {
         loadedCount++
         return loadedCount == COUNT_EXPECTED
-    }
-
-    fun onButtonReloadClick(locationId: Int) {
-        locationJob?.cancel()
-        residentsJob?.cancel()
-        provideLocationFlow(locationId)
-    }
-
-    fun saveLocation(locationEntity: LocationEntity) {
-        location = locationEntity
     }
 
     @AssistedFactory
