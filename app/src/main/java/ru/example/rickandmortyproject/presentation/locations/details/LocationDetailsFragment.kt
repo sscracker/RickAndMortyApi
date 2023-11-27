@@ -9,6 +9,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -21,7 +22,6 @@ import ru.example.rickandmortyproject.presentation.base.BaseFragment
 import ru.example.rickandmortyproject.presentation.characters.details.CharacterDetailsFragment
 import ru.example.rickandmortyproject.presentation.characters.list.adapter.CharacterListAdapter
 import ru.example.rickandmortyproject.utils.viewModelFactory
-import javax.inject.Inject
 
 class LocationDetailsFragment : BaseFragment() {
 
@@ -98,6 +98,7 @@ class LocationDetailsFragment : BaseFragment() {
     }
 
     private fun showErrorViews(show: Boolean) {
+        showContentViews(false)
         binding.errorViewsGroup.isVisible = show
         binding.locationDetailsButtonReload.setOnClickListener {
             viewModel.onButtonReloadClick(locationId)
