@@ -15,6 +15,7 @@ import ru.example.rickandmortyproject.presentation.characters.list.CharactersLis
 import ru.example.rickandmortyproject.presentation.episodes.details.EpisodeDetailsFragment
 import ru.example.rickandmortyproject.presentation.episodes.list.EpisodesFilterFragment
 import ru.example.rickandmortyproject.presentation.episodes.list.EpisodesListFragment
+import ru.example.rickandmortyproject.presentation.locations.details.LocationDetailsFragment
 import ru.example.rickandmortyproject.presentation.locations.list.LocationsFilterFragment
 import ru.example.rickandmortyproject.presentation.locations.list.LocationsListFragment
 
@@ -37,6 +38,7 @@ interface AppComponent {
     fun inject(episodeDetailsFragment: EpisodeDetailsFragment)
     fun inject(locationsListFragment: LocationsListFragment)
     fun inject(locationsFilterFragment: LocationsFilterFragment)
+    fun inject(locationDetailsFragment: LocationDetailsFragment)
 
     @Component.Factory
     interface AppComponentFactory {

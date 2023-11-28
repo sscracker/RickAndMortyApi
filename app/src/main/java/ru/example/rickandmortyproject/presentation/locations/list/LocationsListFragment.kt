@@ -21,6 +21,7 @@ import ru.example.rickandmortyproject.databinding.FragmentLocationsBinding
 import ru.example.rickandmortyproject.di.AppComponent
 import ru.example.rickandmortyproject.domain.locations.list.model.LocationEntity
 import ru.example.rickandmortyproject.presentation.base.BaseFragment
+import ru.example.rickandmortyproject.presentation.locations.details.LocationDetailsFragment
 import ru.example.rickandmortyproject.presentation.locations.list.adapter.LocationsListAdapter
 import ru.example.rickandmortyproject.utils.showToast
 import ru.example.rickandmortyproject.utils.viewModelFactory
@@ -38,6 +39,7 @@ class LocationsListFragment : BaseFragment() {
 
     private val locationsAdapter by lazy {
         LocationsListAdapter(
+            onItemClick = { location -> launchLocationDetailsFragment(location.id) },
             onListEnded = { viewModel.onListEnded() }
         )
     }
@@ -68,6 +70,19 @@ class LocationsListFragment : BaseFragment() {
         initListeners()
         notifyViewModel()
         startProgress()
+    }
+
+    private fun launchLocationDetailsFragment(id: Int) {
+        tabName?.let { locationDetailsTabName ->
+            parentFragmentManager.beginTransaction()
+                .setReorderingAllowed(true)
+                .replace(
+                    R.id.fragment_container,
+                    LocationDetailsFragment.newInstance(id, locationDetailsTabName)
+                )
+                .addToBackStack(locationDetailsTabName)
+                .commit()
+        }
     }
 
     private fun initListeners() {

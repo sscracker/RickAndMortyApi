@@ -55,4 +55,5 @@
     <string name="enter_location_name">Enter location name</string>
     <string name="enter_location_dimension">Enter location dimension</string>
     <string name="enter_location_type">Enter location type</string>
+    <string name="residents">Residents:</string>
 </resources>
