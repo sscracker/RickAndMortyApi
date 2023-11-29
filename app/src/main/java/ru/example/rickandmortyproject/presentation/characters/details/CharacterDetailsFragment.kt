@@ -10,7 +10,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import coil.load
-import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -27,6 +26,7 @@ import ru.example.rickandmortyproject.presentation.episodes.list.adapter.Episode
 import ru.example.rickandmortyproject.presentation.locations.details.LocationDetailsFragment
 import ru.example.rickandmortyproject.utils.showToast
 import ru.example.rickandmortyproject.utils.viewModelFactory
+import javax.inject.Inject
 
 class CharacterDetailsFragment : BaseFragment() {
 
@@ -77,8 +77,7 @@ class CharacterDetailsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setButtonBackListener()
-        setOriginListener()
-        setLocationListener()
+        setOriginAndLocationListeners()
         setEpisodesAdapter()
         observeData()
         showContentViews(true)
@@ -92,24 +91,23 @@ class CharacterDetailsFragment : BaseFragment() {
         binding.characterDetailsRecyclerViewEpisodes.adapter = adapter
     }
 
-    private fun setOriginListener() {
-        binding.characterDetailsOriginCardView.setOnClickListener {
-            characterEntity?.let { character ->
-                launchLocationDetailsFragment(character.originId)
+    private fun setOriginAndLocationListeners() {
+        with(binding) {
+            characterDetailsLocationCardView.setOnClickListener {
+                characterEntity?.let { character ->
+                    launchLocationDetailsFragment(character.originId)
+                }
             }
-        }
-    }
-
-    private fun setLocationListener() {
-        binding.characterDetailsLocationCardView.setOnClickListener {
-            characterEntity?.let { character ->
-                launchLocationDetailsFragment(character.locationId)
+            characterDetailsOriginCardView.setOnClickListener {
+                characterEntity?.let { character ->
+                    launchLocationDetailsFragment(character.locationId)
+                }
             }
         }
     }
 
     private fun launchLocationDetailsFragment(id: Int) {
-        if (id == -1) {
+        if (id == UNDEFINED_ID) {
             requireContext().showToast(requireContext().getString(R.string.unknown_location))
             return
         }
@@ -123,7 +121,7 @@ class CharacterDetailsFragment : BaseFragment() {
     }
 
     private fun launchEpisodeDetailsFragment(id: Int) {
-        if (id == -1) {
+        if (id == UNDEFINED_ID) {
             requireContext().showToast(requireContext().getString(R.string.unknown_episode))
             return
         }
@@ -186,7 +184,7 @@ class CharacterDetailsFragment : BaseFragment() {
 
     private fun setOrigin(originName: String) {
         binding.characterDetailsOriginTextView.text = String.format(
-            "%s: %s",
+            FORMAT,
             getString(R.string.origin_label),
             originName
         )
@@ -199,7 +197,7 @@ class CharacterDetailsFragment : BaseFragment() {
 
     private fun setLocation(locationName: String) {
         binding.characterDetailsLocationTextView.text = String.format(
-            "%s: %s",
+            FORMAT,
             getString(R.string.location_label),
             locationName
         )
@@ -263,6 +261,8 @@ class CharacterDetailsFragment : BaseFragment() {
         private const val KEY_TAB_NAME = "tabName"
         private const val KEY_CHARACTER_ID = "characterId"
         private const val COUNT_START = 0
+        private const val UNDEFINED_ID = -1
+        private const val FORMAT = "%s: %s"
 
         fun newInstance(id: Int, tabName: String) = CharacterDetailsFragment().apply {
             arguments = bundleOf(KEY_CHARACTER_ID to id, KEY_TAB_NAME to tabName)

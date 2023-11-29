@@ -94,10 +94,10 @@ class CharacterDetailsViewModel @AssistedInject constructor(
 
     private fun loadLocationAndOrigin(entity: CharacterEntity) {
         val ids = mutableListOf<Int>()
-        if (entity.originId != -1) {
+        if (entity.originId != UNDEFINED_ID) {
             ids.add(entity.originId)
         }
-        if (entity.locationId != -1) {
+        if (entity.locationId != UNDEFINED_ID) {
             ids.add(entity.locationId)
         }
         viewModelScope.launch(Dispatchers.IO) {
@@ -112,7 +112,7 @@ class CharacterDetailsViewModel @AssistedInject constructor(
     }
 
     private fun provideOriginFlow(id: Int) {
-        if (id == -1) {
+        if (id == UNDEFINED_ID) {
             _originStateFlow.tryEmit(UNKNOWN_VALUE)
             return
         }
@@ -128,7 +128,7 @@ class CharacterDetailsViewModel @AssistedInject constructor(
     }
 
     private fun provideLocationFlow(id: Int) {
-        if (id == -1) {
+        if (id == UNDEFINED_ID) {
             _locationStateFlow.tryEmit(UNKNOWN_VALUE)
             return
         }
@@ -177,5 +177,6 @@ class CharacterDetailsViewModel @AssistedInject constructor(
         private const val COUNT_START = 0
         private const val COUNT_EXPECTED = 2
         private const val UNKNOWN_VALUE = "Unknown"
+        private const val UNDEFINED_ID = -1
     }
 }
