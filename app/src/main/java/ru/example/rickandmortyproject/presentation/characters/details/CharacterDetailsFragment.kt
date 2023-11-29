@@ -20,7 +20,12 @@ import ru.example.rickandmortyproject.di.AppComponent
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterEntity
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterGender
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterStatus
+import ru.example.rickandmortyproject.domain.episodes.list.model.EpisodeEntity
 import ru.example.rickandmortyproject.presentation.base.BaseFragment
+import ru.example.rickandmortyproject.presentation.episodes.details.EpisodeDetailsFragment
+import ru.example.rickandmortyproject.presentation.episodes.list.adapter.EpisodesListAdapter
+import ru.example.rickandmortyproject.presentation.locations.details.LocationDetailsFragment
+import ru.example.rickandmortyproject.utils.showToast
 import ru.example.rickandmortyproject.utils.viewModelFactory
 
 class CharacterDetailsFragment : BaseFragment() {
@@ -38,6 +43,15 @@ class CharacterDetailsFragment : BaseFragment() {
 
     private val characterId by lazy {
         requireArguments().getInt(KEY_CHARACTER_ID)
+    }
+
+    private val adapter by lazy {
+        EpisodesListAdapter(
+            null,
+            onItemClick = { episode ->
+                launchEpisodeDetailsFragment(episode.id)
+            }
+        )
     }
 
     @Inject
@@ -63,10 +77,62 @@ class CharacterDetailsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setButtonBackListener()
-        subscribeFlow()
+        setOriginListener()
+        setLocationListener()
+        setEpisodesAdapter()
+        observeData()
+        showContentViews(true)
 
         if (loadedCount == COUNT_START) {
             startProgress()
+        }
+    }
+
+    private fun setEpisodesAdapter() {
+        binding.characterDetailsRecyclerViewEpisodes.adapter = adapter
+    }
+
+    private fun setOriginListener() {
+        binding.characterDetailsOriginCardView.setOnClickListener {
+            characterEntity?.let { character ->
+                launchLocationDetailsFragment(character.originId)
+            }
+        }
+    }
+
+    private fun setLocationListener() {
+        binding.characterDetailsLocationCardView.setOnClickListener {
+            characterEntity?.let { character ->
+                launchLocationDetailsFragment(character.locationId)
+            }
+        }
+    }
+
+    private fun launchLocationDetailsFragment(id: Int) {
+        if (id == -1) {
+            requireContext().showToast(requireContext().getString(R.string.unknown_location))
+            return
+        }
+        tabName?.let {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .setReorderingAllowed(true)
+                .replace(R.id.fragment_container, LocationDetailsFragment.newInstance(id, it))
+                .addToBackStack(it)
+                .commit()
+        }
+    }
+
+    private fun launchEpisodeDetailsFragment(id: Int) {
+        if (id == -1) {
+            requireContext().showToast(requireContext().getString(R.string.unknown_episode))
+            return
+        }
+        tabName?.let {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .setReorderingAllowed(true)
+                .replace(R.id.fragment_container, EpisodeDetailsFragment.newInstance(id, it))
+                .addToBackStack(it)
+                .commit()
         }
     }
 
@@ -76,29 +142,79 @@ class CharacterDetailsFragment : BaseFragment() {
         }
     }
 
-    private fun subscribeFlow() {
+    private fun observeData() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.characterState
+                viewModel.characterStateFlow
                     .onEach { character ->
                         loadCharacter(character)
                     }
                     .launchIn(this)
-                viewModel.errorState
+
+                viewModel.originStateFlow
+                    .onEach { origin ->
+                        loadOrigin(origin)
+                    }
+                    .launchIn(this)
+
+                viewModel.locationStateFlow
+                    .onEach { location ->
+                        loadLocation(location)
+                    }
+                    .launchIn(this)
+
+                viewModel.episodesListStateFlow
+                    .onEach { episodesList ->
+                        loadEpisodesList(episodesList)
+                    }
+                    .launchIn(this)
+
+                viewModel.errorStateFlow
                     .onEach {
-                        showError()
+                        showError(true)
+                        reload()
                     }
                     .launchIn(this)
             }
         }
     }
 
-    private fun loadCharacter(character: CharacterEntity) {
-        setCharacterData(character)
-        checkLoadingCompleted()
+    private fun loadOrigin(originName: String) {
+        setOrigin(originName)
+        stopProgress()
     }
 
-    private fun setCharacterData(character: CharacterEntity) {
+    private fun setOrigin(originName: String) {
+        binding.characterDetailsOriginTextView.text = String.format(
+            "%s: %s",
+            getString(R.string.origin_label),
+            originName
+        )
+    }
+
+    private fun loadLocation(locationName: String) {
+        setLocation(locationName)
+        stopProgress()
+    }
+
+    private fun setLocation(locationName: String) {
+        binding.characterDetailsLocationTextView.text = String.format(
+            "%s: %s",
+            getString(R.string.location_label),
+            locationName
+        )
+    }
+
+    private fun loadEpisodesList(episodes: List<EpisodeEntity>) {
+        adapter.submitList(episodes)
+    }
+
+    private fun loadCharacter(character: CharacterEntity) {
+        showCharacterData(character)
+        stopProgress()
+    }
+
+    private fun showCharacterData(character: CharacterEntity) {
         characterEntity = character
         binding.characterDetailsNameTextView.text = character.name
         binding.characterDetailsStatusTextView.text = when (character.status) {
@@ -120,43 +236,19 @@ class CharacterDetailsFragment : BaseFragment() {
         }
     }
 
-    private fun checkLoadingCompleted() {
-        loadedCount++
-        if (loadedCount == 1) {
-            stopProgress()
-        }
+    private fun showError(show: Boolean) {
+        showContentViews(!show)
+        binding.errorGroup.isVisible = show
     }
 
-    private fun showError() {
-        hideViews()
-        stopProgress()
-        showErrorViews()
-    }
-
-    private fun showErrorViews() {
-        binding.characterDetailsErrorTextView.isVisible = true
-        binding.characterDetailsButtonReload.isVisible = true
+    private fun reload() {
         binding.characterDetailsButtonReload.setOnClickListener {
             viewModel.onButtonReloadPressed(characterId)
-            hideErrorView()
-            showContent()
-            startProgress()
         }
     }
 
-    private fun hideErrorView() {
-        binding.characterDetailsErrorTextView.isVisible = false
-        binding.characterDetailsButtonReload.isVisible = false
-    }
-
-    private fun showContent() {
-        binding.characterDetailsNameTextView.isVisible = true
-        binding.characterDetailsScrollView.isVisible = true
-    }
-
-    private fun hideViews() {
-        binding.characterDetailsNameTextView.isVisible = false
-        binding.characterDetailsScrollView.isVisible = false
+    private fun showContentViews(show: Boolean) {
+        binding.contentGroup.isVisible = show
     }
 
     private fun startProgress() {

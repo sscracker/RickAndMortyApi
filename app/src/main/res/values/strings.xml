@@ -56,4 +56,8 @@
     <string name="enter_location_dimension">Enter location dimension</string>
     <string name="enter_location_type">Enter location type</string>
     <string name="residents">Residents:</string>
+    <string name="unknown_location">Unknown location</string>
+    <string name="origin_label">Origin</string>
+    <string name="location_label">Location</string>
+    <string name="unknown_episode">Unknown episode</string>
 </resources>

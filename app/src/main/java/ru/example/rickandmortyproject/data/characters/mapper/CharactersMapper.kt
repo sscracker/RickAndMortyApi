@@ -9,6 +9,8 @@ import ru.example.rickandmortyproject.di.scope.ActivityScope
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterEntity
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterGender
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterStatus
+import ru.example.rickandmortyproject.utils.getIdListFromUrls
+import ru.example.rickandmortyproject.utils.idUrlEndsWith
 
 const val ALIVE = "Alive"
 const val DEAD = "Dead"
@@ -47,7 +49,10 @@ class CharactersMapper @Inject constructor() {
         },
         image = dto.image,
         url = dto.url,
-        created = dto.created
+        created = dto.created,
+        originId = dto.origin.url.idUrlEndsWith(),
+        locationId = dto.location.url.idUrlEndsWith(),
+        episodesId = dto.episode.getIdListFromUrls().joinToString()
     )
 
     fun mapDbModelsListToEntitiesList(dbModels: List<CharacterDbModel>) = dbModels.map {
@@ -74,6 +79,9 @@ class CharactersMapper @Inject constructor() {
         },
         image = dbModel.image,
         url = dbModel.url,
-        created = dbModel.created
+        created = dbModel.created,
+        originId = dbModel.originId,
+        locationId = dbModel.locationId,
+        episodesId = dbModel.episodesId.split(",").map { it.trim().toInt() }
     )
 }

@@ -9,5 +9,8 @@ data class CharacterEntity(
     val gender: CharacterGender,
     val image: String,
     val url: String,
-    val created: String
+    val created: String,
+    val originId: Int,
+    val locationId: Int,
+    val episodesId: List<Int>
 )
