@@ -11,3 +11,9 @@ fun Context.showToast(message: String) {
 fun JsonArray.getIdListFromUrls() = toList().map { url ->
     url.asString.split("/").last().toInt()
 }
+
+fun String.idUrlEndsWith() = if (isNotEmpty()) {
+    split("/").last().toInt()
+} else {
+    -1
+}

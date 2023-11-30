@@ -14,5 +14,8 @@ data class CharacterDbModel(
     val type: String,
     val image: String,
     val url: String,
-    val created: String
+    val created: String,
+    val originId: Int,
+    val locationId: Int,
+    val episodesId: String
 )
