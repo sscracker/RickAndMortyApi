@@ -8,17 +8,17 @@ import ru.example.rickandmortyproject.data.characters.model.CharacterDto
 interface CharactersApi {
     @GET("character")
     suspend fun loadPage(
-        @Query(QUERY_PARAM_PAGE) page: Int
+        @Query(QUERY_PARAM_PAGE) page: Int,
     ): ResponseDto
 
     @GET("character/{$PATH_ITEM_ID}")
     suspend fun loadItem(
-        @Path(PATH_ITEM_ID) itemId: Int
+        @Path(PATH_ITEM_ID) itemId: Int,
     ): CharacterDto
 
     @GET("character/{$PATH_ITEM_IDS_STRING}")
     suspend fun loadItemsByIds(
-        @Path(PATH_ITEM_IDS_STRING) itemIds: String
+        @Path(PATH_ITEM_IDS_STRING) itemIds: String,
     ): List<CharacterDto>
 
     companion object {

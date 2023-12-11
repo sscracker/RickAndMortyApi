@@ -7,5 +7,5 @@ data class LocationEntity(
     val dimension: String,
     val residentsId: List<Int>,
     val url: String,
-    val created: String
+    val created: String,
 )

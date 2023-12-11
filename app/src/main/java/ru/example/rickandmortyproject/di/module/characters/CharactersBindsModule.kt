@@ -8,10 +8,7 @@ import ru.example.rickandmortyproject.domain.characters.list.CharactersRepositor
 
 @Module
 interface CharactersBindsModule {
-
     @Binds
     @ActivityScope
-    fun bindsCharacterListRepository(
-        charactersRepositoryImpl: CharactersRepositoryImpl
-    ): CharactersRepository
+    fun bindsCharacterListRepository(charactersRepositoryImpl: CharactersRepositoryImpl): CharactersRepository
 }

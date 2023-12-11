@@ -8,7 +8,6 @@ import ru.example.rickandmortyproject.data.episodes.model.EpisodeDbModel
 
 @Dao
 interface EpisodeListDao : BaseDao<EpisodeDbModel> {
-
     @Query("SELECT * FROM EpisodesListEntity ORDER BY id")
     fun getAllEpisodes(): Flow<List<EpisodeDbModel>>
 

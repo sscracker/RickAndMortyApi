@@ -12,8 +12,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
-import javax.inject.Inject
-import javax.inject.Provider
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -26,11 +24,12 @@ import ru.example.rickandmortyproject.presentation.characters.details.CharacterD
 import ru.example.rickandmortyproject.presentation.characters.list.adapter.CharacterListAdapter
 import ru.example.rickandmortyproject.utils.showToast
 import ru.example.rickandmortyproject.utils.viewModelFactory
+import javax.inject.Inject
+import javax.inject.Provider
 
 private const val COLUMN_COUNT = 2
 
 class CharactersListFragment : BaseFragment() {
-
     private var _binding: FragmentCharactersBinding? = null
     private val binding get() = _binding!!
 
@@ -43,13 +42,13 @@ class CharactersListFragment : BaseFragment() {
     private val characterAdapter by lazy {
         CharacterListAdapter(
             onListEnded =
-            {
-                viewModel.onListEnded()
-                startProgress()
-            },
+                {
+                    viewModel.onListEnded()
+                    startProgress()
+                },
             onItemClick = { character ->
                 launchDetailsFragment(character.id)
-            }
+            },
         )
     }
 
@@ -62,7 +61,7 @@ class CharactersListFragment : BaseFragment() {
             parentFragmentManager.beginTransaction().setReorderingAllowed(true)
                 .replace(
                     R.id.fragment_container,
-                    CharacterDetailsFragment.newInstance(id, characterDetailsTabName)
+                    CharacterDetailsFragment.newInstance(id, characterDetailsTabName),
                 )
                 .addToBackStack(characterDetailsTabName).commit()
         }
@@ -75,13 +74,16 @@ class CharactersListFragment : BaseFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentCharactersBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         initCharacterList()
         configSwipeLayout()
@@ -179,14 +181,15 @@ class CharactersListFragment : BaseFragment() {
     }
 
     private fun setSearchViewListener() {
-        val listener = object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean = true
+        val listener =
+            object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean = true
 
-            override fun onQueryTextChange(changedText: String?): Boolean {
-                viewModel.onSearchQueryChanged(changedText)
-                return true
+                override fun onQueryTextChange(changedText: String?): Boolean {
+                    viewModel.onSearchQueryChanged(changedText)
+                    return true
+                }
             }
-        }
         binding.charactersSearchView.setOnQueryTextListener(listener)
     }
 
@@ -214,9 +217,11 @@ class CharactersListFragment : BaseFragment() {
 
     companion object {
         const val KEY_FILTER_CHANGED = "charactersFilterChanged"
-        private const val KEY_TAB_NAME = "tabName"
-        fun newInstance(tabName: String) = CharactersListFragment().apply {
-            arguments = bundleOf(KEY_TAB_NAME to tabName)
-        }
+        const val KEY_TAB_NAME = "tabName"
+
+        fun newInstance(tabName: String) =
+            CharactersListFragment().apply {
+                arguments = bundleOf(KEY_TAB_NAME to tabName)
+            }
     }
 }

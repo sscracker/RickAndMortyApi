@@ -5,7 +5,6 @@ import ru.example.rickandmortyproject.domain.locations.list.model.LocationEntity
 import ru.example.rickandmortyproject.domain.locations.list.model.LocationFilterSettings
 
 interface LocationsRepository {
-
     fun getAllLocations(): Flow<List<LocationEntity>>
 
     suspend fun loadEpisodesPage(page: Int): Boolean

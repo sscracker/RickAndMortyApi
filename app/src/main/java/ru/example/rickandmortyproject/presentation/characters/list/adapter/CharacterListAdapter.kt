@@ -15,10 +15,10 @@ import ru.example.rickandmortyproject.domain.characters.list.model.CharacterStat
 
 class CharacterListAdapter(
     private val onListEnded: (() -> Unit)?,
-    private val onItemClick: (CharacterEntity) -> Unit
+    private val onItemClick: (CharacterEntity) -> Unit,
 ) : ListAdapter<CharacterEntity, CharacterListAdapter.CharacterListViewHolder>(
-    CharacterDiffCallback
-) {
+        CharacterDiffCallback,
+    ) {
     class CharacterListViewHolder(itemView: View) : ViewHolder(itemView) {
         val image: ImageView = itemView.findViewById(R.id.item_image_view_character_photo)
         val name: TextView = itemView.findViewById(R.id.item_text_view_character_name)
@@ -27,29 +27,36 @@ class CharacterListAdapter(
         val gender: TextView = itemView.findViewById(R.id.item_text_view_character_gender)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_character, parent, false)
-            .let {
-                CharacterListViewHolder(it)
-            }
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ) = LayoutInflater.from(parent.context)
+        .inflate(R.layout.item_character, parent, false)
+        .let {
+            CharacterListViewHolder(it)
+        }
 
-    override fun onBindViewHolder(holder: CharacterListViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: CharacterListViewHolder,
+        position: Int,
+    ) {
         val entity = getItem(position)
         holder.name.text = entity.name
         holder.species.text = entity.species
 
-        holder.status.text = when (entity.status) {
-            CharacterStatus.ALIVE -> STATUS_ALIVE
-            CharacterStatus.DEAD -> STATUS_DEAD
-            CharacterStatus.UNKNOWN -> STATUS_UNKNOWN
-        }
-        holder.gender.text = when (entity.gender) {
-            CharacterGender.FEMALE -> GENDER_FEMALE
-            CharacterGender.MALE -> GENDER_MALE
-            CharacterGender.GENDERLESS -> GENDER_GENDERLESS
-            CharacterGender.UNKNOWN -> GENDER_UNKNOWN
-        }
+        holder.status.text =
+            when (entity.status) {
+                CharacterStatus.ALIVE -> STATUS_ALIVE
+                CharacterStatus.DEAD -> STATUS_DEAD
+                CharacterStatus.UNKNOWN -> STATUS_UNKNOWN
+            }
+        holder.gender.text =
+            when (entity.gender) {
+                CharacterGender.FEMALE -> GENDER_FEMALE
+                CharacterGender.MALE -> GENDER_MALE
+                CharacterGender.GENDERLESS -> GENDER_GENDERLESS
+                CharacterGender.UNKNOWN -> GENDER_UNKNOWN
+            }
         holder.image.load(entity.image) {
             error(R.drawable.person_placeholder)
         }
@@ -62,7 +69,6 @@ class CharacterListAdapter(
     }
 
     companion object {
-
         private const val STATUS_ALIVE = "Alive"
         private const val STATUS_DEAD = "Dead"
         private const val STATUS_UNKNOWN = "Unknown"

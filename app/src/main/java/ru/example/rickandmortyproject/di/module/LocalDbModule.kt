@@ -17,7 +17,7 @@ class LocalDbModule {
         Room.databaseBuilder(
             context,
             AppDatabase::class.java,
-            DB_NAME
+            DB_NAME,
         ).build()
 
     @Provides

@@ -8,12 +8,14 @@ fun Context.showToast(message: String) {
     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }
 
-fun JsonArray.getIdListFromUrls() = toList().map { url ->
-    url.asString.split("/").last().toInt()
-}
+fun JsonArray.getIdListFromUrls() =
+    toList().map { url ->
+        url.asString.split("/").last().toInt()
+    }
 
-fun String.idUrlEndsWith() = if (isNotEmpty()) {
-    split("/").last().toInt()
-} else {
-    -1
-}
+fun String.idUrlEndsWith() =
+    if (isNotEmpty()) {
+        split("/").last().toInt()
+    } else {
+        -1
+    }

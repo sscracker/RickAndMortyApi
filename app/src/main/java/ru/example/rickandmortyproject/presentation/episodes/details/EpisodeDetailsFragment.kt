@@ -9,7 +9,6 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -22,9 +21,9 @@ import ru.example.rickandmortyproject.presentation.base.BaseFragment
 import ru.example.rickandmortyproject.presentation.characters.details.CharacterDetailsFragment
 import ru.example.rickandmortyproject.presentation.characters.list.adapter.CharacterListAdapter
 import ru.example.rickandmortyproject.utils.viewModelFactory
+import javax.inject.Inject
 
 class EpisodeDetailsFragment : BaseFragment() {
-
     private var _binding: FragmentEpisodeDeatilsBinding? = null
 
     private val binding get() = _binding!!
@@ -34,7 +33,7 @@ class EpisodeDetailsFragment : BaseFragment() {
             onListEnded = null,
             onItemClick = { character ->
                 launchCharacterDetailsFragment(character.id)
-            }
+            },
         )
     }
 
@@ -60,13 +59,16 @@ class EpisodeDetailsFragment : BaseFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentEpisodeDeatilsBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         startProgress()
         setAdapter()
@@ -181,7 +183,10 @@ class EpisodeDetailsFragment : BaseFragment() {
         private const val KEY_EPISODE_ID = "episodeId"
         private const val KEY_TAB_NAME = "tabName"
 
-        fun newInstance(id: Int, tabName: String) = EpisodeDetailsFragment().apply {
+        fun newInstance(
+            id: Int,
+            tabName: String,
+        ) = EpisodeDetailsFragment().apply {
             arguments = bundleOf(KEY_EPISODE_ID to id, KEY_TAB_NAME to tabName)
         }
     }

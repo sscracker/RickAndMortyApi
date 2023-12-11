@@ -5,7 +5,6 @@ import ru.example.rickandmortyproject.domain.episodes.list.model.EpisodeEntity
 import ru.example.rickandmortyproject.domain.episodes.list.model.EpisodeFilterSettings
 
 interface EpisodesRepository {
-
     fun getAllEpisodes(): Flow<List<EpisodeEntity>>
 
     suspend fun loadEpisodesPage(pageNumber: Int): Boolean

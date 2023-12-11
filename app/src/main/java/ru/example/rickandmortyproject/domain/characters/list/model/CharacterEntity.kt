@@ -12,5 +12,5 @@ data class CharacterEntity(
     val created: String,
     val originId: Int,
     val locationId: Int,
-    val episodesId: List<Int>
+    val episodesId: List<Int>,
 )

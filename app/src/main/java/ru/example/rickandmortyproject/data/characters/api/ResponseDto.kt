@@ -11,5 +11,5 @@ data class ResponseDto(
     val info: JsonObject,
     @SerializedName("results")
     @Expose
-    val results: JsonArray
+    val results: JsonArray,
 )

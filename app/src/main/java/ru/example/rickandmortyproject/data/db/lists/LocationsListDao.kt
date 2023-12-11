@@ -8,7 +8,6 @@ import ru.example.rickandmortyproject.data.locations.model.LocationDbModel
 
 @Dao
 interface LocationsListDao : BaseDao<LocationDbModel> {
-
     @Query("SELECT * FROM LocationsListEntity ORDER BY id")
     fun getAllLocations(): Flow<List<LocationDbModel>>
 

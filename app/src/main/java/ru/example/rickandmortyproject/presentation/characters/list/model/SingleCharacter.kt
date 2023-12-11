@@ -6,5 +6,5 @@ data class SingleCharacter(
     val name: String,
     val gender: String,
     val species: String,
-    val status: String
+    val status: String,
 )

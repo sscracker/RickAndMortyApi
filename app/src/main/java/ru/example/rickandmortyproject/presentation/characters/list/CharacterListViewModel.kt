@@ -2,7 +2,6 @@ package ru.example.rickandmortyproject.presentation.characters.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -18,141 +17,153 @@ import ru.example.rickandmortyproject.data.characters.usecases.LoadCharactersPag
 import ru.example.rickandmortyproject.data.characters.usecases.SaveCharacterFilterUseCaseImpl
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterEntity
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterFilterSettings
+import javax.inject.Inject
 
-class CharacterListViewModel @Inject constructor(
-    private val getCharacterFilterUseCase: GetCharacterFilterUseCaseImpl,
-    private val saveCharacterFilterUseCaseImpl: SaveCharacterFilterUseCaseImpl,
-    private val getCharactersUseCaseImpl: GetCharactersUseCaseImpl,
-    private val loadCharactersPageUseCaseImpl: LoadCharactersPageUseCaseImpl,
-    private val pageHolder: CharactersPageHolder,
-    private val matcher: CharactersMatcher
-) : ViewModel() {
+class CharacterListViewModel
+    @Inject
+    constructor(
+        private val getCharacterFilterUseCase: GetCharacterFilterUseCaseImpl,
+        private val saveCharacterFilterUseCaseImpl: SaveCharacterFilterUseCaseImpl,
+        private val getCharactersUseCaseImpl: GetCharactersUseCaseImpl,
+        private val loadCharactersPageUseCaseImpl: LoadCharactersPageUseCaseImpl,
+        private val pageHolder: CharactersPageHolder,
+        private val matcher: CharactersMatcher,
+    ) : ViewModel() {
+        private val _charactersListStateFlow = MutableSharedFlow<List<CharacterEntity>>(1)
+        val charactersListStateFlow = _charactersListStateFlow.asSharedFlow()
 
-    private val _charactersListStateFlow = MutableSharedFlow<List<CharacterEntity>>(1)
-    val charactersListStateFlow = _charactersListStateFlow.asSharedFlow()
+        private val _notEmptyFilterStateFlow = MutableStateFlow<Boolean?>(null)
+        val notEmptyFilterStateFlow =
+            _notEmptyFilterStateFlow.asStateFlow()
+                .filterNotNull()
 
-    private val _notEmptyFilterStateFlow = MutableStateFlow<Boolean?>(null)
-    val notEmptyFilterStateFlow = _notEmptyFilterStateFlow.asStateFlow()
-        .filterNotNull()
+        private val _errorStateFlow = MutableStateFlow<Any?>(null)
+        val errorStateFlow =
+            _errorStateFlow.asStateFlow()
+                .filterNotNull()
 
-    private val _errorStateFlow = MutableStateFlow<Any?>(null)
-    val errorStateFlow = _errorStateFlow.asStateFlow()
-        .filterNotNull()
+        private val _emptyResultStateFLow = MutableStateFlow<Any?>(null)
+        val emptyResultStateFLow =
+            _emptyResultStateFLow.asStateFlow()
+                .filterNotNull()
 
-    private val _emptyResultStateFLow = MutableStateFlow<Any?>(null)
-    val emptyResultStateFLow = _emptyResultStateFLow.asStateFlow()
-        .filterNotNull()
+        private var job: Job? = null
+        private val emptyFilterSettings = CharacterFilterSettings()
 
-    private var job: Job? = null
-    private val emptyFilterSettings = CharacterFilterSettings()
+        private var searchQuery = ""
 
-    private var searchQuery = ""
-
-    fun onViewCreated() {
-        if (pageHolder.currentPageNumber() == INITIAL_PAGE_NUMBER) {
-            loadPage()
+        fun onViewCreated() {
+            if (pageHolder.currentPageNumber() == INITIAL_PAGE_NUMBER) {
+                loadPage()
+            }
+            provideCharactersFlow()
+            loadFilterIsPresent()
         }
-        provideCharactersFlow()
-        loadFilterIsPresent()
-    }
 
-    private fun loadFilterIsPresent() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val filterSettings = getCharacterFilterUseCase.invoke()
-            if (filterSettings != emptyFilterSettings) {
-                _notEmptyFilterStateFlow.tryEmit(true)
-            } else {
-                _notEmptyFilterStateFlow.tryEmit(false)
+        private fun loadFilterIsPresent() {
+            viewModelScope.launch(Dispatchers.IO) {
+                val filterSettings = getCharacterFilterUseCase.invoke()
+                if (filterSettings != emptyFilterSettings) {
+                    _notEmptyFilterStateFlow.tryEmit(true)
+                } else {
+                    _notEmptyFilterStateFlow.tryEmit(false)
+                }
             }
         }
-    }
 
-    private fun provideCharactersFlow() {
-        job = viewModelScope.launch(Dispatchers.IO) {
-            getCharactersUseCaseImpl.invoke()
-                .catch {
-                    emitErrorState()
-                }
-                .collect { charactersList ->
-                    val filter = getCharacterFilterUseCase.invoke()
-                    val filtered = charactersList.filter { matcher.isCharacterMatches(filter, it) }
-                    emitFilteredWithQuery(filtered)
+        private fun provideCharactersFlow() {
+            job =
+                viewModelScope.launch(Dispatchers.IO) {
+                    getCharactersUseCaseImpl.invoke()
+                        .catch {
+                            emitErrorState()
+                        }
+                        .collect { charactersList ->
+                            val filter = getCharacterFilterUseCase.invoke()
+                            val filtered =
+                                charactersList.filter {
+                                    matcher.isCharacterMatches(
+                                        filter,
+                                        it,
+                                    )
+                                }
+                            emitFilteredWithQuery(filtered)
+                        }
                 }
         }
-    }
 
-    private fun emitFilteredWithQuery(charactersList: List<CharacterEntity>) {
-        if (searchQuery.isNotEmpty()) {
-            charactersList.filter { characters ->
-                characters.name.contains(searchQuery, true)
-            }.also { characters ->
-                _charactersListStateFlow.tryEmit(characters)
-                if (characters.isEmpty()) {
+        private fun emitFilteredWithQuery(charactersList: List<CharacterEntity>) {
+            if (searchQuery.isNotEmpty()) {
+                charactersList.filter { characters ->
+                    characters.name.contains(searchQuery, true)
+                }.also { characters ->
+                    _charactersListStateFlow.tryEmit(characters)
+                    if (characters.isEmpty()) {
+                        emitEmptyResultState()
+                    }
+                }
+            } else {
+                _charactersListStateFlow.tryEmit(charactersList)
+                if (charactersList.isEmpty()) {
                     emitEmptyResultState()
                 }
             }
-        } else {
-            _charactersListStateFlow.tryEmit(charactersList)
-            if (charactersList.isEmpty()) {
-                emitEmptyResultState()
+        }
+
+        private fun loadPage() {
+            viewModelScope.launch(Dispatchers.IO) {
+                var pageNumber = pageHolder.currentPageNumber()
+                val success = loadCharactersPageUseCaseImpl.invoke(pageNumber)
+                if (success) {
+                    pageNumber++
+                    pageHolder.savePageNumber(pageNumber)
+                } else {
+                    emitErrorState()
+                }
             }
         }
-    }
 
-    private fun loadPage() {
-        viewModelScope.launch(Dispatchers.IO) {
-            var pageNumber = pageHolder.currentPageNumber()
-            val success = loadCharactersPageUseCaseImpl.invoke(pageNumber)
-            if (success) {
-                pageNumber++
-                pageHolder.savePageNumber(pageNumber)
-            } else {
-                emitErrorState()
+        fun onListEnded() {
+            loadPage()
+        }
+
+        fun onListSwiped() {
+            resetData()
+        }
+
+        fun onFilterSettingsChanged() {
+            resetData()
+        }
+
+        fun onButtonClearPressed() {
+            viewModelScope.launch(Dispatchers.IO) {
+                val emptySettingsSaved = saveCharacterFilterUseCaseImpl.invoke(emptyFilterSettings)
+                if (emptySettingsSaved) {
+                    resetData()
+                    _notEmptyFilterStateFlow.tryEmit(false)
+                }
             }
         }
-    }
 
-    fun onListEnded() {
-        loadPage()
-    }
+        fun onSearchQueryChanged(query: String?) {
+            searchQuery = query?.trim().orEmpty()
+            resetData()
+        }
 
-    fun onListSwiped() {
-        resetData()
-    }
+        private fun emitErrorState() {
+            _errorStateFlow.tryEmit(Any())
+        }
 
-    fun onFilterSettingsChanged() {
-        resetData()
-    }
+        private fun emitEmptyResultState() {
+            _emptyResultStateFLow.tryEmit(Any())
+        }
 
-    fun onButtonClearPressed() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val emptySettingsSaved = saveCharacterFilterUseCaseImpl.invoke(emptyFilterSettings)
-            if (emptySettingsSaved) {
-                resetData()
-                _notEmptyFilterStateFlow.tryEmit(false)
-            }
+        private fun resetData() {
+            job?.cancel()
+            provideCharactersFlow()
+        }
+
+        companion object {
+            private const val INITIAL_PAGE_NUMBER = 1
         }
     }
-
-    fun onSearchQueryChanged(query: String?) {
-        searchQuery = query?.trim().orEmpty()
-        resetData()
-    }
-
-    private fun emitErrorState() {
-        _errorStateFlow.tryEmit(Any())
-    }
-
-    private fun emitEmptyResultState() {
-        _emptyResultStateFLow.tryEmit(Any())
-    }
-
-    private fun resetData() {
-        job?.cancel()
-        provideCharactersFlow()
-    }
-
-    companion object {
-        private const val INITIAL_PAGE_NUMBER = 1
-    }
-}

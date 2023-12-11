@@ -13,13 +13,15 @@ import ru.example.rickandmortyproject.data.locations.model.LocationDbModel
     entities = [
         CharacterDbModel::class,
         EpisodeDbModel::class,
-        LocationDbModel::class
+        LocationDbModel::class,
     ],
     version = 4,
-    exportSchema = false
+    exportSchema = false,
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun charactersListDao(): CharacterListDao
+
     abstract fun episodesListDao(): EpisodeListDao
+
     abstract fun locationsListDao(): LocationsListDao
 }

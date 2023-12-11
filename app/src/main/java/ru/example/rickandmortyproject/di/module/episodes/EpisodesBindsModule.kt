@@ -8,10 +8,7 @@ import ru.example.rickandmortyproject.domain.episodes.EpisodesRepository
 
 @Module
 interface EpisodesBindsModule {
-
     @Binds
     @ActivityScope
-    fun bindsEpisodesListRepository(
-        episodesRepositoryImpl: EpisodesRepositoryImpl
-    ): EpisodesRepository
+    fun bindsEpisodesListRepository(episodesRepositoryImpl: EpisodesRepositoryImpl): EpisodesRepository
 }

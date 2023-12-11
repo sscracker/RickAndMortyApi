@@ -8,10 +8,7 @@ import ru.example.rickandmortyproject.domain.locations.LocationsRepository
 
 @Module
 interface LocationsBindsModule {
-
     @Binds
     @ActivityScope
-    fun bindLocationsRepository(
-        locationsRepositoryImpl: LocationsRepositoryImpl
-    ): LocationsRepository
+    fun bindLocationsRepository(locationsRepositoryImpl: LocationsRepositoryImpl): LocationsRepository
 }

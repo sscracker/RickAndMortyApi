@@ -34,11 +34,11 @@ data class CharacterDto(
     val image: String,
     @SerializedName("episode")
     @Expose
-    val episode: JsonArray,
+    var episode: JsonArray,
     @SerializedName("url")
     @Expose
     val url: String,
     @SerializedName("created")
     @Expose
-    val created: String
+    val created: String,
 )

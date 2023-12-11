@@ -9,17 +9,16 @@ import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import javax.inject.Inject
-import javax.inject.Provider
 import kotlinx.coroutines.launch
 import ru.example.rickandmortyproject.databinding.FragmentLocationFiltersBinding
 import ru.example.rickandmortyproject.di.AppComponent
 import ru.example.rickandmortyproject.domain.locations.list.model.LocationFilterSettings
 import ru.example.rickandmortyproject.presentation.base.BaseFragment
 import ru.example.rickandmortyproject.utils.viewModelFactory
+import javax.inject.Inject
+import javax.inject.Provider
 
 class LocationsFilterFragment : BaseFragment() {
-
     private var _binding: FragmentLocationFiltersBinding? = null
     private val binding get() = _binding!!
 
@@ -38,13 +37,16 @@ class LocationsFilterFragment : BaseFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentLocationFiltersBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         subscribeData()
         initListeners()
@@ -88,7 +90,7 @@ class LocationsFilterFragment : BaseFragment() {
         return LocationFilterSettings(
             name,
             type,
-            dimension
+            dimension,
         )
     }
 
@@ -101,7 +103,7 @@ class LocationsFilterFragment : BaseFragment() {
     private fun saveLocationsFilterSettings() {
         setFragmentResult(
             LocationsListFragment.KEY_FILTER_CHANGED,
-            bundleOf(LocationsListFragment.KEY_FILTER_CHANGED to true)
+            bundleOf(LocationsListFragment.KEY_FILTER_CHANGED to true),
         )
         requireActivity().supportFragmentManager.popBackStack()
     }

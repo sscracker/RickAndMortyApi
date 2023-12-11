@@ -9,8 +9,6 @@ import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import javax.inject.Inject
-import javax.inject.Provider
 import kotlinx.coroutines.launch
 import ru.example.rickandmortyproject.databinding.FragmentFilterCharactersBinding
 import ru.example.rickandmortyproject.di.AppComponent
@@ -19,9 +17,10 @@ import ru.example.rickandmortyproject.domain.characters.list.model.CharacterGend
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterStatus
 import ru.example.rickandmortyproject.presentation.base.BaseFragment
 import ru.example.rickandmortyproject.utils.viewModelFactory
+import javax.inject.Inject
+import javax.inject.Provider
 
 class CharactersFiltersFragment : BaseFragment() {
-
     private var _binding: FragmentFilterCharactersBinding? = null
     private val binding get() = _binding!!
 
@@ -40,13 +39,16 @@ class CharactersFiltersFragment : BaseFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentFilterCharactersBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         restoreState(savedInstanceState)
         setButtonBackListener()
@@ -130,7 +132,7 @@ class CharactersFiltersFragment : BaseFragment() {
                 CharacterStatus.ALIVE -> 1
                 CharacterStatus.DEAD -> 2
                 CharacterStatus.UNKNOWN -> 3
-            }
+            },
         )
         binding.charactersFilterSpeciesEditText.setText(settings.species)
         binding.charactersFilterTypeEditText.setText(settings.type)
@@ -141,7 +143,7 @@ class CharactersFiltersFragment : BaseFragment() {
                 CharacterGender.MALE -> 2
                 CharacterGender.GENDERLESS -> 3
                 CharacterGender.UNKNOWN -> 4
-            }
+            },
         )
     }
 
@@ -158,7 +160,7 @@ class CharactersFiltersFragment : BaseFragment() {
     private fun saveFilterSettings() {
         setFragmentResult(
             CharactersListFragment.KEY_FILTER_CHANGED,
-            bundleOf(CharactersListFragment.KEY_FILTER_CHANGED to true)
+            bundleOf(CharactersListFragment.KEY_FILTER_CHANGED to true),
         )
         requireActivity().supportFragmentManager.popBackStack()
     }

@@ -11,5 +11,5 @@ data class EpisodeDbModel(
     val episode: String,
     val characterId: String,
     val url: String,
-    val created: String
+    val created: String,
 )

@@ -9,20 +9,20 @@ import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import javax.inject.Inject
-import javax.inject.Provider
 import kotlinx.coroutines.launch
 import ru.example.rickandmortyproject.databinding.FragmentEpisodesFilterBinding
 import ru.example.rickandmortyproject.di.AppComponent
 import ru.example.rickandmortyproject.domain.episodes.list.model.EpisodeFilterSettings
 import ru.example.rickandmortyproject.presentation.base.BaseFragment
 import ru.example.rickandmortyproject.utils.viewModelFactory
+import javax.inject.Inject
+import javax.inject.Provider
 
 class EpisodesFilterFragment : BaseFragment() {
-
     private var _binding: FragmentEpisodesFilterBinding? = null
 
     private val binding get() = _binding!!
+
     override fun injectDependencies(appComponent: AppComponent) {
         appComponent.inject(this)
     }
@@ -38,13 +38,16 @@ class EpisodesFilterFragment : BaseFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentEpisodesFilterBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         setButtonBackListener()
         setButtonApplyListener()
@@ -65,7 +68,7 @@ class EpisodesFilterFragment : BaseFragment() {
     private fun saveFilterSettings() {
         setFragmentResult(
             EpisodesListFragment.KEY_FILTER_CHANGED,
-            bundleOf(EpisodesListFragment.KEY_FILTER_CHANGED to true)
+            bundleOf(EpisodesListFragment.KEY_FILTER_CHANGED to true),
         )
         requireActivity().supportFragmentManager.popBackStack()
     }
@@ -74,7 +77,7 @@ class EpisodesFilterFragment : BaseFragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.getEpisodesFilterStateFlow
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
-                .collect() { settings ->
+                .collect { settings ->
                     if (!restored) {
                         setFilterSettings(settings)
                     }

@@ -25,24 +25,34 @@ import ru.example.rickandmortyproject.presentation.locations.list.LocationsListF
         LocalDbModule::class,
         CharactersBindsModule::class,
         EpisodesBindsModule::class,
-        LocationsBindsModule::class
-    ]
+        LocationsBindsModule::class,
+    ],
 )
 @ActivityScope
 interface AppComponent {
     fun inject(charactersListFragment: CharactersListFragment)
+
     fun inject(charactersFiltersFragment: CharactersFiltersFragment)
+
     fun inject(characterDetailsFragment: CharacterDetailsFragment)
+
     fun inject(episodesListFragment: EpisodesListFragment)
+
     fun inject(episodesFilterFragment: EpisodesFilterFragment)
+
     fun inject(episodeDetailsFragment: EpisodeDetailsFragment)
+
     fun inject(locationsListFragment: LocationsListFragment)
+
     fun inject(locationsFilterFragment: LocationsFilterFragment)
+
     fun inject(locationDetailsFragment: LocationDetailsFragment)
 
     @Component.Factory
     interface AppComponentFactory {
-        fun create(@BindsInstance context: Context): AppComponent
+        fun create(
+            @BindsInstance context: Context,
+        ): AppComponent
     }
 
     companion object {

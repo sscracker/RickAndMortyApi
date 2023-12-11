@@ -12,8 +12,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
-import javax.inject.Inject
-import javax.inject.Provider
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -26,6 +24,8 @@ import ru.example.rickandmortyproject.presentation.episodes.details.EpisodeDetai
 import ru.example.rickandmortyproject.presentation.episodes.list.adapter.EpisodesListAdapter
 import ru.example.rickandmortyproject.utils.showToast
 import ru.example.rickandmortyproject.utils.viewModelFactory
+import javax.inject.Inject
+import javax.inject.Provider
 
 private const val COLUMN_COUNT = 2
 
@@ -51,7 +51,7 @@ class EpisodesListFragment : BaseFragment() {
             },
             onItemClick = { episode ->
                 launchEpisodeDetailsFragment(episode.id)
-            }
+            },
         )
     }
 
@@ -62,13 +62,16 @@ class EpisodesListFragment : BaseFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentEpisodesBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         initEpisodesList()
         configSwipeRefreshLayout()
@@ -189,14 +192,15 @@ class EpisodesListFragment : BaseFragment() {
     }
 
     private fun setSearchViewListener() {
-        val listener = object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?) = true
+        val listener =
+            object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?) = true
 
-            override fun onQueryTextChange(changedQuery: String?): Boolean {
-                viewModel.onSearchQueryChanged(changedQuery)
-                return true
+                override fun onQueryTextChange(changedQuery: String?): Boolean {
+                    viewModel.onSearchQueryChanged(changedQuery)
+                    return true
+                }
             }
-        }
         binding.episodesSearchView.setOnQueryTextListener(listener)
     }
 
@@ -207,7 +211,7 @@ class EpisodesListFragment : BaseFragment() {
                 .setReorderingAllowed(true)
                 .replace(
                     R.id.fragment_container,
-                    EpisodeDetailsFragment.newInstance(id, episodeDetailsTabName)
+                    EpisodeDetailsFragment.newInstance(id, episodeDetailsTabName),
                 )
                 .addToBackStack(episodeDetailsTabName)
                 .commit()
@@ -218,8 +222,9 @@ class EpisodesListFragment : BaseFragment() {
         const val KEY_FILTER_CHANGED = "episodesFilterChanged"
         private const val KEY_TAB_NAME = "tabName"
 
-        fun newInstance(tabName: String) = EpisodesListFragment().apply {
-            arguments = bundleOf(KEY_TAB_NAME to tabName)
-        }
+        fun newInstance(tabName: String) =
+            EpisodesListFragment().apply {
+                arguments = bundleOf(KEY_TAB_NAME to tabName)
+            }
     }
 }

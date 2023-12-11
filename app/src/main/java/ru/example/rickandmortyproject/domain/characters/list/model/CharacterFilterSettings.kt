@@ -5,5 +5,5 @@ data class CharacterFilterSettings(
     val status: CharacterStatus? = null,
     val species: String = "",
     val type: String = "",
-    val gender: CharacterGender? = null
+    val gender: CharacterGender? = null,
 )

@@ -17,5 +17,5 @@ data class CharacterDbModel(
     val created: String,
     val originId: Int,
     val locationId: Int,
-    val episodesId: String
+    val episodesId: String,
 )

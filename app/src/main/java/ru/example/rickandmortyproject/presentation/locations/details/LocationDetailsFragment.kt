@@ -9,7 +9,6 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -22,9 +21,9 @@ import ru.example.rickandmortyproject.presentation.base.BaseFragment
 import ru.example.rickandmortyproject.presentation.characters.details.CharacterDetailsFragment
 import ru.example.rickandmortyproject.presentation.characters.list.adapter.CharacterListAdapter
 import ru.example.rickandmortyproject.utils.viewModelFactory
+import javax.inject.Inject
 
 class LocationDetailsFragment : BaseFragment() {
-
     private var _binding: FragmentLocationDetailsBinding? = null
 
     private val binding get() = _binding!!
@@ -32,7 +31,7 @@ class LocationDetailsFragment : BaseFragment() {
     private val residentsListAdapter by lazy {
         CharacterListAdapter(
             onListEnded = null,
-            onItemClick = { character -> loadResidentsDetailsFragment(character.id) }
+            onItemClick = { character -> loadResidentsDetailsFragment(character.id) },
         )
     }
 
@@ -58,13 +57,16 @@ class LocationDetailsFragment : BaseFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentLocationDetailsBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         startProgress()
         setAdapter()
@@ -162,7 +164,7 @@ class LocationDetailsFragment : BaseFragment() {
                 .setReorderingAllowed(true)
                 .replace(
                     R.id.fragment_container,
-                    CharacterDetailsFragment.newInstance(residentId, it)
+                    CharacterDetailsFragment.newInstance(residentId, it),
                 )
                 .addToBackStack(it)
                 .commit()
@@ -173,7 +175,10 @@ class LocationDetailsFragment : BaseFragment() {
         private const val KEY_TAB_NAME = "tabName"
         private const val KEY_LOCATION_ID = "episodeId"
 
-        fun newInstance(id: Int, tabName: String) = LocationDetailsFragment().apply {
+        fun newInstance(
+            id: Int,
+            tabName: String,
+        ) = LocationDetailsFragment().apply {
             arguments = bundleOf(KEY_LOCATION_ID to id, KEY_TAB_NAME to tabName)
         }
     }

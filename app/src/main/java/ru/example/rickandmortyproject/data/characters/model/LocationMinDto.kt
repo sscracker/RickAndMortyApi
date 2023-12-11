@@ -9,5 +9,5 @@ data class LocationMinDto(
     val name: String,
     @SerializedName("url")
     @Expose
-    val url: String
+    val url: String,
 )

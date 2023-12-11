@@ -25,6 +25,5 @@ data class LocationsDto(
     val url: String,
     @SerializedName("created")
     @Expose
-    val created: String
-
+    val created: String,
 )

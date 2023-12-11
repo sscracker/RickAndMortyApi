@@ -7,5 +7,5 @@ data class EpisodeEntity(
     val episodeCode: String,
     val charactersId: List<Int>,
     val url: String,
-    val created: String
+    val created: String,
 )
