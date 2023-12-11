@@ -46,7 +46,7 @@ class EpisodesMapper @Inject constructor() {
         created = dbModel.created
     )
 
-    private fun mapCharactersId(dbModel: EpisodeDbModel): List<Int> {
+    fun mapCharactersId(dbModel: EpisodeDbModel): List<Int> {
         return dbModel.characterId.split(",").map { it.trim().toInt() }
     }
 }

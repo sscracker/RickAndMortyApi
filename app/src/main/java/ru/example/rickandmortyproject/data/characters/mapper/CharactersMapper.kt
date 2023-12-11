@@ -29,7 +29,7 @@ class CharactersMapper @Inject constructor() {
 
     fun mapDtoListToDbModelList(dtoList: List<CharacterDto>) = dtoList.map { mapDtoToDbModel(it) }
 
-    private fun mapDtoToDbModel(dto: CharacterDto) = CharacterDbModel(
+    fun mapDtoToDbModel(dto: CharacterDto) = CharacterDbModel(
         id = dto.id,
         name = dto.name,
         status = when (dto.status) {

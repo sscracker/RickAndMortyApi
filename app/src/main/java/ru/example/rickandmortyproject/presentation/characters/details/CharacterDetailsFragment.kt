@@ -10,6 +10,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import coil.load
+import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -26,7 +27,6 @@ import ru.example.rickandmortyproject.presentation.episodes.list.adapter.Episode
 import ru.example.rickandmortyproject.presentation.locations.details.LocationDetailsFragment
 import ru.example.rickandmortyproject.utils.showToast
 import ru.example.rickandmortyproject.utils.viewModelFactory
-import javax.inject.Inject
 
 class CharacterDetailsFragment : BaseFragment() {
 
