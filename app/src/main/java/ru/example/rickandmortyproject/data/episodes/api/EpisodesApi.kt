@@ -7,7 +7,6 @@ import ru.example.rickandmortyproject.data.characters.api.ResponseDto
 import ru.example.rickandmortyproject.data.episodes.model.EpisodesDto
 
 interface EpisodesApi {
-
     @GET("episode")
     suspend fun loadPage(
         @Query("page") page: Int
@@ -22,11 +21,4 @@ interface EpisodesApi {
     suspend fun loadEpisodesByIds(
         @Path("itemIdsString") itemIds: String
     ): List<EpisodesDto>
-
-    companion object {
-
-        private const val QUERY_PARAM_PAGE = "page"
-        private const val PATH_ITEM_ID = "itemId"
-        private const val PATH_ITEM_IDS_STRING = "itemIdsString"
-    }
 }

@@ -20,8 +20,9 @@ const val MALE = "Male"
 const val GENDERLESS = "Genderless"
 
 @ActivityScope
-class CharactersMapper @Inject constructor() {
-
+class CharactersMapper
+@Inject
+constructor() {
     fun mapPageToDbModelList(page: ResponseDto) =
         page.results.mapNotNull { json ->
             Gson().fromJson(json, CharacterDto::class.java)?.let(::mapDtoToDbModel)
@@ -29,59 +30,66 @@ class CharactersMapper @Inject constructor() {
 
     fun mapDtoListToDbModelList(dtoList: List<CharacterDto>) = dtoList.map { mapDtoToDbModel(it) }
 
-    private fun mapDtoToDbModel(dto: CharacterDto) = CharacterDbModel(
-        id = dto.id,
-        name = dto.name,
-        status = when (dto.status) {
-            ALIVE -> CharacterStatus.ALIVE.ordinal
-            DEAD -> CharacterStatus.DEAD.ordinal
-            UNKNOWN -> CharacterStatus.UNKNOWN.ordinal
-            else -> throw RuntimeException("Wrong status value: ${dto.status}")
-        },
-        species = dto.species,
-        type = dto.type,
-        gender = when (dto.gender) {
-            FEMALE -> CharacterGender.FEMALE.ordinal
-            MALE -> CharacterGender.MALE.ordinal
-            GENDERLESS -> CharacterGender.GENDERLESS.ordinal
-            UNKNOWN -> CharacterGender.UNKNOWN.ordinal
-            else -> throw RuntimeException("Wrong gender value: ${dto.gender}")
-        },
-        image = dto.image,
-        url = dto.url,
-        created = dto.created,
-        originId = dto.origin.url.idUrlEndsWith(),
-        locationId = dto.location.url.idUrlEndsWith(),
-        episodesId = dto.episode.getIdListFromUrls().joinToString()
-    )
+    fun mapDtoToDbModel(dto: CharacterDto) =
+        CharacterDbModel(
+            id = dto.id,
+            name = dto.name,
+            status =
+            when (dto.status) {
+                ALIVE -> CharacterStatus.ALIVE.ordinal
+                DEAD -> CharacterStatus.DEAD.ordinal
+                UNKNOWN -> CharacterStatus.UNKNOWN.ordinal
+                else -> throw RuntimeException("Wrong status value: ${dto.status}")
+            },
+            species = dto.species,
+            type = dto.type,
+            gender =
+            when (dto.gender) {
+                FEMALE -> CharacterGender.FEMALE.ordinal
+                MALE -> CharacterGender.MALE.ordinal
+                GENDERLESS -> CharacterGender.GENDERLESS.ordinal
+                UNKNOWN -> CharacterGender.UNKNOWN.ordinal
+                else -> throw RuntimeException("Wrong gender value: ${dto.gender}")
+            },
+            image = dto.image,
+            url = dto.url,
+            created = dto.created,
+            originId = dto.origin.url.idUrlEndsWith(),
+            locationId = dto.location.url.idUrlEndsWith(),
+            episodesId = dto.episode.getIdListFromUrls().joinToString()
+        )
 
-    fun mapDbModelsListToEntitiesList(dbModels: List<CharacterDbModel>) = dbModels.map {
-        mapDbModelToDomain(it)
-    }
+    fun mapDbModelsListToEntitiesList(dbModels: List<CharacterDbModel>) =
+        dbModels.map {
+            mapDbModelToDomain(it)
+        }
 
-    fun mapDbModelToDomain(dbModel: CharacterDbModel) = CharacterEntity(
-        id = dbModel.id,
-        name = dbModel.name,
-        status = when (dbModel.status) {
-            CharacterStatus.ALIVE.ordinal -> CharacterStatus.ALIVE
-            CharacterStatus.DEAD.ordinal -> CharacterStatus.DEAD
-            CharacterStatus.UNKNOWN.ordinal -> CharacterStatus.UNKNOWN
-            else -> throw RuntimeException("Wrong status value: ${dbModel.status}")
-        },
-        species = dbModel.species,
-        type = dbModel.type,
-        gender = when (dbModel.gender) {
-            CharacterGender.FEMALE.ordinal -> CharacterGender.FEMALE
-            CharacterGender.MALE.ordinal -> CharacterGender.MALE
-            CharacterGender.GENDERLESS.ordinal -> CharacterGender.GENDERLESS
-            CharacterGender.UNKNOWN.ordinal -> CharacterGender.UNKNOWN
-            else -> throw RuntimeException("Wrong gender value: ${dbModel.gender}")
-        },
-        image = dbModel.image,
-        url = dbModel.url,
-        created = dbModel.created,
-        originId = dbModel.originId,
-        locationId = dbModel.locationId,
-        episodesId = dbModel.episodesId.split(",").map { it.trim().toInt() }
-    )
+    fun mapDbModelToDomain(dbModel: CharacterDbModel) =
+        CharacterEntity(
+            id = dbModel.id,
+            name = dbModel.name,
+            status =
+            when (dbModel.status) {
+                CharacterStatus.ALIVE.ordinal -> CharacterStatus.ALIVE
+                CharacterStatus.DEAD.ordinal -> CharacterStatus.DEAD
+                CharacterStatus.UNKNOWN.ordinal -> CharacterStatus.UNKNOWN
+                else -> throw RuntimeException("Wrong status value: ${dbModel.status}")
+            },
+            species = dbModel.species,
+            type = dbModel.type,
+            gender =
+            when (dbModel.gender) {
+                CharacterGender.FEMALE.ordinal -> CharacterGender.FEMALE
+                CharacterGender.MALE.ordinal -> CharacterGender.MALE
+                CharacterGender.GENDERLESS.ordinal -> CharacterGender.GENDERLESS
+                CharacterGender.UNKNOWN.ordinal -> CharacterGender.UNKNOWN
+                else -> throw RuntimeException("Wrong gender value: ${dbModel.gender}")
+            },
+            image = dbModel.image,
+            url = dbModel.url,
+            created = dbModel.created,
+            originId = dbModel.originId,
+            locationId = dbModel.locationId,
+            episodesId = dbModel.episodesId.split(",").map { it.trim().toInt() }
+        )
 }

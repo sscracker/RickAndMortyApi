@@ -10,6 +10,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import coil.load
+import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -26,16 +27,14 @@ import ru.example.rickandmortyproject.presentation.episodes.list.adapter.Episode
 import ru.example.rickandmortyproject.presentation.locations.details.LocationDetailsFragment
 import ru.example.rickandmortyproject.utils.showToast
 import ru.example.rickandmortyproject.utils.viewModelFactory
-import javax.inject.Inject
 
 class CharacterDetailsFragment : BaseFragment() {
-
     private var _binding: FragmentCharactersDetailsBinding? = null
     private val binding get() = _binding!!
 
     private var loadedCount = COUNT_START
 
-    private var characterEntity: CharacterEntity? = null
+    var characterEntity: CharacterEntity? = null
 
     private val tabName by lazy {
         requireArguments().getString(KEY_TAB_NAME)
@@ -45,7 +44,7 @@ class CharacterDetailsFragment : BaseFragment() {
         requireArguments().getInt(KEY_CHARACTER_ID)
     }
 
-    private val adapter by lazy {
+    val adapter by lazy {
         EpisodesListAdapter(
             null,
             onItemClick = { episode ->
@@ -74,7 +73,10 @@ class CharacterDetailsFragment : BaseFragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?
+    ) {
         super.onViewCreated(view, savedInstanceState)
         setButtonBackListener()
         setOriginAndLocationListeners()
@@ -183,11 +185,12 @@ class CharacterDetailsFragment : BaseFragment() {
     }
 
     private fun setOrigin(originName: String) {
-        binding.characterDetailsOriginTextView.text = String.format(
-            FORMAT,
-            getString(R.string.origin_label),
-            originName
-        )
+        binding.characterDetailsOriginTextView.text =
+            String.format(
+                FORMAT,
+                getString(R.string.origin_label),
+                originName
+            )
     }
 
     private fun loadLocation(locationName: String) {
@@ -196,11 +199,12 @@ class CharacterDetailsFragment : BaseFragment() {
     }
 
     private fun setLocation(locationName: String) {
-        binding.characterDetailsLocationTextView.text = String.format(
-            FORMAT,
-            getString(R.string.location_label),
-            locationName
-        )
+        binding.characterDetailsLocationTextView.text =
+            String.format(
+                FORMAT,
+                getString(R.string.location_label),
+                locationName
+            )
     }
 
     private fun loadEpisodesList(episodes: List<EpisodeEntity>) {
@@ -215,20 +219,22 @@ class CharacterDetailsFragment : BaseFragment() {
     private fun showCharacterData(character: CharacterEntity) {
         characterEntity = character
         binding.characterDetailsNameTextView.text = character.name
-        binding.characterDetailsStatusTextView.text = when (character.status) {
-            CharacterStatus.ALIVE -> getString(R.string.status_alive)
-            CharacterStatus.DEAD -> getString(R.string.status_dead)
-            CharacterStatus.UNKNOWN -> getString(R.string.status_unknown)
-        }
+        binding.characterDetailsStatusTextView.text =
+            when (character.status) {
+                CharacterStatus.ALIVE -> getString(R.string.status_alive)
+                CharacterStatus.DEAD -> getString(R.string.status_dead)
+                CharacterStatus.UNKNOWN -> getString(R.string.status_unknown)
+            }
         binding.characterDetailsSpeciesTextView.text = character.species
         binding.characterDetailsTypeTextView.text = character.type
 
-        binding.characterDetailsGenderTextView.text = when (character.gender) {
-            CharacterGender.FEMALE -> getString(R.string.gender_female)
-            CharacterGender.MALE -> getString(R.string.gender_male)
-            CharacterGender.GENDERLESS -> getString(R.string.gender_genderless)
-            CharacterGender.UNKNOWN -> getString(R.string.status_unknown)
-        }
+        binding.characterDetailsGenderTextView.text =
+            when (character.gender) {
+                CharacterGender.FEMALE -> getString(R.string.gender_female)
+                CharacterGender.MALE -> getString(R.string.gender_male)
+                CharacterGender.GENDERLESS -> getString(R.string.gender_genderless)
+                CharacterGender.UNKNOWN -> getString(R.string.status_unknown)
+            }
         binding.characterDetailsPhotoImageView.load(character.image) {
             error(R.drawable.person_placeholder)
         }
@@ -264,7 +270,10 @@ class CharacterDetailsFragment : BaseFragment() {
         private const val UNDEFINED_ID = -1
         private const val FORMAT = "%s: %s"
 
-        fun newInstance(id: Int, tabName: String) = CharacterDetailsFragment().apply {
+        fun newInstance(
+            id: Int,
+            tabName: String
+        ) = CharacterDetailsFragment().apply {
             arguments = bundleOf(KEY_CHARACTER_ID to id, KEY_TAB_NAME to tabName)
         }
     }

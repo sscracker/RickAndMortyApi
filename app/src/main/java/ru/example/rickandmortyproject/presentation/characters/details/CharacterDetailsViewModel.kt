@@ -23,7 +23,9 @@ import ru.example.rickandmortyproject.domain.episodes.list.model.EpisodeEntity
 
 private const val TIME_MILLIS = 1000L
 
-class CharacterDetailsViewModel @AssistedInject constructor(
+class CharacterDetailsViewModel
+@AssistedInject
+constructor(
     private val getSingleCharacterUseCaseImpl: GetSingleCharacterUseCaseImpl,
     private val getEpisodesByIdUseCaseImpl: GetEpisodesByIdUseCaseImpl,
     private val loadLocationsByIdUseCaseImpl: LoadLocationsByIdUseCaseImpl,
@@ -32,10 +34,10 @@ class CharacterDetailsViewModel @AssistedInject constructor(
     @Assisted
     private val characterId: Int
 ) : ViewModel() {
-
     private val _characterStateFlow = MutableStateFlow<CharacterEntity?>(null)
-    val characterStateFlow = _characterStateFlow.asStateFlow()
-        .filterNotNull()
+    val characterStateFlow =
+        _characterStateFlow.asStateFlow()
+            .filterNotNull()
 
     private val _originStateFlow = MutableStateFlow<String?>(null)
     val originStateFlow = _originStateFlow.asStateFlow().filterNotNull()
@@ -47,8 +49,9 @@ class CharacterDetailsViewModel @AssistedInject constructor(
     val episodesListStateFlow = _episodesListStateFlow.asStateFlow().filterNotNull()
 
     private val _errorStateFlow = MutableStateFlow<Any?>(null)
-    val errorStateFlow = _errorStateFlow.asStateFlow()
-        .filterNotNull()
+    val errorStateFlow =
+        _errorStateFlow.asStateFlow()
+            .filterNotNull()
 
     private var characterJob: Job? = null
     private var originJob: Job? = null
@@ -70,18 +73,19 @@ class CharacterDetailsViewModel @AssistedInject constructor(
     }
 
     private fun provideCharacterFlow(id: Int) {
-        characterJob = viewModelScope.launch(Dispatchers.IO) {
-            getSingleCharacterUseCaseImpl.invoke(id)
-                .catch {
-                    emitError()
-                }
-                .collect { character ->
-                    delay(TIME_MILLIS)
-                    _characterStateFlow.tryEmit(character)
-                    loading()
-                    provideExtraCharacterDetails(character)
-                }
-        }
+        characterJob =
+            viewModelScope.launch(Dispatchers.IO) {
+                getSingleCharacterUseCaseImpl.invoke(id)
+                    .catch {
+                        emitError()
+                    }
+                    .collect { character ->
+                        delay(TIME_MILLIS)
+                        _characterStateFlow.tryEmit(character)
+                        loading()
+                        provideExtraCharacterDetails(character)
+                    }
+            }
     }
 
     private fun provideExtraCharacterDetails(entity: CharacterEntity) {
@@ -116,15 +120,16 @@ class CharacterDetailsViewModel @AssistedInject constructor(
             _originStateFlow.tryEmit(UNKNOWN_VALUE)
             return
         }
-        originJob = viewModelScope.launch(Dispatchers.IO) {
-            getSingleLocationUseCaseImpl.invoke(id)
-                .catch {
-                    emitError()
-                }
-                .collect { origin ->
-                    _originStateFlow.tryEmit(origin.name)
-                }
-        }
+        originJob =
+            viewModelScope.launch(Dispatchers.IO) {
+                getSingleLocationUseCaseImpl.invoke(id)
+                    .catch {
+                        emitError()
+                    }
+                    .collect { origin ->
+                        _originStateFlow.tryEmit(origin.name)
+                    }
+            }
     }
 
     private fun provideLocationFlow(id: Int) {
@@ -132,15 +137,16 @@ class CharacterDetailsViewModel @AssistedInject constructor(
             _locationStateFlow.tryEmit(UNKNOWN_VALUE)
             return
         }
-        locationJob = viewModelScope.launch(Dispatchers.IO) {
-            getSingleLocationUseCaseImpl.invoke(id)
-                .catch {
-                    emitError()
-                }
-                .collect { location ->
-                    _locationStateFlow.tryEmit(location.name)
-                }
-        }
+        locationJob =
+            viewModelScope.launch(Dispatchers.IO) {
+                getSingleLocationUseCaseImpl.invoke(id)
+                    .catch {
+                        emitError()
+                    }
+                    .collect { location ->
+                        _locationStateFlow.tryEmit(location.name)
+                    }
+            }
     }
 
     private fun provideEpisodesListFlow(ids: List<Int>) {
@@ -148,15 +154,16 @@ class CharacterDetailsViewModel @AssistedInject constructor(
             _episodesListStateFlow.tryEmit(emptyList())
             return
         }
-        episodesListJob = viewModelScope.launch(Dispatchers.IO) {
-            getEpisodesByIdUseCaseImpl.invoke(ids)
-                .catch {
-                    emitError()
-                }
-                .collect { episodesList ->
-                    _episodesListStateFlow.tryEmit(episodesList)
-                }
-        }
+        episodesListJob =
+            viewModelScope.launch(Dispatchers.IO) {
+                getEpisodesByIdUseCaseImpl.invoke(ids)
+                    .catch {
+                        emitError()
+                    }
+                    .collect { episodesList ->
+                        _episodesListStateFlow.tryEmit(episodesList)
+                    }
+            }
     }
 
     private fun loading(): Boolean {
@@ -170,7 +177,9 @@ class CharacterDetailsViewModel @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory {
-        fun create(@Assisted id: Int): CharacterDetailsViewModel
+        fun create(
+            @Assisted id: Int
+        ): CharacterDetailsViewModel
     }
 
     companion object {
