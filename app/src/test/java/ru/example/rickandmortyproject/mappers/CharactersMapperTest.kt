@@ -20,7 +20,7 @@ class CharactersMapperTest {
     }
 
     @Test
-    fun `mapDtoToDbModel maps DTO to DB model correctly`() {
+    fun givenDto_whenMapDtoToDbModel_thenMapCorrectly() {
         val dto = createSampleCharacterDto()
 
         val result = charactersMapper.mapDtoToDbModel(dto)
@@ -35,11 +35,10 @@ class CharactersMapperTest {
         assertEquals("https://rickandmortyapi.com/api/character/123", result.url)
         assertEquals(1, result.originId)
         assertEquals(20, result.locationId)
-        // assertEquals("1", result.episodesId)
     }
 
     @Test
-    fun `mapDbModelToDomain maps DB model to domain entity correctly`() {
+    fun givenDbModel_whenMapDbModelToDomain_thenMapCorrectly() {
         val dbModel = createSampleCharacterDbModel()
 
         val result = charactersMapper.mapDbModelToDomain(dbModel)

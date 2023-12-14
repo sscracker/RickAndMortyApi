@@ -18,7 +18,7 @@ class MainActivityTest {
     val activityRule = ActivityScenarioRule(MainActivity::class.java)
 
     @Test
-    fun testNavigationBetweenTabs() {
+    fun givenTabs_whenClickingOnMenuItems_thenVerifyFragmentDisplayed() {
         onView(withId(R.id.menu_item_characters))
             .perform(click())
         onView(withId(R.id.fragment_container))

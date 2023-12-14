@@ -24,7 +24,7 @@ class EpisodesApiTest {
     }
 
     @Test
-    fun `test load page success`() {
+    fun givenPage_whenLoadPage_thenVerifyResponse() {
         val page = 1
         val expectedResponse =
             ResponseDto(
@@ -39,7 +39,7 @@ class EpisodesApiTest {
     }
 
     @Test
-    fun `test loadItem success`() {
+    fun givenItemId_whenLoadItem_thenVerifyEpisodesDto() {
         val itemId = 123
         val expectedCharacters = JsonArray()
         val expectedEpisodesDto =
@@ -63,7 +63,7 @@ class EpisodesApiTest {
     }
 
     @Test
-    fun `test loadEpisodesByIds success`() {
+    fun givenItemIds_whenLoadEpisodesByIds_thenVerifyEpisodesList() {
         val itemIds = "1,2,3"
 
         val episodesDto1 =
