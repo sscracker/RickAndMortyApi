@@ -20,7 +20,7 @@ class CharactersMapperTest {
     }
 
     @Test
-    fun givenDto_whenMapDtoToDbModel_thenMapCorrectly() {
+    fun `GIVEN dto WHEN map dto to dbmodel THEN map correctly`() {
         val dto = createSampleCharacterDto()
 
         val result = charactersMapper.mapDtoToDbModel(dto)
@@ -38,7 +38,7 @@ class CharactersMapperTest {
     }
 
     @Test
-    fun givenDbModel_whenMapDbModelToDomain_thenMapCorrectly() {
+    fun `GIVEN dbmodel WHEN map dbmodel to domain THEN map correctly`() {
         val dbModel = createSampleCharacterDbModel()
 
         val result = charactersMapper.mapDbModelToDomain(dbModel)

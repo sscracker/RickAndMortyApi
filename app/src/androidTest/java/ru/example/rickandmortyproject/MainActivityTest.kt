@@ -18,7 +18,7 @@ class MainActivityTest {
     val activityRule = ActivityScenarioRule(MainActivity::class.java)
 
     @Test
-    fun givenTabs_whenClickingOnMenuItems_thenVerifyFragmentDisplayed() {
+    fun `GIVEN tabs WHEN clicking on menu items THEN verify fragment displayed`() {
         onView(withId(R.id.menu_item_characters))
             .perform(click())
         onView(withId(R.id.fragment_container))

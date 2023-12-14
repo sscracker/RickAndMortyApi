@@ -25,7 +25,7 @@ class CharactersApiTest {
     }
 
     @Test
-    fun givenPage_whenLoadPage_thenVerifyResponse() {
+    fun `GIVEN page WHEN load page THEN verify response`() {
         val page = 1
         val expectedResponse =
             ResponseDto(
@@ -40,7 +40,7 @@ class CharactersApiTest {
     }
 
     @Test
-    fun givenItemId_whenLoadItem_thenVerifyCharacterDto() {
+    fun `GIVEN item_id WHEN load item THEN verify character dto`() {
         val itemId = 1
         val expectedLocation =
             LocationMinDto(
@@ -83,7 +83,7 @@ class CharactersApiTest {
     }
 
     @Test
-    fun givenItemIds_whenLoadItemsByIds_thenVerifyCharactersList() {
+    fun `GIVEN item_ids WHEN load items by ids THEN verify character list`() {
         val itemIds = "1,2,3"
         val expectedLocation =
             LocationMinDto(
