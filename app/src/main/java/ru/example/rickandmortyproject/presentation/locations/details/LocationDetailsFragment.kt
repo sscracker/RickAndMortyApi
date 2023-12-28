@@ -13,14 +13,14 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import ru.example.rickandmortyproject.R
+import ru.example.rickandmortyproject.RickAndMortyApplication
 import ru.example.rickandmortyproject.databinding.FragmentLocationDetailsBinding
 import ru.example.rickandmortyproject.di.AppComponent
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterEntity
 import ru.example.rickandmortyproject.domain.locations.list.model.LocationEntity
 import ru.example.rickandmortyproject.presentation.base.BaseFragment
-import ru.example.rickandmortyproject.presentation.characters.details.CharacterDetailsFragment
 import ru.example.rickandmortyproject.presentation.characters.list.adapter.CharacterListAdapter
+import ru.example.rickandmortyproject.utils.Screens
 import ru.example.rickandmortyproject.utils.viewModelFactory
 
 class LocationDetailsFragment : BaseFragment() {
@@ -34,10 +34,6 @@ class LocationDetailsFragment : BaseFragment() {
             onListEnded = null,
             onItemClick = { character -> loadResidentsDetailsFragment(character.id) }
         )
-    }
-
-    private val tabName by lazy {
-        requireArguments().getString(KEY_TAB_NAME)
     }
 
     private val locationId by lazy {
@@ -152,29 +148,22 @@ class LocationDetailsFragment : BaseFragment() {
 
     private fun setButtonBackClickListener() {
         binding.locationDetailsBackImageButton.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
+            RickAndMortyApplication.instance.router.exit()
         }
     }
 
     private fun loadResidentsDetailsFragment(residentId: Int) {
-        tabName?.let {
-            requireActivity().supportFragmentManager.beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(
-                    R.id.fragment_container,
-                    CharacterDetailsFragment.newInstance(residentId, it)
-                )
-                .addToBackStack(it)
-                .commit()
-        }
+        RickAndMortyApplication.instance.router.navigateTo(
+            Screens.fragmentCharacterDetails(residentId)
+        )
     }
 
     companion object {
         private const val KEY_TAB_NAME = "tabName"
         private const val KEY_LOCATION_ID = "episodeId"
 
-        fun newInstance(id: Int, tabName: String) = LocationDetailsFragment().apply {
-            arguments = bundleOf(KEY_LOCATION_ID to id, KEY_TAB_NAME to tabName)
+        fun newInstance(id: Int) = LocationDetailsFragment().apply {
+            arguments = bundleOf(KEY_LOCATION_ID to id)
         }
     }
 }

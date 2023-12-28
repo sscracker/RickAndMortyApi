@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.Lifecycle
@@ -18,12 +17,13 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.example.rickandmortyproject.R
+import ru.example.rickandmortyproject.RickAndMortyApplication
 import ru.example.rickandmortyproject.databinding.FragmentCharactersBinding
 import ru.example.rickandmortyproject.di.AppComponent
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterEntity
 import ru.example.rickandmortyproject.presentation.base.BaseFragment
-import ru.example.rickandmortyproject.presentation.characters.details.CharacterDetailsFragment
 import ru.example.rickandmortyproject.presentation.characters.list.adapter.CharacterListAdapter
+import ru.example.rickandmortyproject.utils.Screens
 import ru.example.rickandmortyproject.utils.showToast
 import ru.example.rickandmortyproject.utils.viewModelFactory
 
@@ -53,19 +53,10 @@ class CharactersListFragment : BaseFragment() {
         )
     }
 
-    private val tabName by lazy {
-        requireArguments().getString(KEY_TAB_NAME)
-    }
-
     private fun launchDetailsFragment(id: Int) {
-        tabName?.let { characterDetailsTabName ->
-            parentFragmentManager.beginTransaction().setReorderingAllowed(true)
-                .replace(
-                    R.id.fragment_container,
-                    CharacterDetailsFragment.newInstance(id, characterDetailsTabName)
-                )
-                .addToBackStack(characterDetailsTabName).commit()
-        }
+        RickAndMortyApplication.instance.router.navigateTo(
+            Screens.fragmentCharacterDetails(id)
+        )
     }
 
     override fun injectDependencies(appComponent: AppComponent) {
@@ -169,13 +160,7 @@ class CharactersListFragment : BaseFragment() {
     }
 
     private fun launchFilterFragment() {
-        tabName?.let {
-            parentFragmentManager.beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.fragment_container, CharactersFiltersFragment.newInstance())
-                .addToBackStack(it)
-                .commit()
-        }
+        RickAndMortyApplication.instance.router.navigateTo(Screens.fragmentCharacterFilters())
     }
 
     private fun setSearchViewListener() {
@@ -214,9 +199,6 @@ class CharactersListFragment : BaseFragment() {
 
     companion object {
         const val KEY_FILTER_CHANGED = "charactersFilterChanged"
-        private const val KEY_TAB_NAME = "tabName"
-        fun newInstance(tabName: String) = CharactersListFragment().apply {
-            arguments = bundleOf(KEY_TAB_NAME to tabName)
-        }
+        fun newInstance() = CharactersListFragment()
     }
 }

@@ -13,14 +13,14 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import ru.example.rickandmortyproject.R
+import ru.example.rickandmortyproject.RickAndMortyApplication
 import ru.example.rickandmortyproject.databinding.FragmentEpisodeDeatilsBinding
 import ru.example.rickandmortyproject.di.AppComponent
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterEntity
 import ru.example.rickandmortyproject.domain.episodes.list.model.EpisodeEntity
 import ru.example.rickandmortyproject.presentation.base.BaseFragment
-import ru.example.rickandmortyproject.presentation.characters.details.CharacterDetailsFragment
 import ru.example.rickandmortyproject.presentation.characters.list.adapter.CharacterListAdapter
+import ru.example.rickandmortyproject.utils.Screens
 import ru.example.rickandmortyproject.utils.viewModelFactory
 
 class EpisodeDetailsFragment : BaseFragment() {
@@ -43,10 +43,6 @@ class EpisodeDetailsFragment : BaseFragment() {
 
     private val viewModel: EpisodesDetailsViewModel by viewModelFactory {
         factory.create(episodeId)
-    }
-
-    private val tabName by lazy {
-        requireArguments().getString(KEY_TAB_NAME)
     }
 
     private val episodeId by lazy {
@@ -163,26 +159,20 @@ class EpisodeDetailsFragment : BaseFragment() {
 
     private fun setButtonBackClickListener() {
         binding.episodeDetailsBackImageButton.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
+            RickAndMortyApplication.instance.router.exit()
         }
     }
 
     private fun launchCharacterDetailsFragment(id: Int) {
-        tabName?.let {
-            requireActivity().supportFragmentManager.beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.fragment_container, CharacterDetailsFragment.newInstance(id, it))
-                .addToBackStack(it)
-                .commit()
-        }
+        RickAndMortyApplication.instance.router.navigateTo(Screens.fragmentCharacterDetails(id))
     }
 
     companion object {
         private const val KEY_EPISODE_ID = "episodeId"
         private const val KEY_TAB_NAME = "tabName"
 
-        fun newInstance(id: Int, tabName: String) = EpisodeDetailsFragment().apply {
-            arguments = bundleOf(KEY_EPISODE_ID to id, KEY_TAB_NAME to tabName)
+        fun newInstance(id: Int) = EpisodeDetailsFragment().apply {
+            arguments = bundleOf(KEY_EPISODE_ID to id)
         }
     }
 }

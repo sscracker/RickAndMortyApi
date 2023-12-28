@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.Lifecycle
@@ -18,12 +17,13 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.example.rickandmortyproject.R
+import ru.example.rickandmortyproject.RickAndMortyApplication
 import ru.example.rickandmortyproject.databinding.FragmentEpisodesBinding
 import ru.example.rickandmortyproject.di.AppComponent
 import ru.example.rickandmortyproject.domain.episodes.list.model.EpisodeEntity
 import ru.example.rickandmortyproject.presentation.base.BaseFragment
-import ru.example.rickandmortyproject.presentation.episodes.details.EpisodeDetailsFragment
 import ru.example.rickandmortyproject.presentation.episodes.list.adapter.EpisodesListAdapter
+import ru.example.rickandmortyproject.utils.Screens
 import ru.example.rickandmortyproject.utils.showToast
 import ru.example.rickandmortyproject.utils.viewModelFactory
 
@@ -32,10 +32,6 @@ private const val COLUMN_COUNT = 2
 class EpisodesListFragment : BaseFragment() {
     private var _binding: FragmentEpisodesBinding? = null
     private val binding get() = _binding!!
-
-    private val tabName by lazy {
-        requireArguments().getString(KEY_TAB_NAME)
-    }
 
     @Inject
     lateinit var viewModelProvider: Provider<EpisodesListViewModel>
@@ -179,12 +175,8 @@ class EpisodesListFragment : BaseFragment() {
     }
 
     private fun launchFilterFragment() {
-        tabName?.let {
-            parentFragmentManager.beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.fragment_container, EpisodesFilterFragment.newInstance())
-                .addToBackStack(it)
-                .commit()
+        binding.episodesFilterButton.setOnClickListener {
+            RickAndMortyApplication.instance.router.navigateTo(Screens.fragmentEpisodeFilters())
         }
     }
 
@@ -201,25 +193,12 @@ class EpisodesListFragment : BaseFragment() {
     }
 
     private fun launchEpisodeDetailsFragment(id: Int) {
-        tabName?.let { episodeDetailsTabName ->
-            parentFragmentManager
-                .beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(
-                    R.id.fragment_container,
-                    EpisodeDetailsFragment.newInstance(id, episodeDetailsTabName)
-                )
-                .addToBackStack(episodeDetailsTabName)
-                .commit()
-        }
+        RickAndMortyApplication.instance.router.navigateTo(Screens.fragmentEpisodeDetails(id))
     }
 
     companion object {
         const val KEY_FILTER_CHANGED = "episodesFilterChanged"
-        private const val KEY_TAB_NAME = "tabName"
 
-        fun newInstance(tabName: String) = EpisodesListFragment().apply {
-            arguments = bundleOf(KEY_TAB_NAME to tabName)
-        }
+        fun newInstance() = EpisodesListFragment()
     }
 }

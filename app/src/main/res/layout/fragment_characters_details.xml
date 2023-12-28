@@ -11,7 +11,7 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginStart="@dimen/app_base_margin"
-        android:background="@drawable/app_rectangle_button"
+        android:background="@drawable/oval_button"
         android:contentDescription="@string/button_back"
         android:src="@drawable/ic_back_arrow"
         app:layout_constraintBottom_toTopOf="@id/character_details_guideline_header"

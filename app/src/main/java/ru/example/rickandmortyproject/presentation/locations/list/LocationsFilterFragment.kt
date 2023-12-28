@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import javax.inject.Inject
 import javax.inject.Provider
 import kotlinx.coroutines.launch
+import ru.example.rickandmortyproject.RickAndMortyApplication
 import ru.example.rickandmortyproject.databinding.FragmentLocationFiltersBinding
 import ru.example.rickandmortyproject.di.AppComponent
 import ru.example.rickandmortyproject.domain.locations.list.model.LocationFilterSettings
@@ -72,7 +73,7 @@ class LocationsFilterFragment : BaseFragment() {
 
     private fun initListeners() {
         binding.locationFilterBackButton.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
+            RickAndMortyApplication.instance.router.exit()
         }
 
         binding.locationsFilterApplyButton.setOnClickListener {
