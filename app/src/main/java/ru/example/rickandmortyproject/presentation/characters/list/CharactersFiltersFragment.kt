@@ -12,12 +12,14 @@ import androidx.lifecycle.lifecycleScope
 import javax.inject.Inject
 import javax.inject.Provider
 import kotlinx.coroutines.launch
+import ru.example.rickandmortyproject.RickAndMortyApplication
 import ru.example.rickandmortyproject.databinding.FragmentFilterCharactersBinding
 import ru.example.rickandmortyproject.di.AppComponent
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterFilterSettings
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterGender
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterStatus
 import ru.example.rickandmortyproject.presentation.base.BaseFragment
+import ru.example.rickandmortyproject.utils.Screens
 import ru.example.rickandmortyproject.utils.viewModelFactory
 
 class CharactersFiltersFragment : BaseFragment() {
@@ -75,7 +77,7 @@ class CharactersFiltersFragment : BaseFragment() {
 
     private fun setButtonBackListener() {
         binding.charactersFilterBackButton.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
+            RickAndMortyApplication.instance.router.backTo(Screens.fragmentCharactersList())
         }
     }
 

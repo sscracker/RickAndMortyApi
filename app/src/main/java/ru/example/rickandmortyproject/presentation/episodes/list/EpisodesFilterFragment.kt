@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import javax.inject.Inject
 import javax.inject.Provider
 import kotlinx.coroutines.launch
+import ru.example.rickandmortyproject.RickAndMortyApplication
 import ru.example.rickandmortyproject.databinding.FragmentEpisodesFilterBinding
 import ru.example.rickandmortyproject.di.AppComponent
 import ru.example.rickandmortyproject.domain.episodes.list.model.EpisodeFilterSettings
@@ -102,7 +103,7 @@ class EpisodesFilterFragment : BaseFragment() {
 
     private fun setButtonBackListener() {
         binding.episodesFilterBackButton.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
+            RickAndMortyApplication.instance.router.exit()
         }
     }
 

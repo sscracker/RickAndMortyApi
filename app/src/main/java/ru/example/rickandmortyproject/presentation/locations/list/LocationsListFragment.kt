@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.Lifecycle
@@ -17,12 +16,13 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.example.rickandmortyproject.R
+import ru.example.rickandmortyproject.RickAndMortyApplication
 import ru.example.rickandmortyproject.databinding.FragmentLocationsBinding
 import ru.example.rickandmortyproject.di.AppComponent
 import ru.example.rickandmortyproject.domain.locations.list.model.LocationEntity
 import ru.example.rickandmortyproject.presentation.base.BaseFragment
-import ru.example.rickandmortyproject.presentation.locations.details.LocationDetailsFragment
 import ru.example.rickandmortyproject.presentation.locations.list.adapter.LocationsListAdapter
+import ru.example.rickandmortyproject.utils.Screens
 import ru.example.rickandmortyproject.utils.showToast
 import ru.example.rickandmortyproject.utils.viewModelFactory
 
@@ -42,10 +42,6 @@ class LocationsListFragment : BaseFragment() {
             onItemClick = { location -> launchLocationDetailsFragment(location.id) },
             onListEnded = { viewModel.onListEnded() }
         )
-    }
-
-    private val tabName by lazy {
-        requireArguments().getString(KEY_TAB_NAME)
     }
 
     override fun injectDependencies(appComponent: AppComponent) {
@@ -73,27 +69,12 @@ class LocationsListFragment : BaseFragment() {
     }
 
     private fun launchLocationDetailsFragment(id: Int) {
-        tabName?.let { locationDetailsTabName ->
-            parentFragmentManager.beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(
-                    R.id.fragment_container,
-                    LocationDetailsFragment.newInstance(id, locationDetailsTabName)
-                )
-                .addToBackStack(locationDetailsTabName)
-                .commit()
-        }
+        RickAndMortyApplication.instance.router.navigateTo(Screens.fragmentLocationDetails(id))
     }
 
     private fun initListeners() {
         binding.locationsFilterButton.setOnClickListener {
-            tabName?.let {
-                parentFragmentManager.beginTransaction()
-                    .setReorderingAllowed(true)
-                    .replace(R.id.fragment_container, LocationsFilterFragment.newInstance())
-                    .addToBackStack(it)
-                    .commit()
-            }
+            RickAndMortyApplication.instance.router.navigateTo(Screens.fragmentLocationFilters())
         }
 
         val listener = object : SearchView.OnQueryTextListener {
@@ -195,8 +176,6 @@ class LocationsListFragment : BaseFragment() {
         private const val KEY_TAB_NAME = "tabName"
         const val KEY_FILTER_CHANGED = "locationFiltersChanged"
 
-        fun newInstance(tabName: String) = LocationsListFragment().apply {
-            arguments = bundleOf(KEY_TAB_NAME to tabName)
-        }
+        fun newInstance() = LocationsListFragment()
     }
 }

@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.example.rickandmortyproject.R
+import ru.example.rickandmortyproject.RickAndMortyApplication
 import ru.example.rickandmortyproject.databinding.FragmentCharactersDetailsBinding
 import ru.example.rickandmortyproject.di.AppComponent
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterEntity
@@ -22,9 +23,8 @@ import ru.example.rickandmortyproject.domain.characters.list.model.CharacterGend
 import ru.example.rickandmortyproject.domain.characters.list.model.CharacterStatus
 import ru.example.rickandmortyproject.domain.episodes.list.model.EpisodeEntity
 import ru.example.rickandmortyproject.presentation.base.BaseFragment
-import ru.example.rickandmortyproject.presentation.episodes.details.EpisodeDetailsFragment
 import ru.example.rickandmortyproject.presentation.episodes.list.adapter.EpisodesListAdapter
-import ru.example.rickandmortyproject.presentation.locations.details.LocationDetailsFragment
+import ru.example.rickandmortyproject.utils.Screens
 import ru.example.rickandmortyproject.utils.showToast
 import ru.example.rickandmortyproject.utils.viewModelFactory
 
@@ -111,13 +111,7 @@ class CharacterDetailsFragment : BaseFragment() {
             requireContext().showToast(requireContext().getString(R.string.unknown_location))
             return
         }
-        tabName?.let {
-            requireActivity().supportFragmentManager.beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.fragment_container, LocationDetailsFragment.newInstance(id, it))
-                .addToBackStack(it)
-                .commit()
-        }
+        RickAndMortyApplication.instance.router.navigateTo(Screens.fragmentLocationDetails(id))
     }
 
     private fun launchEpisodeDetailsFragment(id: Int) {
@@ -125,18 +119,12 @@ class CharacterDetailsFragment : BaseFragment() {
             requireContext().showToast(requireContext().getString(R.string.unknown_episode))
             return
         }
-        tabName?.let {
-            requireActivity().supportFragmentManager.beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.fragment_container, EpisodeDetailsFragment.newInstance(id, it))
-                .addToBackStack(it)
-                .commit()
-        }
+        RickAndMortyApplication.instance.router.navigateTo(Screens.fragmentEpisodeDetails(id))
     }
 
     private fun setButtonBackListener() {
         binding.characterDetailsBackImageButton.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
+            RickAndMortyApplication.instance.router.exit()
         }
     }
 
@@ -264,8 +252,8 @@ class CharacterDetailsFragment : BaseFragment() {
         private const val UNDEFINED_ID = -1
         private const val FORMAT = "%s: %s"
 
-        fun newInstance(id: Int, tabName: String) = CharacterDetailsFragment().apply {
-            arguments = bundleOf(KEY_CHARACTER_ID to id, KEY_TAB_NAME to tabName)
+        fun newInstance(id: Int) = CharacterDetailsFragment().apply {
+            arguments = bundleOf(KEY_CHARACTER_ID to id)
         }
     }
 }
